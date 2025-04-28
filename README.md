@@ -25,3 +25,6 @@ BitSummit2025のチームW07のリポジトリです。
 - アセット管理・進捗管理：GoogleDrive
 - サウンドアセット管理：AutioStock
 
+## 技術スタック・ライブラリ
+- Unity
+- UniTask
