@@ -33,12 +33,10 @@ BitSummit2025のチームW07のリポジトリです。
 - 
 
 ## ファイル構成
+<pre> 
 BSGJ_W-07 // リポジトリ
 ├── README.md
 └── 2025BSGJ_W-07 // Unityプロジェクト
     ├── asset
     └── *****
-
-
-
-
+</pre>
