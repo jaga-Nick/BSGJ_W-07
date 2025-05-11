@@ -36,7 +36,27 @@ BitSummit2025のチームW07のリポジトリです。
 <pre> 
 BSGJ_W-07 // リポジトリ
 ├── README.md
-└── 2025BSGJ_W-07 // Unityプロジェクト
+└── Biritako-Boom // Unityプロジェクト
     ├── asset
-    └── *****
+        ├── AddressableAssetsData
+        ├── Audio
+        ├── Scenes
+        │   ├──InGame //Scene
+        │   ├──Result //Scene
+        │   ├──Title //Scene
+        ├── Scripts
+        │   ├── Common
+        │   ├── InGame
+        │   │   ├── Model
+        │   │   ├── Presenter
+        │   │   └── View
+        │   ├── Result
+        │   │   ├── Model
+        │   │   ├── Presenter
+        │   │   └── View
+        │   └── Title
+        │       ├── Model
+        │       ├── Presenter
+        │       └── View
+        └── UI
 </pre>
