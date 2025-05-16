@@ -3,7 +3,7 @@ using UnityEngine.AddressableAssets;
 
 namespace UFO
 {
-    public class UFOHp_Model : MonoBehaviour
+    public class UfoHp_Model : MonoBehaviour
     {
         private int _hp = 100;
 

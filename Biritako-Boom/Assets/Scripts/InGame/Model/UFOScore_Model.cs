@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UFO
 {
-    public class UFOScore_Model : MonoBehaviour
+    public class UfoScore_Model : MonoBehaviour
     {
         private int _score = 100;
         private int _multiplier = 1;
