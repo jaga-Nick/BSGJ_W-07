@@ -1,14 +1,14 @@
 using TMPro;
 using UnityEngine;
 
-namespace Score
+namespace InGame.View
 {
-    public class Score_View : MonoBehaviour
+    public class ScoreView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreText;
 
         /// <summary>
-        /// ÉXÉRÉAÇUIÇ…îΩâfÇµÇ‹Ç∑
+        /// „Çπ„Ç≥„Ç¢„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÇíË°®Á§∫„Åô„Çã„ÄÇ
         /// </summary>
         public void DisplayScore(int score)
         {
