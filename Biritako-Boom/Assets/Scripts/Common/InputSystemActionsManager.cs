@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace Common
 {
@@ -9,7 +9,7 @@ namespace Common
     {
         private InputSystem_Actions _InputSystemActions;
         /// <summary>
-        /// ƒAƒNƒVƒ‡ƒ“ƒ}ƒbƒv‚Ìî•ñ‚ğæ“¾‚·‚é
+        /// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒƒãƒ—ã®æƒ…å ±ã‚’å–å¾—ã™ã‚‹
         /// </summary>
         /// <returns></returns>
         public InputSystem_Actions GetInputSystem_Actions()
@@ -22,7 +22,7 @@ namespace Common
         }
 
         /// <summary>
-        /// Player“ü—Í‚Ì—LŒø‰»
+        /// Playerå…¥åŠ›ã®æœ‰åŠ¹åŒ–
         /// </summary>
         public void PlayerEnable()
         {
@@ -31,7 +31,7 @@ namespace Common
         }
 
         /// <summary>
-        /// UI“ü—Í‚Ì—LŒø‰»
+        /// UIå…¥åŠ›ã®æœ‰åŠ¹åŒ–
         /// </summary>
         public void UIEnable()
         {
@@ -40,21 +40,21 @@ namespace Common
         }
 
         /// <summary>
-        /// Player“ü—Í‚Ì–³Œø‰»
+        /// Playerå…¥åŠ›ã®ç„¡åŠ¹åŒ–
         /// </summary>
         public void PlayerDisable()
         {
             _InputSystemActions?.Player.Disable();
-            Debug.Log("ƒvƒŒƒCƒ„[‘€ì–³Œø‰»");
+            Debug.Log("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ“ä½œç„¡åŠ¹åŒ–");
         }
 
         /// <summary>
-        /// UI“ü—Í‚Ì—LŒø‰»
+        /// UIå…¥åŠ›ã®æœ‰åŠ¹åŒ–
         /// </summary>
         public void UIDisable()
         {
             _InputSystemActions?.UI.Disable();
-            Debug.Log("UI‘€ì–³Œø‰»");
+            Debug.Log("UIæ“ä½œç„¡åŠ¹åŒ–");
         }
     }
 }

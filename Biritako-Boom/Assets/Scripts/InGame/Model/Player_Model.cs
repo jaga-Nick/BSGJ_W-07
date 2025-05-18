@@ -1,4 +1,4 @@
-using Common;
+ï»¿using Common;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
@@ -12,20 +12,20 @@ namespace InGame
     /// </summary>
     public class Player_Model
     {
-        //--ƒf[ƒ^‚Æ‚µ‚Ä•Û‚·‚éˆ×‚ÉB
+        //--ãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦ä¿æŒã™ã‚‹ç‚ºã«ã€‚
         private GameObject PlayerObject;
         private Rigidbody2D rb;
         //-----------------------
         /// <summary>
-        /// ¶¬’n“_
+        /// ç”Ÿæˆåœ°ç‚¹
         /// </summary>
         private Vector3 InstancePosition=new Vector3(0,0,0);
 
-        //---ƒXƒe[ƒ^ƒX•”•ª-----------
+        //---ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹éƒ¨åˆ†-----------
         public float Speed { get; private set; } = 3.0f;
 
         /// <summary>
-        /// ©‹@¶¬
+        /// è‡ªæ©Ÿç”Ÿæˆ
         /// </summary>
         public GameObject PlayerCharacterGenerate(Vector3 GeneratePosition)
         {
@@ -39,7 +39,7 @@ namespace InGame
         }
 
         /// <summary>
-        /// Addressableg—p©‹@¶¬
+        /// Addressableä½¿ç”¨è‡ªæ©Ÿç”Ÿæˆ
         /// </summary>
         /// <returns></returns>
         public async UniTask<GameObject> PlayerCharacterAddressGenerate(string Chara_Address, CancellationToken cancellationToken)
@@ -60,7 +60,7 @@ namespace InGame
         }
 
         /// <summary>
-        /// ¶¬’n“_•ÏX
+        /// ç”Ÿæˆåœ°ç‚¹å¤‰æ›´
         /// </summary>
         /// <param name="NewPosition"></param>
         public void InstancePositionChange(Vector3 NewPosition)
@@ -69,7 +69,7 @@ namespace InGame
         }
 
         /// <summary>
-        /// ˆÚ“®ˆ—
+        /// ç§»å‹•å‡¦ç†
         /// </summary>
         /// <param name="Speed"></param>
         /// <param name="rb"></param>

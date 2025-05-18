@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Common
 {
     /// <summary>
-    /// Addressable‚ğg‚¤‚Éusing‚³‚¹‚é
+    /// Addressableã‚’ä½¿ã†æ™‚ã«usingã•ã›ã‚‹
     /// </summary>
     /// <typeparam name="T"></typeparam>
     struct HandleDisposable<T> : IDisposable
@@ -20,7 +20,7 @@ namespace Common
             if (Handle.IsValid())
             {
                 Handle.Release();
-                Handle = default; //–³Œø’l
+                Handle = default; //ç„¡åŠ¹å€¤
             }
         }
     }

@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace Attach
 {
     /// <summary>
-    /// Player‚ÉAttach‚·‚é
+    /// Playerã«Attachã™ã‚‹
     /// </summary>
     public class Player_Attach : MonoBehaviour
     {
