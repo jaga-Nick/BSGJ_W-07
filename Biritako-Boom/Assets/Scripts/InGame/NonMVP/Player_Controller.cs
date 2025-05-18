@@ -1,9 +1,9 @@
-using Common;
+﻿using Common;
 using InGame;
 using UnityEngine;
 
 /// <summary>
-/// Input�𐧌�
+/// Inputを制御
 /// </summary>
 public class Player_Controller : MonoBehaviour
 {

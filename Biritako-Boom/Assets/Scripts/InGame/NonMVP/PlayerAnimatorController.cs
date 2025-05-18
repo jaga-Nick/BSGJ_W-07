@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[‚É’¼ƒAƒ^ƒbƒ`‘z’èB(PlayerAttach‚É‹@”\ˆÚs‚à‹–ì‚ÉB
+/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«ç›´ã‚¢ã‚¿ãƒƒãƒæƒ³å®šã€‚(PlayerAttachã«æ©Ÿèƒ½ç§»è¡Œã‚‚è¦–é‡ã«ã€‚
 /// </summary>
 public class PlayerAnimatorController : MonoBehaviour
 {
     private Animator Animator;
     private Rigidbody2D _rb;
 
-    //ƒAƒjƒ[ƒ^[‚Ìƒpƒ‰ƒ[ƒ^[‚ğƒnƒbƒVƒ…‰»
+    //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ãƒãƒƒã‚·ãƒ¥åŒ–
     private static readonly int Vertical = Animator.StringToHash("Vertical");
     private static readonly int Horizontal = Animator.StringToHash("Horizontal");
     private static readonly int Horizontal_OnMove = Animator.StringToHash("Horizontal_OnMove");
@@ -25,13 +25,13 @@ public class PlayerAnimatorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //velocity‚ğæ“¾‚µ‚ÄˆÚ“®‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+        //velocityã‚’å–å¾—ã—ã¦ç§»å‹•ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
         var move = _rb.linearVelocity;
 
-        //c‰¡‚Ì“®‚«‚ğ‘—‚éB
+        //ç¸¦æ¨ªã®å‹•ãã‚’é€ã‚‹ã€‚
         Animator.SetFloat(Vertical,move.y);
         Animator.SetFloat(Horizontal, move.x);
-        //c‰¡•ûŒü‚É0‚Å‚È‚¯‚ê‚ÎB
+        //ç¸¦æ¨ªæ–¹å‘ã«0ã§ãªã‘ã‚Œã°ã€‚
         Animator.SetBool(Vertical_OnMove, move.y != 0);
         Animator.SetBool(Horizontal_OnMove, move.x != 0);
     }
