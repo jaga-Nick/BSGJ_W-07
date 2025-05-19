@@ -11,18 +11,22 @@ namespace InGame.Model
     public class UfoModel : MonoBehaviour
     {
         /// <summary>
-        /// UFOのHPに応じてのイベント管理
+        /// UFOのmodel管理
         /// </summary>
         public event Action UfoHpChanged;
         
         /// <summary>
         /// UFOのHP管理のフィールド
         /// </summary>
-        private const int minUfoHp = 0;
-        private const int maxUfoHp = 100;
+        private const int MinUfoHp = 0;
+        private const int MaxUfoHp = 100;
         private int currentUfoHp;
-
-        private const int score = 100;
+        
+        
+        /// <summary>
+        /// UFOのスコア管理のフィールド
+        /// </summary>
+        private const int Score = 100;
         private int currentScore;
         
         /// <summary>
@@ -30,8 +34,6 @@ namespace InGame.Model
         /// </summary>
         public int CurrentUfoHp { get => currentUfoHp; set => currentUfoHp = value; }
         public int CurrentScore { get => currentScore; set => currentScore = value; }
-        public int MinUfoHp => minUfoHp;
-        public int MaxUfoHp => maxUfoHp;
 
         /// <summary>
         /// UFOのHPをamountに応じて増やす。
@@ -40,7 +42,7 @@ namespace InGame.Model
         public void IncrementUfoHp(int amount)
         {
             currentUfoHp += amount;
-            currentUfoHp = Mathf.Clamp(currentUfoHp, minUfoHp, maxUfoHp);
+            currentUfoHp = Mathf.Clamp(currentUfoHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -51,7 +53,7 @@ namespace InGame.Model
         public void DecrementUfoHp(int amount)
         {
             currentUfoHp -= amount;
-            CurrentUfoHp = Mathf.Clamp(currentUfoHp, minUfoHp, maxUfoHp);
+            CurrentUfoHp = Mathf.Clamp(currentUfoHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -69,7 +71,7 @@ namespace InGame.Model
         /// </summary>
         public void RestoreUfoHp()
         {
-            currentUfoHp = maxUfoHp;
+            currentUfoHp = MaxUfoHp;
         }
 
         /// <summary>
