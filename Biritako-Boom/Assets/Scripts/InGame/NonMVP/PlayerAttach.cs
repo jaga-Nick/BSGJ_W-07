@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Attach
+namespace InGame.NonMVP
 {
     /// <summary>
     /// PlayerにAttachする
     /// </summary>
-    public class Player_Attach : MonoBehaviour
+    public class PlayerAttach : MonoBehaviour
     {
 
     }

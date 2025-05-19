@@ -6,15 +6,16 @@ using Common;
 using System;
 using System.Threading;
 using UnityEngine.InputSystem;
-namespace InGame
+
+namespace InGame.View
 {
     /// <summary>
-    /// 
+    /// Playerの表示
     /// </summary>
-    public class Player_View : MonoBehaviour
+    public class PlayerView : MonoBehaviour
     {
         private InputSystem_Actions _inputActions;
-        private GameObject Character;
+        private GameObject _character;
 
         private void Awake()
         {
