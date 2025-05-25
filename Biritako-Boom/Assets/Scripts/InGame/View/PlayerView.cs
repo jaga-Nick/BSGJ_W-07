@@ -1,25 +1,21 @@
 ﻿using UnityEngine;
-using Cysharp.Threading.Tasks;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using Common;
-using System;
-using System.Threading;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
 
 namespace InGame.View
 {
     /// <summary>
-    /// Playerの表示
+    /// Playerデータ表示
     /// </summary>
     public class PlayerView : MonoBehaviour
     {
-        private InputSystem_Actions _inputActions;
-        private GameObject _character;
+        //延長コード
+        [SerializeField]
+        private Image CodeGauge;
 
-        private void Awake()
+        public void OnChangedCodeGauge(float GaugePercent)
         {
-            _inputActions = InputSystemActionsManager.Instance().GetInputSystem_Actions();
-        }
+            CodeGauge.fillAmount = GaugePercent;
+        } 
     }
 }

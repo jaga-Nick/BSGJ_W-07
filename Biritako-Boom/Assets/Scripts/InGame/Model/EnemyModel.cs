@@ -5,6 +5,6 @@
     /// </summary>
     public class EnemyModel
     {
-        
+        public int MaxUfoHp { get; private set; }
     }
 }

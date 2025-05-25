@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using InGame.Model;
 using InGame.View;
+using System.Security.Cryptography.X509Certificates;
 
 namespace InGame.Presenter
 {
@@ -9,12 +10,12 @@ namespace InGame.Presenter
     /// </summary>
     public class PlayerPresenter:MonoBehaviour
     {
-        private PlayerModel _model;
-        private PlayerView _view;
+        private PlayerModel Model;
+        private PlayerView View;
         
         private void Update()
         {
-            
+            View.OnChangedCodeGauge(Model.GetCodeGaugePercent());
         }
     }
 }

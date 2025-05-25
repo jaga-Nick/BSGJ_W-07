@@ -9,17 +9,35 @@ namespace InGame.NonMVP
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
-        private PlayerModel _model;
-        private InputSystem_Actions _actionMap;
+        private PlayerModel Model;
+        private InputSystem_Actions ActionMap;
 
         public void Awake()
         {
-            _actionMap = InputSystemActionsManager.Instance().GetInputSystem_Actions(); 
+            ActionMap = InputSystemActionsManager.Instance().GetInputSystem_Actions(); 
         }
 
         public void Update()
         {
-            //Model.PlayerMove(ActionMap);
+            //移動処理
+            Model.MoveInput(ActionMap);
+
+            if (ActionMap.Player.Attack.WasPressedThisFrame())
+            {
+                Debug.Log("爆破する。");
+            }
+            if (ActionMap.Player.Have.WasPressedThisFrame())
+            {
+                Debug.Log("コンセントを持つ");
+            }
+            if (ActionMap.Player.Have.WasReleasedThisFrame())
+            {
+                Debug.Log("コンセントを置く");
+            }
+        }
+        public void FixedUpdate()
+        {
+            Model.MovePlayer();
         }
     }   
 }
