@@ -1,6 +1,8 @@
 ﻿using Common;
 using Title.Loader;
+using Title.View;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Title.Button
 {
@@ -9,6 +11,13 @@ namespace Title.Button
         private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
         private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
         private ISceneInfo _introSceneLoader = new IntroSceneLoader();
+
+        [SerializeField] private GameObject creditPanel;
+
+        private void Start()
+        {
+            OnClickCloseCreditButton();
+        }
 
         /// <summary>
         /// Settingボタンを押してSettingシーンに遷移する
@@ -29,9 +38,17 @@ namespace Title.Button
         /// <summary>
         /// Creditボタンを押してCreditPanelを開く。
         /// </summary>
-        public async void OnClickCreditButton()
+        public void OnClickOpenCreditButton()
         {
-            // await SceneManager.Instance().LoadMainScene(_settingSceneLoader);
+            creditPanel.SetActive(true);
+        }
+
+        /// <summary>
+        /// Closeボタンを押してCreditPanelを閉じる。
+        /// </summary>
+        public void OnClickCloseCreditButton()
+        {
+            creditPanel.SetActive(false);
         }
 
         /// <summary>
