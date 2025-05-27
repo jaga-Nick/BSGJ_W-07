@@ -15,7 +15,7 @@ namespace InGame.Presenter
         
         private void Update()
         {
-            View.OnChangedCodeGauge(Model.GetCodeGaugePercent());
+            //View.OnChangedCodeGauge(Model.GetCodeGaugePercent());
         }
     }
 }
