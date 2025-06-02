@@ -9,8 +9,8 @@ namespace Title.Button
     public class ButtonEvent : MonoBehaviour
     {
         private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
+        private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
         private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
-        private ISceneInfo _introSceneLoader = new IntroSceneLoader();
 
         [SerializeField] private GameObject creditPanel;
 
@@ -32,7 +32,7 @@ namespace Title.Button
         /// </summary>
         public async void OnClickPlayButton()
         {
-            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_introSceneLoader);
         }
 
         /// <summary>
