@@ -1,5 +1,6 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -28,6 +29,10 @@ namespace InGame.Model
         public float CodeGauge { get; private set; } = 10.0f;
 
         private Vector3 MoveVector;
+
+        //オブジェクトをスタック
+        private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
+
 
         public GameObject GeneratePlayerCharacter(Vector3 generatePosition)
         {
@@ -86,5 +91,12 @@ namespace InGame.Model
             return CodeGauge / MaxCodeGauge;
         }
 
+        /// <summary>
+        /// コード接続
+        /// </summary>
+        public void ConnectCode()
+        {
+            
+        }
     }
 }
