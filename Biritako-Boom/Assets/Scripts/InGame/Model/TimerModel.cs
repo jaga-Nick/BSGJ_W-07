@@ -3,6 +3,8 @@
 /// <summary>
 /// 時間制御
 /// </summary>
+
+
 public class TimerModel
 {
     [Header("制限時間")]
@@ -21,6 +23,16 @@ public class TimerModel
     {
         CurrentLimitTime = MaxLimitTime;
     }
+
+    /// <summary>
+    /// 時間割合
+    /// </summary>
+    /// <returns></returns>
+    public float GetTimePersent()
+    {
+        return CurrentLimitTime/MaxLimitTime;
+    }
+
     /// <summary>
     /// 時間減少
     /// </summary>

@@ -10,20 +10,16 @@ namespace InGame.View
 
     public class GameHUDView : MonoBehaviour
     {
-        private PlayerView playerView;
-        private ScoreView scoreView;
-        private TimerView timerView;
+        [Header("ゲージとPlayerCharacterAnimation")]
+        [SerializeField]
+        private PlayerView playerView = new PlayerView();
+        [Header("ScoreとTimer")]
+        [SerializeField]
+        private ScoreView scoreView = new ScoreView();
+        [SerializeField]
+        private TimerView timerView=new TimerView();
 
-        //初期化。
-        private void Awake()
-        {
-            playerView=gameObject.GetComponent<PlayerView>();
-            scoreView = gameObject.GetComponent<ScoreView>();
-            timerView = gameObject.GetComponent<TimerView>();
-        }
-
-
-        public void UpdatePlayerView(int gauge)=>playerView?.DisplayCodeGauge(gauge);
+        public void UpdatePlayerView(float gauge)=>playerView?.DisplayCodeGauge(gauge);
         public void UpdateScoreView(int score)=>scoreView?.DisplayScore(score);
         public void UpdateTimerView(float time) => timerView?.DisplayTimer(time);
     }

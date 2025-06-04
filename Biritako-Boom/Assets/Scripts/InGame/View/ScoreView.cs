@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace InGame.View
@@ -6,7 +7,8 @@ namespace InGame.View
     /// <summary>
     /// Scoreの表示
     /// </summary>
-    public class ScoreView : MonoBehaviour
+    [Serializable]
+    public class ScoreView
     {
         [SerializeField] private TextMeshProUGUI ScoreText;
 

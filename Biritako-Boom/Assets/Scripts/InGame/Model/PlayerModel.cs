@@ -30,6 +30,10 @@ namespace InGame.Model
 
         private Vector3 MoveVector;
 
+
+
+        //-------------------------------
+
         //オブジェクトをスタック
         private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
 

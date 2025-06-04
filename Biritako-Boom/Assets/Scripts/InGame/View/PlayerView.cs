@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,14 @@ namespace InGame.View
     /// <summary>
     /// PlayerAnimation変更処理
     /// </summary>
-    public class PlayerView : MonoBehaviour
+
+    [Serializable]
+    public class PlayerView
     {
         //延長コード
         [SerializeField]
         private Image CodeGauge;
-        /* Animation
+        /* Animation(実装までかなり長いはずなので全文コメント
         private Animator _animator;
         private Rigidbody2D _rb;
 
