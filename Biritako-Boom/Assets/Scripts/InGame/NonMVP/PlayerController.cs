@@ -7,15 +7,20 @@ namespace InGame.NonMVP
     /// <summary>
     /// Inputを制御
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController
     {
+        //
+        public PlayerController(PlayerModel playerModel)
+        {
+            Model = playerModel;
+
+            InputSystemActionsManager manage=InputSystemActionsManager.Instance();
+            ActionMap = manage.GetInputSystem_Actions();
+            
+        }
+
         private PlayerModel Model;
         private InputSystem_Actions ActionMap;
-
-        public void Awake()
-        {
-            ActionMap = InputSystemActionsManager.Instance().GetInputSystem_Actions(); 
-        }
 
         public void Update()
         {
@@ -28,16 +33,20 @@ namespace InGame.NonMVP
             }
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
-                Debug.Log("コンセントを持つ");
+                Debug.Log("プラグを持つ");
             }
             if (ActionMap.Player.Have.WasReleasedThisFrame())
             {
-                Debug.Log("コンセントを置く");
+                Debug.Log("プラグを刺す");
+            }
+            if (ActionMap.Player.Jump.WasPressedThisFrame()) 
+            {
+                Debug.Log("コンセントを配置する");
             }
         }
         public void FixedUpdate()
         {
-            Model.MovePlayer();
+           // Model.MovePlayer();
         }
     }   
 }

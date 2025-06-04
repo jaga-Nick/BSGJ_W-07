@@ -13,6 +13,7 @@ namespace InGame.Model
     /// </summary>
     public class PlayerModel
     {
+
         //--データとして保持する為に。
         private GameObject PlayerObject;
         private Rigidbody2D Rb;
@@ -46,6 +47,8 @@ namespace InGame.Model
                 player = Object.Instantiate(PlayerObject, generatePosition, Quaternion.identity);
             }
             Rb = player?.GetComponent<Rigidbody2D>();
+
+            InputSystemActionsManager manage = InputSystemActionsManager.Instance();
             return player;
         }
 
@@ -64,6 +67,7 @@ namespace InGame.Model
                 Rb = instance.GetComponent<Rigidbody2D>();
                 return instance;
             }
+            
         }
         
         public void SetSpeed(float newSpeed)
