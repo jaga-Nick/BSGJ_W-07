@@ -10,25 +10,26 @@ namespace InGame.Presenter
     /// </summary>
     public class PlayerPresenter:MonoBehaviour
     {
+        //Player統括
         private PlayerModel Model = new PlayerModel();
         private GameHUDView View;
-
-
+        
+        //システムモデル
         private TimerModel timerModel=new TimerModel();
         private ScoreModel scoreModel;
+
         private void Awake()
         {
-            //スコアイベントの購読
+            View = gameObject.GetComponent<GameHUDView>();
+            //スコアイベントの購読(Singletonの呼び出し）
             scoreModel = ScoreModel.Instance();
             scoreModel.ScoreChanged += ScoreChanged;
-            
-
         }
 
         private void Update()
         {
-            View.UpdatePlayerView(Model.GetCodeGaugePercent());
-            View.UpdateTimerView(timerModel.GetTimePersent());
+            View?.UpdatePlayerView(Model.GetCodeGaugePercent());
+            View?.UpdateTimerView(timerModel.GetTimePersent());
         }
 
         //購読解除対策
