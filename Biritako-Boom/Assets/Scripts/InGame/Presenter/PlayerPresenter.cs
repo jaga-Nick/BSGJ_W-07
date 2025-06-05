@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using InGame.Model;
 using InGame.View;
-using System.Security.Cryptography.X509Certificates;
 using InGame.NonMVP;
+using System;
 
 namespace InGame.Presenter
 {
@@ -17,6 +17,11 @@ namespace InGame.Presenter
         [SerializeField]
         private string CharacterAddress="PlayerCharacter";
 
+        [Header("ソケット(コンセント）データ")]
+        [SerializeField]
+        private GameObject SocketPrefab;
+        [SerializeField]
+        private string SocketAddress = "PlayerCharacter";
         //----------------------------------------------
 
         //Player統括
@@ -29,8 +34,6 @@ namespace InGame.Presenter
 
         private PlayerController playerController;
 
-
-
         private void Awake()
         {
             Model = new PlayerModel();
@@ -41,20 +44,19 @@ namespace InGame.Presenter
             scoreModel.ScoreChanged += ScoreChanged;
 
             playerController = new PlayerController(Model);
-        }
 
+        }
         private void Update()
         {
             View?.UpdatePlayerView(Model.GetCodeGaugePercent());
             View?.UpdateTimerView(timerModel.GetTimePersent());
 
             //Input系列の制御
-            playerController.Update();
+            playerController?.Update();
         }
-
         private void FixedUpdate()
         {
-            playerController.FixedUpdate();
+            playerController?.FixedUpdate();
         }
 
         //購読解除対策

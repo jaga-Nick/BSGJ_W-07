@@ -46,7 +46,7 @@ namespace InGame.NonMVP
         }
         public void FixedUpdate()
         {
-           // Model.MovePlayer();
+            Model.MovePlayer();
         }
     }   
 }

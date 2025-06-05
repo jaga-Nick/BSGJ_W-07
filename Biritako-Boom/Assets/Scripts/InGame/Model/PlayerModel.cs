@@ -86,12 +86,20 @@ namespace InGame.Model
         }
         public void MovePlayer()
         {
-            Rb.linearVelocity = MoveVector;
+            if (Rb != null)
+            {
+                Rb.linearVelocity = MoveVector;
+            }
         }
 
         public void DecreaseCodeGauge(float Num)
         {
             CodeGauge -= Num;
+        }
+
+        public void DecearseCodeGauge(Transform start,Transform end)
+        {
+            
         }
         //
         public float GetCodeGaugePercent()
