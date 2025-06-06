@@ -1,19 +1,22 @@
 using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
+using Result.Loader;
 
 namespace Result.Model
 {
     public class ResultButton : MonoBehaviour
     {
-        
+        //private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
+        //private readonly ISceneInfo _titleSceneLoader = new TitleSceneLoader();
         
         /// <summary>
         /// ReTryボタンを押したらInGameシーンに遷移する
         /// </summary>
         public async UniTask OnClickReTryButton()
         {
-            // await SceneManager.Instance().LoadMainScene(name);
+            //await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
         }
         
         /// <summary>
@@ -21,7 +24,7 @@ namespace Result.Model
         /// </summary>
         public async UniTask OnClickTitleButton()
         {
-            // await SceneManager.Instance().LoadMainScene(name);
+            //await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
         }
         
         /// <summary>
