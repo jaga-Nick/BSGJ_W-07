@@ -8,14 +8,26 @@ namespace Title.Button
 {
     public class ButtonEvent : MonoBehaviour
     {
+        /// <summary>
+        /// Loader
+        /// </summary>
         private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
         private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
-        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
 
+        /// <summary>
+        /// Panel
+        /// </summary>
         [SerializeField] private GameObject creditPanel;
+        [SerializeField] private Image fadePanel;
+        
+        /// <summary>
+        /// Manager
+        /// </summary>
+        private FadeManager _fadeManager;
 
         private void Start()
         {
+            _fadeManager = new FadeManager();
             OnClickCloseCreditButton();
         }
 
