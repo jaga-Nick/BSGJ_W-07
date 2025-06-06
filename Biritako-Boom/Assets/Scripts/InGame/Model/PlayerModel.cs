@@ -1,5 +1,6 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace InGame.Model
     /// <summary>
     /// Playerのmodel管理
     /// </summary>
+    [Serializable]
     public class PlayerModel
     {
 
@@ -44,7 +46,7 @@ namespace InGame.Model
             GameObject player = null;
             if (PlayerObject)
             {
-                player = Object.Instantiate(PlayerObject, generatePosition, Quaternion.identity);
+                player = UnityEngine.Object.Instantiate(PlayerObject, generatePosition, Quaternion.identity);
             }
             Rb = player?.GetComponent<Rigidbody2D>();
 
@@ -63,7 +65,7 @@ namespace InGame.Model
             using (new HandleDisposable<GameObject>(handle))
             {
                 GameObject prefab = await handle;
-                GameObject instance = Object.Instantiate(prefab,InstancePosition,Quaternion.identity);
+                GameObject instance = UnityEngine.Object.Instantiate(prefab,InstancePosition,Quaternion.identity);
                 Rb = instance.GetComponent<Rigidbody2D>();
                 return instance;
             }

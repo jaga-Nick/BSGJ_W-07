@@ -1,20 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace InGame
+namespace InGame.NonMVP
 {
-    /// <summary>
-    /// Listで管理する。
-    /// </summary>
-    class StructConnect
-    {
-        
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GenerateConnectModel : MonoBehaviour
+    public class GenerateCodeSystem : MonoBehaviour
     {
         private Transform Init;
         private Transform End;

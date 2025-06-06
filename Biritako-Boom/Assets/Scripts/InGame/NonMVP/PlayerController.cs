@@ -5,7 +5,7 @@ using UnityEngine;
 namespace InGame.NonMVP
 {
     /// <summary>
-    /// Inputを制御
+    /// Input
     /// </summary>
     public class PlayerController
     {

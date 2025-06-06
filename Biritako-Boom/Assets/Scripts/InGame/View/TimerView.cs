@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+
+
 namespace InGame.View
 {
     [Serializable]

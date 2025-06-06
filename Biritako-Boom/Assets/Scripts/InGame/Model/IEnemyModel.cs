@@ -40,14 +40,6 @@ namespace InGame.Model
             }
             Rb.linearVelocity = Angle;
         }
-        /// <summary>
-        /// 爆発。||仮の為一度SocketとEnemyを引数で生成する。
-        /// (一度別として扱う）
-        /// </summary>
-        public void Explosion(Transform Sokect,Transform IEnemy)
-        {
-            Vector3 distance = IEnemy.position - Sokect.position;
-            float Num=distance.magnitude;
-        }
+        
     }
 }

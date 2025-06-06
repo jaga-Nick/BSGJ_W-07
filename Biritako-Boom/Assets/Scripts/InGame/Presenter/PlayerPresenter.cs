@@ -2,13 +2,9 @@
 using InGame.Model;
 using InGame.View;
 using InGame.NonMVP;
-using System;
 
 namespace InGame.Presenter
 {
-    /// <summary>
-    /// Playerのpresenter
-    /// </summary>
     public class PlayerPresenter:MonoBehaviour
     {
         [Header("キャラクターPrefabデータ")]
