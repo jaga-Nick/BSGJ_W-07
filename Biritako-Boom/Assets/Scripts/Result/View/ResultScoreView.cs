@@ -16,7 +16,9 @@ namespace Result.View
 
         private const string SCORE_PREFIX = "Score : "; // スコアの接頭辞
 
-        // Viewの初期化（Presenterから呼ばれることを想定）
+        /// <summary>
+        /// Viewの初期化（Presenterから呼ばれることを想定）
+        /// </summary>
         public void Initialize()
         {
             if (_scoreText != null)
@@ -31,7 +33,10 @@ namespace Result.View
             }
         }
 
-        // スコアを非同期で、下一桁目から順番に表示するメソッド
+        /// <summary>
+        /// スコアを非同期で、下一桁目から順番に表示する
+        /// </summary>
+        /// <param name="score"></param>
         public async UniTask DisplaySingleScoreAnimation(int score)
         {
             // まずはバッファ付きの初期状態にリセット

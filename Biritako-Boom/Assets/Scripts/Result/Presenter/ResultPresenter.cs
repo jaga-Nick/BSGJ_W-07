@@ -28,7 +28,9 @@ public class ResultPresenter : MonoBehaviour
         await DisplaySingleScore(); // 1つのスコアを表示
     }
 
-    // 1つのスコアを非同期で表示するメソッド
+    /// <summary>
+    /// 1つのスコアを非同期で表示する
+    /// </summary>
     public async UniTask DisplaySingleScore()
     {
         Debug.Log("Loading single score...");
