@@ -12,12 +12,19 @@ namespace InGame.Model
         /// 移動許容距離
         /// </summary>
         public float LimitMoveDistance { get; }
-
         public Rigidbody2D Rb { get;}
         public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
         public Vector3 Angle { get; set; }
-        public void Move()
+        /// <summary>
+        /// 爆発力
+        /// </summary>
+        public float ExplosionPower { get;}
+
+        /// <summary>
+        /// ランダムに動きます。
+        /// </summary>
+        public virtual void Move()
         {
             CurrentTime += Time.deltaTime;
 
@@ -33,9 +40,14 @@ namespace InGame.Model
             }
             Rb.linearVelocity = Angle;
         }
-        public void AngleChange(int num)
+        /// <summary>
+        /// 爆発。||仮の為一度SocketとEnemyを引数で生成する。
+        /// (一度別として扱う）
+        /// </summary>
+        public void Explosion(Transform Sokect,Transform IEnemy)
         {
-
+            Vector3 distance = IEnemy.position - Sokect.position;
+            float Num=distance.magnitude;
         }
     }
 }
