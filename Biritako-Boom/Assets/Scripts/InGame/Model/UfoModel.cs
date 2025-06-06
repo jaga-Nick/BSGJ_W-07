@@ -1,14 +1,13 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
 
 namespace InGame.Model
 {
     /// <summary>
     /// UFO(敵)の管理クラス
     /// </summary>
-    public class UfoModel : MonoBehaviour
+    public class UfoModel 
     {
         /// <summary>
         /// UFOのmodel管理
@@ -20,6 +19,9 @@ namespace InGame.Model
         /// </summary>
         private const int MinUfoHp = 0;
         private const int MaxUfoHp = 100;
+
+        //レベルデザインに必要事項より追記
+        [SerializeField]
         private int currentUfoHp;
         
         
@@ -34,6 +36,9 @@ namespace InGame.Model
         /// </summary>
         public int CurrentUfoHp { get => currentUfoHp; set => currentUfoHp = value; }
         public int CurrentScore { get => currentScore; set => currentScore = value; }
+
+
+
 
         /// <summary>
         /// UFOのHPをamountに応じて増やす。

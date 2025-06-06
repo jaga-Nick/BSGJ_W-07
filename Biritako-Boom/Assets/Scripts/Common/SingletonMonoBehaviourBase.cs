@@ -7,6 +7,10 @@ namespace Common
     {
         protected static T instance;
 
+        /// <summary>
+        /// 生成
+        /// </summary>
+        /// <returns></returns>
         public static T Instance()
         {
             if (instance == null)

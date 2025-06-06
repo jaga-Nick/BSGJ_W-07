@@ -5,21 +5,48 @@ using UnityEngine;
 namespace InGame.NonMVP
 {
     /// <summary>
-    /// Inputを制御
+    /// Input
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController
     {
-        private PlayerModel _model;
-        private InputSystem_Actions _actionMap;
-
-        public void Awake()
+        //
+        public PlayerController(PlayerModel playerModel)
         {
-            _actionMap = InputSystemActionsManager.Instance().GetInputSystem_Actions(); 
+            Model = playerModel;
+
+            InputSystemActionsManager manage=InputSystemActionsManager.Instance();
+            ActionMap = manage.GetInputSystem_Actions();
+            
         }
+
+        private PlayerModel Model;
+        private InputSystem_Actions ActionMap;
 
         public void Update()
         {
-            //Model.PlayerMove(ActionMap);
+            //移動処理
+            Model.MoveInput(ActionMap);
+
+            if (ActionMap.Player.Attack.WasPressedThisFrame())
+            {
+                Debug.Log("爆破する。");
+            }
+            if (ActionMap.Player.Have.WasPressedThisFrame())
+            {
+                Debug.Log("プラグを持つ");
+            }
+            if (ActionMap.Player.Have.WasReleasedThisFrame())
+            {
+                Debug.Log("プラグを刺す");
+            }
+            if (ActionMap.Player.Jump.WasPressedThisFrame()) 
+            {
+                Debug.Log("コンセントを配置する");
+            }
+        }
+        public void FixedUpdate()
+        {
+            Model.MovePlayer();
         }
     }   
 }
