@@ -3,15 +3,29 @@ using System.Collections.Generic;
 
 public class CodeSimulater : MonoBehaviour
 {
-    public void Initialize(int particleCount,float timeStep,Vector3 gravity,float damping,float stiffness)
+    /// <summary>
+    /// 初期化データ
+    /// </summary>
+    /// <param name="lineRenderer"></param>
+    /// <param name="particleCount"></param>
+    /// <param name="timeStep"></param>
+    /// <param name="gravity"></param>
+    /// <param name="damping"></param>
+    /// <param name="stiffness"></param>
+    /// <param name="Start"></param>
+    /// <param name="End"></param>
+    public void Initialize(LineRenderer lineRenderer,int particleCount,float timeStep,Vector3 gravity,float damping,float stiffness,Transform Start,Transform End)
     {
+        this.CodeLineRenderer = lineRenderer;
+
         this.ParticleCount = particleCount;
         this.TimeStep = timeStep;
         this.Gravity = gravity;
         this.Damping = damping;
         this.Stiffness = stiffness;
 
-
+        this.StartPoint = Start;
+        this.EndPoint = End;
 
         InitializeRope();
         //位置設定の総量変更
@@ -23,12 +37,11 @@ public class CodeSimulater : MonoBehaviour
 
     // ヒモの両端を指定するためのTransform
     [Header("両端の位置")]
-    public Transform startPoint;
-    public Transform endPoint;
+    public Transform StartPoint;
+    public Transform EndPoint;
 
+    #region データの実装（外部から設定される。Initializeで設定)
     // ヒモの粒子数
-    [Header("粒子数")]
-    [SerializeField] 
     private int ParticleCount = 20;
 
     // シミュレーションパラメータ
@@ -56,21 +69,41 @@ public class CodeSimulater : MonoBehaviour
         }
     }
     private List<Constraint> constraints = new List<Constraint>();
+    private LineRenderer CodeLineRenderer;
+    #endregion
 
-
-    [Header("ロープの可視化用 LineRenderer")]
-    public LineRenderer lineRenderer;
-
+   
     //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
     //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-
-
-    void Update()
+    public void Update()
     {
         Simulate();
         UpdateLineRenderer();
     }
+    /// <summary>
+    /// ここで当たった時に消える。
+    /// </summary>
+    /// <param name="collision"></param>
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
 
+    /// <summary>
+    /// 爆破を呼び出す
+    /// </summary>
+    public void Explosion()
+    {
+        //ここでどれだけ離れているかを設定する
+
+        Debug.Log(Positions[4]);
+        Debug.Log(Positions[9]);
+        Debug.Log(Positions[14]);
+        Debug.Log(Positions[19]);
+    }
+
+
+    #region ロープの設定
     /// <summary>
     /// ロープの質点と拘束を初期化する。
     /// 両端は固定され、中間は補間で配置される。
@@ -85,7 +118,7 @@ public class CodeSimulater : MonoBehaviour
         for (int i = 0; i < ParticleCount; i++)
         {
             float t = (float)i / (ParticleCount - 1);
-            Positions[i] = Vector3.Lerp(startPoint.position, endPoint.position, t);
+            Positions[i] = Vector3.Lerp(StartPoint.position, EndPoint.position, t);
             Velocities[i] = Vector3.zero;
             Masses[i] = 1f;
         }
@@ -100,7 +133,6 @@ public class CodeSimulater : MonoBehaviour
         IsFixed[0] = true;
         IsFixed[ParticleCount - 1] = true;
     }
-
     /// <summary>
     /// シミュレーション本体。力適用 → 拘束解決 → 状態更新 の流れ。
     /// </summary>
@@ -151,19 +183,19 @@ public class CodeSimulater : MonoBehaviour
         }
 
         // 両端を強制的に固定
-        Positions[0] = startPoint.position;
-        Positions[ParticleCount - 1] = endPoint.position;
+        Positions[0] = StartPoint.position;
+        Positions[ParticleCount - 1] = EndPoint.position;
     }
-
     /// <summary>
     /// LineRendererをロープの現在の状態に合わせて更新。
     /// </summary>
     private void UpdateLineRenderer()
     {
-        if (lineRenderer == null) return;
+        if (CodeLineRenderer == null) return;
         for (int i = 0; i < ParticleCount; i++)
         {
-            lineRenderer.SetPosition(i, Positions[i]);
+            CodeLineRenderer.SetPosition(i, Positions[i]);
         }
     }
+    #endregion
 }

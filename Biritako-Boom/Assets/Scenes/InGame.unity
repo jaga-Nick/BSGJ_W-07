@@ -1159,6 +1159,7 @@ GameObject:
   - component: {fileID: 1927360532}
   - component: {fileID: 1927360531}
   - component: {fileID: 1927360533}
+  - component: {fileID: 1927360534}
   m_Layer: 0
   m_Name: PlayerManage
   m_TagString: Untagged
@@ -1193,7 +1194,7 @@ Transform:
   m_GameObject: {fileID: 1927360527}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.0225775, y: 0.08135155, z: 0.18268704}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1215,6 +1216,25 @@ MonoBehaviour:
   CharacterAddress: PlayerCharacter
   SocketPrefab: {fileID: 0}
   SocketAddress: PlayerCharacter
+--- !u!114 &1927360534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927360527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00602efde169ab4e86462bcb8b88131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LineWidth: 0.1
+  LineMaterial: {fileID: 0}
+  ParticleCount: 20
+  TimeStep: 0.02
+  Gravity: {x: 0, y: 0, z: 0}
+  Damping: 2
+  Stiffness: 2
 --- !u!1 &2126630021
 GameObject:
   m_ObjectHideFlags: 0
