@@ -1,55 +1,52 @@
 fileFormatVersion: 2
-guid: 62d15a1ea131b054997051125a74fa38
+guid: 293a8c4a3c17afd4baca9789e2423250
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1483665779731714255
-    second: Bomb_0
+      213: 4558447895395872863
+    second: UfoSubordinate_0
   - first:
-      213: -1902917897002446259
-    second: Bomb_1
+      213: -781484219597300722
+    second: UfoSubordinate_1
   - first:
-      213: -5839540051515997725
-    second: Bomb_2
+      213: -5795048750165052870
+    second: UfoSubordinate_2
   - first:
-      213: -5337159410277229379
-    second: Bomb_3
+      213: -6894097731175545333
+    second: UfoSubordinate_3
   - first:
-      213: 4119226490080697988
-    second: Bomb_4
+      213: 5485305833892122581
+    second: UfoSubordinate_4
   - first:
-      213: -3851982506454002795
-    second: Bomb_5
+      213: -319486547247101303
+    second: UfoSubordinate_5
   - first:
-      213: 6209065506319696928
-    second: Bomb_6
+      213: -9007063861126975827
+    second: UfoSubordinate_6
   - first:
-      213: -3399856696407936989
-    second: Bomb_7
+      213: -5890769592540571741
+    second: UfoSubordinate_7
   - first:
-      213: 1985883963534080937
-    second: Bomb_8
+      213: -5902532769098643267
+    second: UfoSubordinate_8
   - first:
-      213: 4628270932175567455
-    second: Bomb_9
+      213: 4527647582138931495
+    second: UfoSubordinate_9
   - first:
-      213: -6024620564409628431
-    second: Bomb_10
+      213: -1163158034190860594
+    second: UfoSubordinate_10
   - first:
-      213: 7996123559772295727
-    second: Bomb_11
+      213: 5972804643913094602
+    second: UfoSubordinate_11
   - first:
-      213: 5531716946309243334
-    second: Bomb_12
+      213: 4324028322784255060
+    second: UfoSubordinate_12
   - first:
-      213: 407215636444879582
-    second: Bomb_13
+      213: -7245516656229081241
+    second: UfoSubordinate_13
   - first:
-      213: 663768082219358500
-    second: Bomb_14
-  - first:
-      213: -6181241212211882912
-    second: Bomb_15
+      213: -3938917566748178435
+    second: UfoSubordinate_14
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,7 +94,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 109, y: 6, z: 107, w: 4}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -158,363 +155,345 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bomb_0
+      name: UfoSubordinate_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 144
-        width: 33
-        height: 30
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 13f20b985d5f86be0800000000000000
-      internalID: -1483665779731714255
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_1
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 133
-        width: 56
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d429f68314a7795e0800000000000000
-      internalID: -1902917897002446259
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_2
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 127
-        width: 65
-        height: 65
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3e109b92349c5fea0800000000000000
-      internalID: -5839540051515997725
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 109
-        width: 19
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dbcdac83bc99ee5b0800000000000000
-      internalID: -5337159410277229379
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_4
-      rect:
-        serializedVersion: 2
-        x: 46
-        y: 109
-        width: 19
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 48e93aa0bae6a2930800000000000000
-      internalID: 4119226490080697988
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_5
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 63
-        width: 19
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5935acda1520b8ac0800000000000000
-      internalID: -3851982506454002795
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_6
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 63
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 02401535e280b2650800000000000000
-      internalID: 6209065506319696928
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_7
-      rect:
-        serializedVersion: 2
-        x: 142
-        y: 81
-        width: 38
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3203f5b095841d0d0800000000000000
-      internalID: -3399856696407936989
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_8
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 7
-        width: 58
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9abf79371f64f8b10800000000000000
-      internalID: 1985883963534080937
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_9
-      rect:
-        serializedVersion: 2
-        x: 63
-        y: 3
-        width: 66
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f5a379424ebea3040800000000000000
-      internalID: 4628270932175567455
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_10
-      rect:
-        serializedVersion: 2
-        x: 131
-        y: 41
-        width: 22
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f8c9d7348f346ca0800000000000000
-      internalID: -6024620564409628431
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_11
-      rect:
-        serializedVersion: 2
-        x: 146
-        y: 32
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f221c582300f7fe60800000000000000
-      internalID: 7996123559772295727
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bomb_12
-      rect:
-        serializedVersion: 2
-        x: 171
-        y: 26
+        x: 81
+        y: 85
         width: 12
-        height: 17
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6c165ce114b94cc40800000000000000
-      internalID: 5531716946309243334
+      spriteID: f50b23c853cd24f30800000000000000
+      internalID: 4558447895395872863
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bomb_13
+      name: UfoSubordinate_1
       rect:
         serializedVersion: 2
-        x: 173
-        y: 42
-        width: 19
-        height: 23
+        x: 81
+        y: 85
+        width: 12
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eda184db678b6a500800000000000000
-      internalID: 407215636444879582
+      spriteID: e0c54552e3c9725f0800000000000000
+      internalID: -781484219597300722
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bomb_14
+      name: UfoSubordinate_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 1
-        width: 31
-        height: 26
+        x: 81
+        y: 85
+        width: 12
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4295de1dd8d263900800000000000000
-      internalID: 663768082219358500
+      spriteID: a32375e7dd9d39fa0800000000000000
+      internalID: -5795048750165052870
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bomb_15
+      name: UfoSubordinate_3
       rect:
         serializedVersion: 2
-        x: 167
-        y: 1
-        width: 24
-        height: 21
+        x: 110
+        y: 7
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0641b1bfdd1d73aa0800000000000000
-      internalID: -6181241212211882912
+      spriteID: b068476d3ae3350a0800000000000000
+      internalID: -6894097731175545333
       vertices: []
       indices: 
       edges: []
       weights: []
-    outline: []
+    - serializedVersion: 2
+      name: UfoSubordinate_4
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5df8481f798bf1c40800000000000000
+      internalID: 5485305833892122581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_5
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a02d09da4f09bf0800000000000000
+      internalID: -319486547247101303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_6
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daea448c32b700380800000000000000
+      internalID: -9007063861126975827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_7
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 9
+      pivot: {x: 0.48440433, y: 0.4376184}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a752f62448cf3ea0800000000000000
+      internalID: -5890769592540571741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_8
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 7
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db8c5ce28bdf51ea0800000000000000
+      internalID: -5902532769098643267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7291c89cc7f65de30800000000000000
+      internalID: 4527647582138931495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_10
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ece796a3ee1abdfe0800000000000000
+      internalID: -1163158034190860594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_11
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac55e39ad2aa3e250800000000000000
+      internalID: 5972804643913094602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_12
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45c984299d8020c30800000000000000
+      internalID: 4324028322784255060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_13
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 7
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f1a435df0c27b90800000000000000
+      internalID: -7245516656229081241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_14
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7cd62a7572659c0800000000000000
+      internalID: -3938917566748178435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline:
+    - - {x: -159, y: -56.5}
+      - {x: 159, y: -56.5}
+      - {x: 159, y: 56.5}
+      - {x: -159, y: 56.5}
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
-    internalID: 0
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -523,22 +502,21 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bomb_0: -1483665779731714255
-      Bomb_1: -1902917897002446259
-      Bomb_10: -6024620564409628431
-      Bomb_11: 7996123559772295727
-      Bomb_12: 5531716946309243334
-      Bomb_13: 407215636444879582
-      Bomb_14: 663768082219358500
-      Bomb_15: -6181241212211882912
-      Bomb_2: -5839540051515997725
-      Bomb_3: -5337159410277229379
-      Bomb_4: 4119226490080697988
-      Bomb_5: -3851982506454002795
-      Bomb_6: 6209065506319696928
-      Bomb_7: -3399856696407936989
-      Bomb_8: 1985883963534080937
-      Bomb_9: 4628270932175567455
+      UfoSubordinate_0: 4558447895395872863
+      UfoSubordinate_1: -781484219597300722
+      UfoSubordinate_10: -1163158034190860594
+      UfoSubordinate_11: 5972804643913094602
+      UfoSubordinate_12: 4324028322784255060
+      UfoSubordinate_13: -7245516656229081241
+      UfoSubordinate_14: -3938917566748178435
+      UfoSubordinate_2: -5795048750165052870
+      UfoSubordinate_3: -6894097731175545333
+      UfoSubordinate_4: 5485305833892122581
+      UfoSubordinate_5: -319486547247101303
+      UfoSubordinate_6: -9007063861126975827
+      UfoSubordinate_7: -5890769592540571741
+      UfoSubordinate_8: -5902532769098643267
+      UfoSubordinate_9: 4527647582138931495
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

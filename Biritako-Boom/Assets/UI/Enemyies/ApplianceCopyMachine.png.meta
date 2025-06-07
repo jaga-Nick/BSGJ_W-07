@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 44be2945d557668478c67f4c16678283
+guid: ed289b8685b1d5043b618f602a9a52aa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3298995681524961215
-    second: UfoBoss_0
+      213: -354778038261107623
+    second: ApplianceCopyMachine_0
+  - first:
+      213: 2581803329664228705
+    second: ApplianceCopyMachine_1
+  - first:
+      213: -8478378847255593913
+    second: ApplianceCopyMachine_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UfoBoss_0
+      name: ApplianceCopyMachine_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 190
-        height: 189
+        x: 0
+        y: 2
+        width: 64
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 140382f08ec9732d0800000000000000
-      internalID: -3298995681524961215
+      spriteID: 954365ff043931bf0800000000000000
+      internalID: -354778038261107623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCopyMachine_1
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 0
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16d9e88037864d320800000000000000
+      internalID: 2581803329664228705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCopyMachine_2
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 1
+        width: 65
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74cf42adb5fb65a80800000000000000
+      internalID: -8478378847255593913
       vertices: []
       indices: 
       edges: []
@@ -147,8 +197,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      UfoBoss_0: -3298995681524961215
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
