@@ -23,12 +23,15 @@ namespace Title.Button
         /// <summary>
         /// Manager
         /// </summary>
-        private FadeManager _fadeManager;
+        private FadeManager _sceneFadeManager;
+        private FadeManager _panelFadeManager;
 
         private void Start()
         {
-            _fadeManager = new FadeManager();
-            OnClickCloseCreditButton();
+            _sceneFadeManager = new FadeManager(fadePanel);
+            _panelFadeManager = new FadeManager(fadePanel);
+            // 最初はクレジットパネルは隠す
+            creditPanel.SetActive(false);
         }
 
         /// <summary>
@@ -36,7 +39,9 @@ namespace Title.Button
         /// </summary>
         public async void OnClickSettingButton()
         {
+            await _sceneFadeManager.End();
             await SceneManager.Instance().LoadMainScene(_settingSceneLoader);
+            await _sceneFadeManager.Init();
         }
 
         /// <summary>
@@ -44,7 +49,9 @@ namespace Title.Button
         /// </summary>
         public async void OnClickPlayButton()
         {
+            await _sceneFadeManager.End();
             await SceneManager.Instance().LoadMainScene(_introSceneLoader);
+            await _panelFadeManager.Init();
         }
 
         /// <summary>
