@@ -36,36 +36,36 @@ namespace InGame.Model
 
         #region プロパティ
         
+        /// <summary>
+        /// インターフェイスプロパティ
+        /// </summary>
         // 移動許容距離
         public float LimitMoveDistance { get; private set; }
         public Rigidbody2D Rb { get; private set; }
         // 爆発力
         public float ExplosionPower { get; private set; }
-
-        // 以下のプロパティはIEnemyModelで定義されていますが、
-        // 母艦の特殊な移動ロジックでは直接使用しないため、実装のみ行います。
+        
         public float CurrentTime { get; set; }
-        public float IntervalTime { get; set; }
+        public float IntervalTime { get; set; } = 0.2f;
         public Vector3 Angle { get; set; }
 
-        #endregion
-
-        #region プロパティ (母艦固有)
-
+        /// <summary>
+        /// 母艦固有プロパティ
+        /// </summary>
         private GameObject motherShipObject;
         
         // 母艦のHP
-        public int Hp { get; private set; }
+        private int _hp;
         
         // 破壊されたときに得られるスコア
-        public int Score { get; } = 1000000;
+        private int _score { get; } = 1000000;
         
         // 母艦の移動速度
-        public float Speed { get; private set; }
+        private float _speed;
 
         private bool isEnd = false;
         
-        public bool IsRandomPatrol { get; set; } = true;
+        private bool isRandomPatrol { get; set; } = true;
 
         #endregion
         
@@ -93,10 +93,12 @@ namespace InGame.Model
         public MotherShipModel(Rigidbody2D rb)
         {
             // --- ステータスを初期化 ---
-            Speed = 5.0f;
-            Hp = 5000;
+            IntervalTime = 0.2f;
+            
+            _speed = 5.0f;
+            _hp = 5000;
             ExplosionPower = 100;
-            Score = 1000000;
+            _score = 1000000;
             isEnd = false;
         }
 
@@ -110,9 +112,9 @@ namespace InGame.Model
             _transform = rb.transform;
         }
         
-        public void SetRandomPatrol(bool mode){ IsRandomPatrol  = mode; }
+        public void SetRandomPatrol(bool mode){ isRandomPatrol  = mode; }
         
-        public void SetSpeed(float speed) { Speed = speed; }
+        public void SetSpeed(float speed) { _speed = speed; }
         
         
         
@@ -125,6 +127,7 @@ namespace InGame.Model
         public void DefeatNotification()
         {
             Debug.Log("第三部　完!!");
+            
             isEnd = true;
         }
         
@@ -161,8 +164,8 @@ namespace InGame.Model
         /// </summary>
         public async UniTask TakeDamage(int damage)
         {
-            Hp -= damage;
-            if (Hp <= 0)
+            _hp -= damage;
+            if (_hp <= 0)
             {
                 DefeatNotification();
             }
@@ -202,6 +205,7 @@ namespace InGame.Model
         /// </summary>
         public void Move()
         {
+            
             // 状態に応じて処理を分岐させます
             switch (_currentState)
             {
@@ -212,6 +216,25 @@ namespace InGame.Model
                     MoveCenter();
                     break;
             }
+            
+            /*
+            
+            CurrentTime += Time.deltaTime;
+
+            if (IntervalTime >= CurrentTime)
+            {
+                // 状態に応じて処理を分岐させます
+                switch (_currentState)
+                {
+                    case State.Patrolling:
+                        Patrolling();
+                        break;
+                    case State.MovingToCenter:
+                        MoveCenter();
+                        break;
+                }
+            }
+            */
         }
         
         /// <summary>
@@ -247,7 +270,7 @@ namespace InGame.Model
             if (_currentTargetIndex >= _ufoTargets.Count)
             {
                 // ランダム巡回フラグがtrueの場合、リストをシャッフルする
-                if (IsRandomPatrol)
+                if (isRandomPatrol)
                 {
                     RandomTargets();
                 }
@@ -301,7 +324,7 @@ namespace InGame.Model
             Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
             
             // Rigidbody2Dの速度に、方向と速さを設定して移動させる
-            Rb.linearVelocity = direction * Speed;
+            Rb.linearVelocity = direction * _speed;
         }
         
         

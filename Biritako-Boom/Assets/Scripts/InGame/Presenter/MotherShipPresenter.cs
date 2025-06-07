@@ -9,8 +9,8 @@ namespace InGame.Presenter
     {
         
         [Header("母艦Prefabデータ")]
-        [SerializeField]
-        private GameObject CharacterPrefab;
+        //[SerializeField]
+        //private GameObject CharacterPrefab;
         [SerializeField]
         private string CharacterAddress="Enemy_MotherShip";
         

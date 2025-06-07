@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -6,7 +7,14 @@ namespace InGame.View
     public class MotherShipView : MonoBehaviour
     {
         [SerializeField]
-        private Rigidbody2D Rb;
+        private Rigidbody2D _rb;
+
+
+        private void Awake()
+        {
+            _rb = GetComponent<Rigidbody2D>();
+        }
+
         void Start()
         {
             
@@ -24,12 +32,7 @@ namespace InGame.View
         /// </summary>
         public MotherShipView()
         {
-            /*
-            if (Rb == null)
-            {
-                Rb = GetComponent<Rigidbody2D>();
-            }
-            */
+
             
             
         }
@@ -38,7 +41,7 @@ namespace InGame.View
         
         # region アクセスメソッド
 
-        public Rigidbody2D GetRb() { return Rb; }
+        public Rigidbody2D GetRb() { return _rb; }
 
         #endregion
     }

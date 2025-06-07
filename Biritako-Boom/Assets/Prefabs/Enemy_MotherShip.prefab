@@ -175,7 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d306c6ca1285648a4e9ff737bc0fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 0}
   CharacterAddress: Enemy_MotherShip
 --- !u!114 &-6851847958364582349
 MonoBehaviour:
@@ -189,4 +188,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c807f249ab6cdb4c942f9fe03180d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rb: {fileID: 8017675619962139825}
+  _rb: {fileID: 8017675619962139825}
