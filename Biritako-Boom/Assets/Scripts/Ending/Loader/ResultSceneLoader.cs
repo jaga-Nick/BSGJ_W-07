@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Ending.Loader
 {
-    public class ResultSceneLoader : MonoBehaviour
+    public class ResultSceneLoader : ISceneInfo
     {
         public string SceneName => "Result";
 

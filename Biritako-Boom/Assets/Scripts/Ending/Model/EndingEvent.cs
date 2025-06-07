@@ -8,14 +8,14 @@ namespace Ending.Model
 {
     public class EndingEvent : MonoBehaviour
     {
-        //private readonly ISceneInfo _resultSceneLoader = new InResultSceneLoader();
+        private readonly ISceneInfo _resultSceneLoader = new ResultSceneLoader();
         
         /// <summary>
         /// Resultシーンに遷移する
         /// </summary>
         public async UniTask OnResultLoder()
         {
-            // await SceneManager.Instance().LoadMainScene(_resultSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_resultSceneLoader);
             Debug.Log("通りました");
         }
     }
