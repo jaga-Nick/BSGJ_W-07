@@ -12,6 +12,10 @@ namespace Common
 
         public string SceneName { get; }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="fadePanel"></param>
         public FadeManager(Image fadePanel)
         {
             _fadePanel = fadePanel;
