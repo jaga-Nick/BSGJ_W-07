@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52ac4f2a6b1073444a285bd27c9ed96b
+    m_Address: Enemy_MotherShip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5af35d3ee30dcf141a435eafe40895c8
     m_Address: Title
     m_ReadOnly: 0
