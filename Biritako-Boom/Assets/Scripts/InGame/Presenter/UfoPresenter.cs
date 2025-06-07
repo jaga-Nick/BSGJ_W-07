@@ -9,7 +9,8 @@ namespace InGame.Presenter
         
         private void Awake()
         {
-            ufoModel = gameObject.GetComponent<UfoModel>();
+            ufoModel = new UfoModel();
+            
         }
 
         private void OnDestroy()

@@ -5,10 +5,26 @@ using UnityEngine.AddressableAssets;
 namespace InGame.Model
 {
     /// <summary>
-    /// UFO(敵)の管理クラス
+    /// UFO（Enemy）の管理クラス
     /// </summary>
-    public class UfoModel 
+    public class UfoModel : IEnemyModel
     {
+        /// <summary>
+        /// 移動許容距離
+        /// </summary>
+        public float LimitMoveDistance { get; }
+        public Rigidbody2D Rb { get; }
+        public float CurrentTime { get; set; }
+        public float IntervalTime { get; set; }
+        public Vector3 Angle { get; set; }
+        public float ExplosionPower { get; }
+        
+        /// <summary>
+        /// 速さと座標
+        /// </summary>
+        public float Speed { get; set; }
+        public Vector3 Position { get; set; }
+        
         /// <summary>
         /// UFOのmodel管理
         /// </summary>
@@ -36,9 +52,7 @@ namespace InGame.Model
         /// </summary>
         public int CurrentUfoHp { get => currentUfoHp; set => currentUfoHp = value; }
         public int CurrentScore { get => currentScore; set => currentScore = value; }
-
-
-
+        
 
         /// <summary>
         /// UFOのHPをamountに応じて増やす。
@@ -85,6 +99,15 @@ namespace InGame.Model
         private void UpdateUfoHp()
         {
             UfoHpChanged?.Invoke();
+        }
+        
+        /// <summary>
+        /// UFOの座標をセットする
+        /// </summary>
+        /// <param name="newPosition"></param>
+        public void SetPositon(Vector3 newPosition)
+        {
+            Position = newPosition;
         }
         
         /// <summary>
