@@ -409,12 +409,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5bfd7b9c5c44d8b54f76ce874abdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 3
+  spawnInterval: 5
   timer: 0
   maxEnemies: 15
   electronicsPrefabs:
-  - {fileID: 0}
+  - {fileID: 1357869806}
   - {fileID: 1753875042}
+  - {fileID: 1004121517}
 --- !u!4 &531447711
 Transform:
   m_ObjectHideFlags: 0
