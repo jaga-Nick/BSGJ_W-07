@@ -1,7 +1,9 @@
-﻿using InGame.Model;
+﻿using System;
+using InGame.Model;
 using InGame.NonMVP;
 using InGame.View;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace InGame.Presenter
 {
@@ -12,11 +14,22 @@ namespace InGame.Presenter
         /// </summary>
         private ElectronicsModel _model;
         private ElectronicsView _view;
+        private UfoModel _ufoModel;
         
+        private Camera _camera;
+
+        private void Awake()
+        {
+            _camera = Camera.main;
+        }
+
         public void Start()
         {
-            _model = new ElectronicsModel();
-            _view = gameObject.AddComponent<ElectronicsView>();
+            _model = new ElectronicsModel
+            {
+                Rb = gameObject.GetComponent<Rigidbody2D>()
+            };
+            _view = gameObject.GetComponent<ElectronicsView>();
         }
 
         /// <summary>
@@ -24,9 +37,30 @@ namespace InGame.Presenter
         /// </summary>
         public Vector3 DetermineSpawnPoints()
         {
-            // 座標を取得する
-            var position = new Vector3(0, 0, 0);
+            // UFOのmodelを取得して座標を確認
+            // _ufoModel = new UfoModel();
+            
+            // ランダムな座標を生成
+            var randomPositionX = RandomRun();
+            var randomPositionY = RandomRun();
+
+            // 画面外の座標を取得
+            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
             return position;
+        }
+
+        /// <summary>
+        /// ランダムな値を取得
+        /// </summary>
+        /// <returns></returns>
+        private static float RandomRun()
+        {
+            var value = Random.Range(-0.5f, 1.5f);
+            if (value is >= 0.0f and <= 1.0f)
+            {
+                RandomRun();
+            }
+            return value;
         }
 
         private void Update()
@@ -34,7 +68,7 @@ namespace InGame.Presenter
             // 移動ロジックを実装
             var newPosition = _model.Position + transform.position * (_model.Speed * Time.deltaTime);
             _model.SetPositon(newPosition);
-            _view.UpdatePosition(newPosition);
+            _model.Move();
             
             // 移動アニメーションの制御
             _view.PlayMoveAnimation(_model.Speed > 0);

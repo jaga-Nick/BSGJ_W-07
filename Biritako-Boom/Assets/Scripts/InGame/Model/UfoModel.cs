@@ -19,6 +19,11 @@ namespace InGame.Model
         public Vector3 Angle { get; set; }
         public float ExplosionPower { get; }
         
+        /// <summary>
+        /// 速さと座標
+        /// </summary>
+        public float Speed { get; set; }
+        public Vector3 Position { get; set; }
         
         /// <summary>
         /// UFOのmodel管理
@@ -94,6 +99,15 @@ namespace InGame.Model
         private void UpdateUfoHp()
         {
             UfoHpChanged?.Invoke();
+        }
+        
+        /// <summary>
+        /// UFOの座標をセットする
+        /// </summary>
+        /// <param name="newPosition"></param>
+        public void SetPositon(Vector3 newPosition)
+        {
+            Position = newPosition;
         }
         
         /// <summary>

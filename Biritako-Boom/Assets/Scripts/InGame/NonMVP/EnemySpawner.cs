@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using InGame.Presenter;
+﻿using InGame.Presenter;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -10,15 +8,22 @@ namespace InGame.NonMVP
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
+        /// <summary>
+        /// スポーンのプロパティ
+        /// </summary>
         [SerializeField] private float spawnInterval = 3f;
         [SerializeField] private float timer;
         [SerializeField] private int maxEnemies = 15;
 
+        /// <summary>
+        /// Prefab
+        /// </summary>
         [SerializeField] private GameObject[] electronicsPrefabs;
-
-        private ElectronicsPresenter _electronicsPresenter;
-        private UfoPresenter _ufoPresenter;
+        [SerializeField] private GameObject ufoPrefab;
         
+        /// <summary>
+        /// 現在のEnemyの数
+        /// </summary>
         public int CurrentEnemies { get; set; } = 0;
 
         private void Start()
@@ -29,26 +34,28 @@ namespace InGame.NonMVP
         private void Update()
         {
             timer -= Time.deltaTime;
-            if (timer <= 0　&& CurrentEnemies < maxEnemies)
-            {
-                // SpawnElectronics();
-                timer = spawnInterval;
-            }
+            if (!(timer <= 0) || CurrentEnemies >= maxEnemies) return;
+            SpawnElectronics();
+            timer = spawnInterval;
         }
 
+        /// <summary>
+        /// 家電の生成
+        /// </summary>
         private void SpawnElectronics()
         {
             // 家電を選択して生成する
             var randomIndex = Random.Range(0, electronicsPrefabs.Length);
             var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
-            // 家電のPresenterを取得
-            _electronicsPresenter = electronics.GetComponent<ElectronicsPresenter>();
-
+            // 家電に付与されているPresenterを取得
+            var presenter = electronics.GetComponent<ElectronicsPresenter>();
+            
             // Presenterで決定した座標をもとに初期座標を決定
-            var spawnPosition = _electronicsPresenter.DetermineSpawnPoints();
+            var spawnPosition = presenter.DetermineSpawnPoints();
             electronics.transform.position = spawnPosition;
             
+            // 家電の数をインクリメント
             CurrentEnemies++;
         }
         

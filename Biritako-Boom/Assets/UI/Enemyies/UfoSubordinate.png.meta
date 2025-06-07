@@ -1,0 +1,524 @@
+fileFormatVersion: 2
+guid: 293a8c4a3c17afd4baca9789e2423250
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4558447895395872863
+    second: UfoSubordinate_0
+  - first:
+      213: -781484219597300722
+    second: UfoSubordinate_1
+  - first:
+      213: -5795048750165052870
+    second: UfoSubordinate_2
+  - first:
+      213: -6894097731175545333
+    second: UfoSubordinate_3
+  - first:
+      213: 5485305833892122581
+    second: UfoSubordinate_4
+  - first:
+      213: -319486547247101303
+    second: UfoSubordinate_5
+  - first:
+      213: -9007063861126975827
+    second: UfoSubordinate_6
+  - first:
+      213: -5890769592540571741
+    second: UfoSubordinate_7
+  - first:
+      213: -5902532769098643267
+    second: UfoSubordinate_8
+  - first:
+      213: 4527647582138931495
+    second: UfoSubordinate_9
+  - first:
+      213: -1163158034190860594
+    second: UfoSubordinate_10
+  - first:
+      213: 5972804643913094602
+    second: UfoSubordinate_11
+  - first:
+      213: 4324028322784255060
+    second: UfoSubordinate_12
+  - first:
+      213: -7245516656229081241
+    second: UfoSubordinate_13
+  - first:
+      213: -3938917566748178435
+    second: UfoSubordinate_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 109, y: 6, z: 107, w: 4}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UfoSubordinate_0
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f50b23c853cd24f30800000000000000
+      internalID: 4558447895395872863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_1
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0c54552e3c9725f0800000000000000
+      internalID: -781484219597300722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_2
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a32375e7dd9d39fa0800000000000000
+      internalID: -5795048750165052870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_3
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 7
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b068476d3ae3350a0800000000000000
+      internalID: -6894097731175545333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_4
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5df8481f798bf1c40800000000000000
+      internalID: 5485305833892122581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_5
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a02d09da4f09bf0800000000000000
+      internalID: -319486547247101303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_6
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daea448c32b700380800000000000000
+      internalID: -9007063861126975827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_7
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 9
+      pivot: {x: 0.48440433, y: 0.4376184}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a752f62448cf3ea0800000000000000
+      internalID: -5890769592540571741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_8
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 7
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db8c5ce28bdf51ea0800000000000000
+      internalID: -5902532769098643267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7291c89cc7f65de30800000000000000
+      internalID: 4527647582138931495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_10
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ece796a3ee1abdfe0800000000000000
+      internalID: -1163158034190860594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_11
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac55e39ad2aa3e250800000000000000
+      internalID: 5972804643913094602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_12
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45c984299d8020c30800000000000000
+      internalID: 4324028322784255060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_13
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 7
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f1a435df0c27b90800000000000000
+      internalID: -7245516656229081241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_14
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 85
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7cd62a7572659c0800000000000000
+      internalID: -3938917566748178435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline:
+    - - {x: -159, y: -56.5}
+      - {x: 159, y: -56.5}
+      - {x: 159, y: 56.5}
+      - {x: -159, y: 56.5}
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 1537655665
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      UfoSubordinate_0: 4558447895395872863
+      UfoSubordinate_1: -781484219597300722
+      UfoSubordinate_10: -1163158034190860594
+      UfoSubordinate_11: 5972804643913094602
+      UfoSubordinate_12: 4324028322784255060
+      UfoSubordinate_13: -7245516656229081241
+      UfoSubordinate_14: -3938917566748178435
+      UfoSubordinate_2: -5795048750165052870
+      UfoSubordinate_3: -6894097731175545333
+      UfoSubordinate_4: 5485305833892122581
+      UfoSubordinate_5: -319486547247101303
+      UfoSubordinate_6: -9007063861126975827
+      UfoSubordinate_7: -5890769592540571741
+      UfoSubordinate_8: -5902532769098643267
+      UfoSubordinate_9: 4527647582138931495
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

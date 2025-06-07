@@ -10,15 +10,6 @@ namespace InGame.View
         private Animator _animator;
         
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
-        
-        /// <summary>
-        /// 家電の座標の更新
-        /// </summary>
-        /// <param name="newPosition"></param>
-        public void UpdatePosition(Vector3 newPosition)
-        {
-            transform.position = newPosition;
-        }
 
         /// <summary>
         /// アニメーションの再生
@@ -30,6 +21,14 @@ namespace InGame.View
             {
                 _animator.SetBool(IsMoving, isMoving);
             }
+        }
+
+        /// <summary>
+        /// 死んだらオブジェクトを破壊する
+        /// </summary>
+        public void OnDestroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

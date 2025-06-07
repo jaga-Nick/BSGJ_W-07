@@ -9,7 +9,7 @@ namespace InGame.Model
         /// 移動許容距離
         /// </summary>
         public float LimitMoveDistance { get; }
-        public Rigidbody2D Rb { get; }
+        public Rigidbody2D Rb { get; set; }
         public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
         public Vector3 Angle { get; set; }
@@ -30,19 +30,8 @@ namespace InGame.Model
         /// </summary>
         public virtual void Move()
         {
-            CurrentTime += Time.deltaTime;
-
-            if (IntervalTime >= CurrentTime)
-            {
-                var num = Random.Range(1, 360);
-                var value = Mathf.Deg2Rad * num;
-
-                Angle = new Vector3(Mathf.Cos(value), Mathf.Sin(value), 0);
-                
-                //次の時間設定
-                IntervalTime=Random.Range(1, 5);
-            }
-            Rb.linearVelocity = Angle;
+            // 上下左右どちらかに進む
+            
         }
 
         /// <summary>
