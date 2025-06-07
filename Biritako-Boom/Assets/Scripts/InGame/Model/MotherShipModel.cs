@@ -1,3 +1,4 @@
+using Common;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,7 +11,6 @@ namespace InGame.Model
     /// <summary>
     /// 母艦UFOのモデル管理。
     /// </summary>
-    [System.Serializable] // この属性により、他のクラスからこのクラスのインスタンスをインスペクターに表示できるようになります
     public class MotherShipModel : IEnemyModel
     {
         #region 定数
@@ -141,16 +141,17 @@ namespace InGame.Model
         public async UniTask<GameObject> GenerateMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
         {
             // Addressables経由でプレハブを非同期ロード
-            GameObject prefab = await Addressables.LoadAssetAsync<GameObject>(address).ToUniTask(cancellationToken: cancellationToken);
-            
-            // ロードしたプレハブからGameObjectをインスタンス化
-            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
 
-            // 生成したインスタンスからコンポーネントを取得し、自身のフィールドに保持します。
-            // これにより、このModelインスタンスが特定のGameObjectを操作できるようになります。
-            Rb = instance.GetComponent<Rigidbody2D>();
-            
-            return instance;
+            using (new HandleDisposable<GameObject>(handle))
+            {
+                GameObject prefab = await handle;
+                // ロードしたプレハブからGameObjectをインスタンス化
+                GameObject instance = UnityEngine.Object.Instantiate(prefab,position,Quaternion.identity);
+                // 生成したインスタンスからコンポーネントを取得し、自身のフィールドに保持
+                Rb = instance.GetComponent<Rigidbody2D>();
+                return instance;
+            }
         }
 
         #endregion
@@ -256,7 +257,7 @@ namespace InGame.Model
         /// </summary>
         private void Patrolling()
         {
-            // リスト内の破壊されたUFO（nullになったもの）を安全に削除します
+            // リスト内の破壊されたUFO（nullになったもの）を安全に削除
             _ufoTargets.RemoveAll(target => target == null || !target.activeInHierarchy);
 
             // 全ての雑魚UFOが破壊された場合、中央への移動状態に遷移します
@@ -266,7 +267,7 @@ namespace InGame.Model
                 return;
             }
             
-            // ターゲットインデックスがリストの範囲を超えるのを防ぎます
+            // ターゲットインデックスがリストの範囲を超えるのを防ぐ
             if (_currentTargetIndex >= _ufoTargets.Count)
             {
                 // ランダム巡回フラグがtrueの場合、リストをシャッフルする
@@ -278,10 +279,9 @@ namespace InGame.Model
                 _currentTargetIndex = 0; // 最初のターゲットに戻る（ループ）
             }
 
-            // 現在のターゲットを取得します
+            // 現在のターゲットを取得
             Transform currentTarget = _ufoTargets[_currentTargetIndex].transform;
-
-            // ターゲットの方向へ移動します
+            
             MoveTowards(currentTarget.position);
 
             // ターゲットに十分に近づいたら、次のターゲットへ移行します
@@ -298,7 +298,7 @@ namespace InGame.Model
         }
 
         /// <summary>
-        /// マップ中央へ移動中の処理を実行します。
+        /// マップ中央へ移動中の処理。
         /// </summary>
         private void MoveCenter()
         {
@@ -314,16 +314,14 @@ namespace InGame.Model
         }
         
         /// <summary>
-        /// 指定されたターゲットポジションに向かってRigidbody2Dを動かします。
+        /// ターゲットポジションに向かって動かす
         /// </summary>
         private void MoveTowards(Vector2 targetPosition)
         {
-            if (Rb == null || _transform == null) return; // 参照がなければ何もしない
-
-            // 現在地から目標地点への方向ベクトルを計算（正規化して長さを1にする）
-            Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
+            if (Rb == null || _transform == null) return;
             
-            // Rigidbody2Dの速度に、方向と速さを設定して移動させる
+            Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
+
             Rb.linearVelocity = direction * _speed;
         }
         
@@ -334,18 +332,13 @@ namespace InGame.Model
         private void RandomTargets()
         {
             int n = _ufoTargets.Count;
-            // リストの末尾から先頭に向かってループ
             while (n > 1)
             {
                 n--;
-                // 0からnまでの間のランダムなインデックスkを決定
                 int k = Random.Range(0, n + 1);
-                
                 (_ufoTargets[k], _ufoTargets[n]) = (_ufoTargets[n], _ufoTargets[k]);
             }
         }
-        
-
         #endregion
     }
 }
