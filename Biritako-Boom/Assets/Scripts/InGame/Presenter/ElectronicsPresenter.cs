@@ -1,4 +1,5 @@
 ﻿using InGame.Model;
+using InGame.NonMVP;
 using InGame.View;
 using UnityEngine;
 
@@ -11,26 +12,34 @@ namespace InGame.Presenter
         /// </summary>
         private ElectronicsModel _model;
         private ElectronicsView _view;
+        
+        public void Start()
+        {
+            _model = new ElectronicsModel();
+            _view = gameObject.AddComponent<ElectronicsView>();
+        }
 
         /// <summary>
-        /// イニシャライズ
+        /// Enemyをスポーンする座標を決める
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="view"></param>
-        public void Init(ElectronicsModel model, ElectronicsView view)
+        public Vector3 DetermineSpawnPoints()
         {
-            this._model = model;
-            this._view = view;
+            // 座標を取得する
+            var position = new Vector3(0, 0, 0);
+            return position;
         }
 
         private void Update()
         {
-            // 敵の移動ロジックを実装
-            Vector3 newPosition = this._view.transform.position;
+            // 移動ロジックを実装
+            var newPosition = _model.Position + transform.position * (_model.Speed * Time.deltaTime);
+            _model.SetPositon(newPosition);
+            _view.UpdatePosition(newPosition);
             
             // 移動アニメーションの制御
+            _view.PlayMoveAnimation(_model.Speed > 0);
             
-            // 敵が死んだ場合
+            // 死んだ場合
         }
     }
 }

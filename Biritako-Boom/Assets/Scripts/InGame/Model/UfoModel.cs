@@ -47,9 +47,7 @@ namespace InGame.Model
         /// </summary>
         public int CurrentUfoHp { get => currentUfoHp; set => currentUfoHp = value; }
         public int CurrentScore { get => currentScore; set => currentScore = value; }
-
-
-
+        
 
         /// <summary>
         /// UFOのHPをamountに応じて増やす。

@@ -10,9 +10,9 @@ namespace InGame.View
         private Animator _animator;
         
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
-
+        
         /// <summary>
-        /// 座標の更新
+        /// 家電の座標の更新
         /// </summary>
         /// <param name="newPosition"></param>
         public void UpdatePosition(Vector3 newPosition)

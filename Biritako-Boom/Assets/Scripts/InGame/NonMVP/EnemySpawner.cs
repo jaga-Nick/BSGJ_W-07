@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using InGame.Presenter;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -12,9 +14,11 @@ namespace InGame.NonMVP
         [SerializeField] private float timer;
         [SerializeField] private int maxEnemies = 15;
 
-        private GameObject enemyPrefab;
-        private Transform[] spawnPoints;
+        [SerializeField] private GameObject[] electronicsPrefabs;
 
+        private ElectronicsPresenter _electronicsPresenter;
+        private UfoPresenter _ufoPresenter;
+        
         public int CurrentEnemies { get; set; } = 0;
 
         private void Start()
@@ -27,19 +31,25 @@ namespace InGame.NonMVP
             timer -= Time.deltaTime;
             if (timer <= 0　&& CurrentEnemies < maxEnemies)
             {
-                SpawnEnemy();
+                // SpawnElectronics();
+                timer = spawnInterval;
             }
         }
 
-        /// <summary>
-        /// Enemyをスポーンする
-        /// </summary>
-        private void SpawnEnemy()
+        private void SpawnElectronics()
         {
-            // 座標を取得する
-            var index = Random.Range(0, spawnPoints.Length);
-            // 生成する
-            Instantiate(enemyPrefab, spawnPoints[index].position, Quaternion.identity);
+            // 家電を選択して生成する
+            var randomIndex = Random.Range(0, electronicsPrefabs.Length);
+            var electronics = Instantiate(electronicsPrefabs[randomIndex]);
+            
+            // 家電のPresenterを取得
+            _electronicsPresenter = electronics.GetComponent<ElectronicsPresenter>();
+
+            // Presenterで決定した座標をもとに初期座標を決定
+            var spawnPosition = _electronicsPresenter.DetermineSpawnPoints();
+            electronics.transform.position = spawnPosition;
+            
+            CurrentEnemies++;
         }
         
 
@@ -50,6 +60,5 @@ namespace InGame.NonMVP
         {
             CurrentEnemies--;
         }
-        
     }
 }
