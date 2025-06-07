@@ -5,10 +5,21 @@ using UnityEngine.AddressableAssets;
 namespace InGame.Model
 {
     /// <summary>
-    /// UFO(敵)の管理クラス
+    /// UFO（Enemy）の管理クラス
     /// </summary>
-    public class UfoModel 
+    public class UfoModel : IEnemyModel
     {
+        /// <summary>
+        /// 移動許容距離
+        /// </summary>
+        public float LimitMoveDistance { get; }
+        public Rigidbody2D Rb { get; }
+        public float CurrentTime { get; set; }
+        public float IntervalTime { get; set; }
+        public Vector3 Angle { get; set; }
+        public float ExplosionPower { get; }
+        
+        
         /// <summary>
         /// UFOのmodel管理
         /// </summary>
