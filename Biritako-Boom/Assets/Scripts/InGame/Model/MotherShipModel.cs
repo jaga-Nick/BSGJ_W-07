@@ -1,0 +1,328 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+namespace InGame.Model
+{
+    /// <summary>
+    /// 母艦UFOのモデル管理。
+    /// </summary>
+    [System.Serializable] // この属性により、他のクラスからこのクラスのインスタンスをインスペクターに表示できるようになります
+    public class MotherShipModel : IEnemyModel
+    {
+        #region 定数
+        // この距離までターゲットに近づいたら、目的地に到着したとみなすための閾値
+        private const float DESTINATION_THRESHOLD = 0.5f;
+
+        #endregion
+
+        #region 状態定義
+
+        /// <summary>
+        /// 母艦の現在の行動状態を定義します
+        /// </summary>
+        private enum State
+        {
+            Idle,           // 待機中
+            Patrolling,     // 雑魚UFOを巡回中
+            MovingToCenter, // マップ中央へ移動中
+            Stopped         // 停止
+        }
+
+        #endregion
+
+        #region プロパティ
+        
+        // 移動許容距離
+        public float LimitMoveDistance { get; private set; }
+        public Rigidbody2D Rb { get; private set; }
+        // 爆発力
+        public float ExplosionPower { get; private set; }
+
+        // 以下のプロパティはIEnemyModelで定義されていますが、
+        // 母艦の特殊な移動ロジックでは直接使用しないため、実装のみ行います。
+        public float CurrentTime { get; set; }
+        public float IntervalTime { get; set; }
+        public Vector3 Angle { get; set; }
+
+        #endregion
+
+        #region プロパティ (母艦固有)
+
+        private GameObject motherShipObject;
+        
+        // 母艦のHP
+        public int Hp { get; private set; }
+        
+        // 破壊されたときに得られるスコア
+        public int Score { get; } = 1000000;
+        
+        // 母艦の移動速度
+        public float Speed { get; private set; }
+
+        private bool isEnd = false;
+        
+        public bool IsRandomPatrol { get; set; } = true;
+
+        #endregion
+        
+        #region プライベート変数
+        
+        // 制御対象のTransformコンポーネント。自身の位置を知るために使用します。
+        private Transform _transform;
+        
+        // 母艦の現在の状態
+        private State _currentState = State.Idle;
+        
+        // 巡回対象となる雑魚UFOのTransformリスト
+        private List<GameObject> _ufoTargets = new List<GameObject>();
+        
+        // 現在の巡回ターゲットのインデックス
+        private int _currentTargetIndex = 0;
+
+        #endregion
+
+        #region 
+
+        /// <summary>
+        /// MotherShipUfoModelのコンストラクタ
+        /// </summary>
+        public MotherShipModel(Rigidbody2D rb)
+        {
+            // --- ステータスを初期化 ---
+            Speed = 5.0f;
+            Hp = 5000;
+            ExplosionPower = 100;
+            Score = 1000000;
+            isEnd = false;
+        }
+
+        #endregion
+        
+        #region アクセスメソッド
+        
+        public void SetRb(Rigidbody2D rb)
+        {
+            Rb = rb;
+            _transform = rb.transform;
+        }
+        
+        public void SetRandomPatrol(bool mode){ IsRandomPatrol  = mode; }
+        
+        public void SetSpeed(float speed) { Speed = speed; }
+        
+        
+        
+        
+        
+        
+        /// <summary>
+        /// 撃破状態から呼び出され、isEndフラグを立てます。
+        /// </summary>
+        public void DefeatNotification()
+        {
+            Debug.Log("第三部　完!!");
+            isEnd = true;
+        }
+        
+        #endregion
+        
+        #region 生成メソッド
+        
+        /// <summary>
+        /// Addressablesを使用して母艦UFOを非同期で生成
+        /// </summary>
+        public async UniTask<GameObject> GenerateMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        {
+            // Addressables経由でプレハブを非同期ロード
+            GameObject prefab = await Addressables.LoadAssetAsync<GameObject>(address).ToUniTask(cancellationToken: cancellationToken);
+            
+            // ロードしたプレハブからGameObjectをインスタンス化
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+
+            // 生成したインスタンスからコンポーネントを取得し、自身のフィールドに保持します。
+            // これにより、このModelインスタンスが特定のGameObjectを操作できるようになります。
+            Rb = instance.GetComponent<Rigidbody2D>();
+            
+            return instance;
+        }
+
+        #endregion
+        
+        
+        
+        #region 公開メソッド
+
+        /// <summary>
+        /// ダメージを与える
+        /// </summary>
+        public async UniTask TakeDamage(int damage)
+        {
+            Hp -= damage;
+            if (Hp <= 0)
+            {
+                DefeatNotification();
+            }
+        }
+
+        /// <summary>
+        /// シーン内に存在する全てのモブUFOを探し出し、巡回ターゲットのリストとして設定します。
+        /// </summary>
+        public void FindTargets()
+        {
+            test[] ufo = Object.FindObjectsOfType<test>();
+            
+            _ufoTargets.Clear(); 
+    
+            // 新しいリストを作成して、見つけたUFOのGameObjectを格納していきます
+            foreach (var presenter in ufo)
+            {
+                // PresenterがアタッチされているGameObjectをリストに追加
+                _ufoTargets.Add(presenter.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// 巡回を開始します
+        /// </summary>
+        public void StartPatrol()
+        {
+            _currentTargetIndex = 0; // 最初のターゲットから開始
+
+            // 雑魚UFOが1体以上いれば巡回を開始し、いなければ中央への移動を開始します
+            _currentState = _ufoTargets.Count > 0 ? State.Patrolling : State.MovingToCenter;
+        }
+        
+        
+        /// <summary>
+        /// PresenterのUpdateから毎フレーム呼び出される更新処理です。
+        /// </summary>
+        public void Move()
+        {
+            // 状態に応じて処理を分岐させます
+            switch (_currentState)
+            {
+                case State.Patrolling:
+                    Patrolling();
+                    break;
+                case State.MovingToCenter:
+                    MoveCenter();
+                    break;
+            }
+        }
+        
+        /// <summary>
+        /// 母艦を破壊する、
+        /// </summary>
+        public void DestroyUfo(GameObject MothershipInstance)
+        {
+            if (MothershipInstance) return;
+            Addressables.ReleaseInstance(MothershipInstance); 
+            MothershipInstance = null;
+        }
+
+        #endregion
+
+        #region 内部処理メソッド
+
+        /// <summary>
+        /// 巡回中の処理
+        /// </summary>
+        private void Patrolling()
+        {
+            // リスト内の破壊されたUFO（nullになったもの）を安全に削除します
+            _ufoTargets.RemoveAll(target => target == null || !target.activeInHierarchy);
+
+            // 全ての雑魚UFOが破壊された場合、中央への移動状態に遷移します
+            if (_ufoTargets.Count == 0)
+            {
+                _currentState = State.MovingToCenter; 
+                return;
+            }
+            
+            // ターゲットインデックスがリストの範囲を超えるのを防ぎます
+            if (_currentTargetIndex >= _ufoTargets.Count)
+            {
+                // ランダム巡回フラグがtrueの場合、リストをシャッフルする
+                if (IsRandomPatrol)
+                {
+                    RandomTargets();
+                }
+                
+                _currentTargetIndex = 0; // 最初のターゲットに戻る（ループ）
+            }
+
+            // 現在のターゲットを取得します
+            Transform currentTarget = _ufoTargets[_currentTargetIndex].transform;
+
+            // ターゲットの方向へ移動します
+            MoveTowards(currentTarget.position);
+
+            // ターゲットに十分に近づいたら、次のターゲットへ移行します
+            if (Vector2.Distance(_transform.position, currentTarget.position) < DESTINATION_THRESHOLD)
+            {
+                Rb.linearVelocity = Vector2.zero;
+                _currentTargetIndex++;
+            }
+            else
+            {
+                MoveTowards(currentTarget.position);
+            }
+                
+        }
+
+        /// <summary>
+        /// マップ中央へ移動中の処理を実行します。
+        /// </summary>
+        private void MoveCenter()
+        {
+            // 中央へ移動
+            MoveTowards(Vector2.zero);
+
+            // 中央に十分に近づいたら完全に停止し、状態をStoppedにします
+            if (Vector2.Distance(_transform.position, Vector2.zero) < DESTINATION_THRESHOLD)
+            {
+                if(Rb != null) Rb.linearVelocity = Vector2.zero;
+                _currentState = State.Stopped;
+            }
+        }
+        
+        /// <summary>
+        /// 指定されたターゲットポジションに向かってRigidbody2Dを動かします。
+        /// </summary>
+        private void MoveTowards(Vector2 targetPosition)
+        {
+            if (Rb == null || _transform == null) return; // 参照がなければ何もしない
+
+            // 現在地から目標地点への方向ベクトルを計算（正規化して長さを1にする）
+            Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
+            
+            // Rigidbody2Dの速度に、方向と速さを設定して移動させる
+            Rb.linearVelocity = direction * Speed;
+        }
+        
+        
+        /// <summary>
+        /// UFOリストをシャッフル
+        /// </summary>
+        private void RandomTargets()
+        {
+            int n = _ufoTargets.Count;
+            // リストの末尾から先頭に向かってループ
+            while (n > 1)
+            {
+                n--;
+                // 0からnまでの間のランダムなインデックスkを決定
+                int k = Random.Range(0, n + 1);
+                
+                (_ufoTargets[k], _ufoTargets[n]) = (_ufoTargets[n], _ufoTargets[k]);
+            }
+        }
+        
+
+        #endregion
+    }
+}
