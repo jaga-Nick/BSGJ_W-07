@@ -44,19 +44,14 @@ namespace InGame.NonMVP
             }
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
-                Debug.Log("プラグを持つ(家電からプラグを取得する）");
-                Debug.Log(checker.FindClosestEnemyOfTypeOne(Model.PlayerObject.transform.position, 100f));
-
-               
-                //if (checker.FindClosestEnemyOfTypeOne(Model.PlayerObject.transform.position, 100f)!=null) {
-                    Debug.Log("成功");
-                    
-                    GameObject electro=checker.FindClosestEnemyOfTypeOneGameObject(Model.PlayerObject.transform.position, 5f);
+                if (checker.FindClosestEnemyOfTypeOne(Model.PlayerObject.transform.position, 10f)!=null) 
+                {
+                    GameObject electro=checker.FindClosestEnemyOfTypeOneGameObject(Model.PlayerObject.transform.position, 10f);
 
                     //ジェネレート(プレイヤーキャラクターと家電）
                     var code = Model.generateCodeSystem.GenerateCode(Model.PlayerObject, electro);
                     Model.SetCurrentHaveCode(code);
-                //}
+                }
             }
             if (ActionMap.Player.Have.WasReleasedThisFrame())
             {
@@ -78,7 +73,6 @@ namespace InGame.NonMVP
                 Debug.Log("test");
                 if (Model.Socket==null)
                 {
-                    Debug.Log("1");
                     //コンセントを生成する。
                     Model.GenerateSocket(Presenter.GetSocketPrefab());
                 }

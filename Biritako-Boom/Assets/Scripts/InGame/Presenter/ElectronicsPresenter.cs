@@ -37,11 +37,9 @@ namespace InGame.Presenter
 
         public void Start()
         {
-            _model = new ElectronicsModel
-            {
-                Rb = gameObject.GetComponent<Rigidbody2D>(),
-                Position = transform.position,
-            };
+            _model = gameObject.GetComponent<ElectronicsModel>();
+            _model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
+            
             _view = gameObject.GetComponent<ElectronicsView>();
 
             StartCoroutine(MoveCharacterRoutine());

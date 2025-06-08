@@ -56,6 +56,8 @@ namespace InGame.NonMVP
             lineRenderer.endWidth = LineWidth;
             lineRenderer.material = LineMaterial;
 
+            lineRenderer.sortingOrder = 3;
+
             //物理演算を線で行う為に生成。
             EdgeCollider2D edge = CodeObject.AddComponent<EdgeCollider2D>();
             edge.isTrigger = true;//衝突をオフに（IsTriggerイベントのみを取得する。）

@@ -148,27 +148,29 @@ namespace InGame.NonMVP{
             foreach (var hit in hits)
             {
                 if (hit.transform.position == origin) continue;
+                // 複数の MonoBehaviour を取得して調べる
+                var behaviours = hit.GetComponents<MonoBehaviour>();
 
-                var mb = hit.GetComponent<MonoBehaviour>();
-                if (mb == null) continue;
-
-                var enemyModel = mb as IEnemyModel;
-                if (enemyModel == null) continue;
-
-                // GetEnemyTypeが1以外はスキップ
-                if (enemyModel.GetEnemyType() != 1) continue;
-
-                float dist = Vector2.Distance(origin, hit.transform.position);
-                if (dist < closestDist)
+                Debug.Log(behaviours);
+                foreach (var behaviour in behaviours)
                 {
-                    closestDist = dist;
-                    closestEnemy = enemyModel;
+                    if (behaviour is IEnemyModel enemyModel)
+                    {
+                        if (enemyModel.GetEnemyType() != 1) continue;
+
+                        float dist = Vector2.Distance(origin, hit.transform.position);
+                        if (dist < closestDist)
+                        {
+                            closestDist = dist;
+                            closestEnemy = enemyModel;
+                        }
+                    }
                 }
             }
 
             return closestEnemy;
         }
-        
+
         /// <summary>
         /// 家電-GameObjectを返り値にしたバージョン。
         /// </summary>
@@ -186,23 +188,24 @@ namespace InGame.NonMVP{
             {
                 if (hit.transform.position == origin) continue;
 
-                var mb = hit.GetComponent<MonoBehaviour>();
-                if (mb == null) continue;
-
-                var enemyModel = mb as IEnemyModel;
-                if (enemyModel == null) continue;
-
-                // GetEnemyTypeが1以外はスキップ
-                if (enemyModel.GetEnemyType() != 1) continue;
-
-                float dist = Vector2.Distance(origin, hit.transform.position);
-                if (dist < closestDist)
+                var behaviours = hit.GetComponents<MonoBehaviour>();
+                foreach (var behaviour in behaviours)
                 {
-                    closestDist = dist;
-                    closestEnemyGO = hit.gameObject;
+                    if (behaviour is IEnemyModel enemyModel)
+                    {
+                        if (enemyModel.GetEnemyType() != 1) continue;
+
+                        float dist = Vector2.Distance(origin, hit.transform.position);
+                        if (dist < closestDist)
+                        {
+                            closestDist = dist;
+                            closestEnemyGO = hit.gameObject;
+                        }
+                    }
                 }
             }
 
+            Debug.Log(closestEnemyGO);
             return closestEnemyGO;
         }
     }
