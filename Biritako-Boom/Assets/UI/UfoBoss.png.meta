@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: d76b519bbc337954da10e72c4331c2a0
+guid: 44be2945d557668478c67f4c16678283
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8456747548459407333
-    second: ApplianceToaster_0
-  - first:
-      213: -896580894198193730
-    second: ApplianceToaster_1
-  - first:
-      213: -3678499210243488273
-    second: ApplianceToaster_2
+      213: -3298995681524961215
+    second: UfoBoss_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ApplianceToaster_0
+      name: UfoBoss_0
       rect:
         serializedVersion: 2
-        x: 6
+        x: 1
         y: 0
-        width: 55
-        height: 44
+        width: 190
+        height: 189
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b18ebe219e893aa80800000000000000
-      internalID: -8456747548459407333
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceToaster_1
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 0
-        width: 59
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eb12ae05d64be83f0800000000000000
-      internalID: -896580894198193730
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceToaster_2
-      rect:
-        serializedVersion: 2
-        x: 130
-        y: 0
-        width: 55
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fe5c1e2357853fcc0800000000000000
-      internalID: -3678499210243488273
+      spriteID: 140382f08ec9732d0800000000000000
+      internalID: -3298995681524961215
       vertices: []
       indices: 
       edges: []
@@ -198,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ApplianceToaster_0: -8456747548459407333
-      ApplianceToaster_1: -896580894198193730
-      ApplianceToaster_2: -3678499210243488273
+      UfoBoss_0: -3298995681524961215
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

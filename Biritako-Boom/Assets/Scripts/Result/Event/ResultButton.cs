@@ -8,15 +8,15 @@ namespace Result.Model
 {
     public class ResultButton : MonoBehaviour
     {
-        //private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
-        //private readonly ISceneInfo _titleSceneLoader = new TitleSceneLoader();
+        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
+        private readonly ISceneInfo _titleSceneLoader = new TitleSceneLoader();
         
         /// <summary>
         /// ReTryボタンを押したらInGameシーンに遷移する
         /// </summary>
         public async UniTask OnClickReTryButton()
         {
-            //await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
         }
         
         /// <summary>
@@ -24,7 +24,7 @@ namespace Result.Model
         /// </summary>
         public async UniTask OnClickTitleButton()
         {
-            //await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
         }
         
         /// <summary>

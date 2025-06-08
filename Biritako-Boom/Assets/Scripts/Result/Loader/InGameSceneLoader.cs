@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Result.Loader
 {
-    public class InGameSceneLoader : MonoBehaviour
+    public class InGameSceneLoader : ISceneInfo
     {
         public string SceneName => "InGame";
 
