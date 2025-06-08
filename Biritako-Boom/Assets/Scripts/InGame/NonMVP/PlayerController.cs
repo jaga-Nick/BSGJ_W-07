@@ -1,4 +1,5 @@
 ﻿using Common;
+using Cysharp.Threading.Tasks;
 using InGame.Model;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ namespace InGame.NonMVP
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
                 Debug.Log("プラグを持つ");
+
+
             }
             if (ActionMap.Player.Have.WasReleasedThisFrame())
             {
@@ -41,6 +44,8 @@ namespace InGame.NonMVP
             }
             if (ActionMap.Player.Jump.WasPressedThisFrame()) 
             {
+                Model.AddressGenerateSocket("").Forget();
+
                 Debug.Log("コンセントを配置する");
             }
         }

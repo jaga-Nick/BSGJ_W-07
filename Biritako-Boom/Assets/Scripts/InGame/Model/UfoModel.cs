@@ -17,7 +17,6 @@ namespace InGame.Model
         public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
         public Vector3 Angle { get; set; }
-        public float ExplosionPower { get; }
         
         /// <summary>
         /// 速さと座標
@@ -31,28 +30,24 @@ namespace InGame.Model
         public event Action UfoHpChanged;
         
         /// <summary>
+        /// 爆発力
+        /// </summary>
+        public float ExplosionPower { get; }
+        
+        /// <summary>
         /// UFOのHP管理のフィールド
         /// </summary>
-        private const int MinUfoHp = 0;
-        private const int MaxUfoHp = 100;
+        public int MinUfoHp { get; set; } = 0;
+        public int MaxUfoHp { get; set; } = 100;
+        public int CurrentUfoHp { get; set; }
+        
 
-        //レベルデザインに必要事項より追記
-        [SerializeField]
-        private int currentUfoHp;
-        
-        
         /// <summary>
         /// UFOのスコア管理のフィールド
         /// </summary>
         private const int Score = 100;
-        private int currentScore;
-        
-        /// <summary>
-        /// ゲッターとセッター。読み取り専用のプロパティ。
-        /// </summary>
-        public int CurrentUfoHp { get => currentUfoHp; set => currentUfoHp = value; }
-        public int CurrentScore { get => currentScore; set => currentScore = value; }
-        
+        public int CurrentScore { get; set; }
+
 
         /// <summary>
         /// UFOのHPをamountに応じて増やす。
@@ -60,8 +55,8 @@ namespace InGame.Model
         /// <param name="amount"></param>
         public void IncrementUfoHp(int amount)
         {
-            currentUfoHp += amount;
-            currentUfoHp = Mathf.Clamp(currentUfoHp, MinUfoHp, MaxUfoHp);
+            CurrentUfoHp += amount;
+            CurrentUfoHp = Mathf.Clamp(CurrentUfoHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -71,8 +66,8 @@ namespace InGame.Model
         /// <param name="amount"></param>
         public void DecrementUfoHp(int amount)
         {
-            currentUfoHp -= amount;
-            CurrentUfoHp = Mathf.Clamp(currentUfoHp, MinUfoHp, MaxUfoHp);
+            CurrentUfoHp -= amount;
+            CurrentUfoHp = Mathf.Clamp(CurrentUfoHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -82,7 +77,7 @@ namespace InGame.Model
         /// <returns></returns>
         public bool IsDead()
         {
-            return currentUfoHp <= 0;
+            return CurrentUfoHp <= 0;
         }
 
         /// <summary>
@@ -90,7 +85,7 @@ namespace InGame.Model
         /// </summary>
         public void RestoreUfoHp()
         {
-            currentUfoHp = MaxUfoHp;
+            CurrentUfoHp = MaxUfoHp;
         }
 
         /// <summary>

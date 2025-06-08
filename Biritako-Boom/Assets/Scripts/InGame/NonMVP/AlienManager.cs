@@ -1,161 +1,156 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using System;
+using UnityEngine.AddressableAssets; // Addressablesの機能を使うために必要
 using Cysharp.Threading.Tasks;
-using InGame.Model;
+using InGame.Presenter;
 
 /// <summary>
-/// エイリアンの生成・更新・破棄・オブジェクトプールを管理するクラス。
-/// 全てのアクティブなエイリアンのMove()をこのクラスのUpdateで一括処理する。
+/// エイリアンの生成、更新、オブジェクトプールを管理するクラス。
 /// </summary>
-
-
-
 public class AlienManager : MonoBehaviour
 {
-    
-    public static AlienManager Instance { get; private set; }
-
     [Header("Pool Settings")]
-    [SerializeField] private AssetReferenceGameObject _alienPrefabReference; // Addressableの参照
+    [Tooltip("Addressablesに設定したエイリアンのアドレス")]
+    [SerializeField] private string _characterAddress = "Enemy_Alien"; // ここでキーを指定
+
+    [Header("エイリアン最大数")]
     [SerializeField] private int _initialPoolSize = 50;
-
-    [Header("Runtime Info")]
-    [SerializeField, Tooltip("プール内で待機中のエイリアン")]
-    private Queue<AlienModel> _pool = new Queue<AlienModel>();
     
-    [SerializeField, Tooltip("現在アクティブなエイリアン")]
-    private List<AlienModel> _activeAliens = new List<AlienModel>();
+    // プール（待機中のエイリアン）を管理するキュー
+    private readonly Queue<AlienPresenter> _pool = new Queue<AlienPresenter>();
+    // 活動中のエイリアンを管理するリスト
+    private readonly List<AlienPresenter> _activeAliens = new List<AlienPresenter>();
 
+    // Addressablesからロードしたプレハブの実体
     private GameObject _alienPrefab;
+    // 初期化が完了したかどうかのフラグ
     private bool _isInitialized = false;
+    
 
-    private void Awake()
+    private async void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Addressablesからプレハブをロードし、プールを初期化する非同期メソッド
-    /// </summary>
-    public async UniTask InitializeAsync()
-    {
-        if (_isInitialized) return;
-
-        // 1. Addressablesからプレハブをロード
-        _alienPrefab = await _alienPrefabReference.LoadAssetAsync<GameObject>().ToUniTask();
-
-        if (_alienPrefab == null)
-        {
-            Debug.LogError("エイリアンのプレハブがAddressablesからロードできませんでした。");
-            return;
-        }
-
-        // 2. プールを初期化
-        for (int i = 0; i < _initialPoolSize; i++)
-        {
-            CreateAndPoolAlien();
-        }
-
-        _isInitialized = true;
-        Debug.Log("AlienManagerの初期化が完了しました。");
+        await InitializePool();
+        
+        SpawnTest().Forget();
+        
     }
     
-    /// <summary>
-    /// マネージャーのUpdateループ。アクティブな全エイリアンを一括で更新する。
-    /// </summary>
     private void Update()
     {
-        if (!_isInitialized) return;
-
-        // 後ろからループすることで、ループ中に対象が削除されても安全に処理できる
         for (int i = _activeAliens.Count - 1; i >= 0; i--)
         {
-            AlienModel alien = _activeAliens[i];
+            var presenter = _activeAliens[i];
+            presenter.Model.Move(); 
             
-            // 移動処理の呼び出し
-            alien.Move();
-            
-            // 画面外に出るなど、生存条件をチェックしてプールに戻す
-            // (この距離はカメラの位置やゲームの仕様に合わせて調整)
-            if (Vector3.Distance(Vector3.zero, alien.transform.position) > alien.LimitMoveDistance)
-            {
-                alien.ReturnToPool();
-            }
         }
-    }
-
-    /// <summary>
-    /// 指定した位置にエイリアンを一体スポーンさせる
-    /// </summary>
-    /// <param name="position">スポーンさせる座標</param>
-    /// <returns>スポーンさせたエイリアンのインスタンス。失敗時はnull</returns>
-    public AlienModel SpawnAlien(Vector3 position)
-    {
-        if (!_isInitialized)
-        {
-            Debug.LogWarning("AlienManagerが初期化されていません。");
-            return null;
-        }
-
-        // プールが空なら、動的に新しいインスタンスを生成
-        if (_pool.Count == 0)
-        {
-            Debug.LogWarning("プールが枯渇したため、新しいエイリアンを動的に生成します。");
-            CreateAndPoolAlien();
-        }
-
-        AlienModel alien = _pool.Dequeue();
-        alien.transform.position = position;
-        alien.ResetState(); // 状態をリセット
-        alien.gameObject.SetActive(true);
-        _activeAliens.Add(alien);
         
-        return alien;
+
     }
 
     /// <summary>
-    /// 指定されたエイリアンをプールに戻す
+    /// オブジェクトが破棄される時に呼ばれる
     /// </summary>
-    /// <param name="alien">プールに戻すエイリアン</param>
-    public void ReturnAlien(AlienModel alien)
-    {
-        if (alien == null) return;
-
-        // Listから削除する際は、インスタンスを直接探して削除するのが安全
-        if (_activeAliens.Remove(alien))
-        {
-            alien.gameObject.SetActive(false);
-            _pool.Enqueue(alien);
-        }
-    }
-
-    /// <summary>
-    /// エイリアンを一体生成し、非アクティブ状態でプールに追加するヘルパーメソッド
-    /// </summary>
-    private void CreateAndPoolAlien()
-    {
-        GameObject alienObj = Instantiate(_alienPrefab, this.transform);
-        AlienModel alien = alienObj.GetComponent<AlienModel>();
-        alien.Initialize(this); // Managerへの参照を渡す
-        alienObj.SetActive(false);
-        _pool.Enqueue(alien);
-    }
-
     private void OnDestroy()
     {
-        // Addressablesのリソースを解放
+        // Managerが破棄される際に、ロードしたAddressableアセットを解放する
         if (_alienPrefab != null)
         {
-            _alienPrefabReference.ReleaseAsset();
+            Addressables.Release(_alienPrefab);
+        }
+    }
+
+    /// <summary>
+    /// 文字列キーを使用してAddressablesからプレハブをロードし、プールを非同期で初期化。
+    /// </summary>
+    public async UniTask InitializePool()
+    {
+        // 既に初期化済みなら処理を中断
+        if (_isInitialized) return;
+
+        
+        // 文字列のキーを使ってAddressablesからプレハブを非同期でロード
+        _alienPrefab = await Addressables.LoadAssetAsync<GameObject>(_characterAddress).ToUniTask();
+        
+        // 初期プールサイズ分だけ、あらかじめエイリアンを生成してプールしておく
+        for (int i = 0; i < _initialPoolSize; i++)
+        {
+            GeneratePoolAlien();
+        }
+
+        // 初期化完了フラグを立てる
+        _isInitialized = true;
+    }
+
+    /// <summary>
+    /// 指定した位置にエイリアンを一体出現させます。
+    /// </summary>
+    public void SpawnAlien(Vector3 position, int initialHp)
+    {
+        // プールが空の場合、動的に新しいエイリアンを生成して補充する
+        if (_pool.Count == 0) GeneratePoolAlien();
+        
+        // プールから待機中のPresenterを一つ取り出す
+        var presenter = _pool.Dequeue();
+        // Presenter（GameObject）の座標を指定された位置に設定
+        presenter.transform.position = position;
+
+        // Modelの型をキャストして状態設定メソッドを呼び出す
+        ((InGame.Model.AlienModel)presenter.Model).SetInitialState(initialHp);
+
+        // GameObjectをアクティブにして画面に表示
+        presenter.gameObject.SetActive(true);
+        // 活動中リストに追加
+        _activeAliens.Add(presenter);
+    }
+    
+    /// <summary>
+    /// 指定されたエイリアンを非アクティブ化し、プールに戻します。
+    /// </summary>
+    public void ReturnAlien(AlienPresenter presenter)
+    {
+        // 対象がnullなら何もしない
+        if (presenter == null) return;
+        
+        // 活動中リストから対象を削除できたら（二重返却防止）
+        if (_activeAliens.Remove(presenter))
+        {
+            // GameObjectを非アクティブ化
+            presenter.gameObject.SetActive(false);
+            // プール（キュー）の末尾に戻す
+            _pool.Enqueue(presenter);
         }
     }
     
+    /// <summary>
+    /// エイリアンのインスタンスを一体生成し、非アクティブ状態でプールに追加する内部メソッド。
+    /// </summary>
+    private void GeneratePoolAlien()
+    {
+        // ロード済みのプレハブからGameObjectをインスタンス化。親を自分に設定。
+        var alienObj = Instantiate(_alienPrefab, this.transform);
+        // 生成したGameObjectからPresenterコンポーネントを取得
+        var presenter = alienObj.GetComponent<AlienPresenter>();
+        // PresenterにManager自身を教えて初期化する
+        presenter.Initialize(this);
+
+        // 最初は非表示にしておく
+        alienObj.SetActive(false);
+        // プールに追加
+        _pool.Enqueue(presenter);
+    }
+
+    public async UniTask SpawnTest()
+    {
+        // このコンポーネントが有効である限りループを続ける
+        while (this.isActiveAndEnabled)
+        {
+            // エイリアンを一体生成する
+            SpawnAlien(new Vector3(3.0f, 3.0f, 0.0f), 1);
+            
+            // 10秒間待機する。
+            // CancellationTokenを指定することで、このオブジェクトが破棄された時に待機を安全に中断できる
+            await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: this.GetCancellationTokenOnDestroy());
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
+using InGame.NonMVP;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -33,13 +34,24 @@ namespace InGame.Model
 
         private Vector3 MoveVector;
 
+        //ソケット（コンセント）
+        private GameObject Socket = null;
 
 
+        //コードのシミュレートを格納
+        public GenerateCodeSystem generateCodeSystem { get; private set; }
+        //コードをシミュレートしている。
+        List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
         //-------------------------------
 
         //オブジェクトをスタック
         private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
 
+
+        public void GetGenerateCodeSystem(GenerateCodeSystem generater)
+        {
+            generateCodeSystem = generater;
+        }
 
         public GameObject GeneratePlayerCharacter(Vector3 generatePosition)
         {
@@ -69,9 +81,21 @@ namespace InGame.Model
                 Rb = instance.GetComponent<Rigidbody2D>();
                 return instance;
             }
-            
         }
-        
+        public async UniTask AddressGenerateSocket(string Address)
+        {
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(Address);
+
+            using (new HandleDisposable<GameObject>(handle))
+            {
+                GameObject prefab = await handle;
+                UnityEngine.Object.Instantiate(prefab, InstancePosition, Quaternion.identity);
+            }
+        }
+
+
+        //-----------------
+        #region セット
         public void SetSpeed(float newSpeed)
         {
             Speed = newSpeed;
@@ -81,7 +105,9 @@ namespace InGame.Model
         {
             InstancePosition = newPosition;
         }
-
+        #endregion
+        //---------------------------
+        #region 移動関数
         public void MoveInput(InputSystem_Actions Actions)
         {
             MoveVector = Actions.Player.Move.ReadValue<Vector3>() * Speed;
@@ -93,16 +119,24 @@ namespace InGame.Model
                 Rb.linearVelocity = MoveVector;
             }
         }
+        #endregion
 
+        /// <summary>
+        /// コード生成
+        /// </summary>
+        public void GenerateCode()
+        {
+            
+        }
+        /// <summary>
+        /// ゲージ現象
+        /// </summary>
+        /// <param name="Num"></param>
         public void DecreaseCodeGauge(float Num)
         {
             CodeGauge -= Num;
         }
 
-        public void DecearseCodeGauge(Transform start,Transform end)
-        {
-            
-        }
         //
         public float GetCodeGaugePercent()
         {

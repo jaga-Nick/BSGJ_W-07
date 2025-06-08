@@ -12,7 +12,7 @@ namespace InGame.NonMVP
     public class ExplosionAttach : MonoBehaviour
     {
         private Animator animator;
-        private async UniTask Explosion(string AnimationName)
+        public async UniTask Explosion(string AnimationName)
         {
             animator = gameObject.GetComponent<Animator>();
             animator.Play(AnimationName);
@@ -27,9 +27,9 @@ namespace InGame.NonMVP
         private void OnTriggerEnter2D(Collider2D collision)
         {
             //Debug.Log("ここで一応プレイヤーかIEnemyかの処理")
-            IEnumerable<IEnemyModel> enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>();
+            IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
 
-
+            //ここでIEnemhyModelの処理を呼び出す様にする
         }
     }
 }
