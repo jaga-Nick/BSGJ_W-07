@@ -26,6 +26,18 @@ namespace InGame.Model
         public float ExplosionPower { get; }
         
         /// <summary>
+        /// 何の家電かを数字で判別する
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetEnemyType()
+        {
+            // 家電の場合1
+            // UFOの場合2
+            // 母艦UFOの場合3
+            return 1;
+        }
+        
+        /// <summary>
         /// 家電のモーション
         /// </summary>
         public virtual void Move()
