@@ -16,10 +16,23 @@ namespace InGame.Model
         public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
         public Vector3 Angle { get; set; }
+        
         /// <summary>
         /// 爆発力
         /// </summary>
         public float ExplosionPower { get;}
+
+        /// <summary>
+        /// 何の家電かを数字で判別する
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetEnemyType()
+        {
+            // 家電の場合1
+            // UFOの場合2
+            // 母艦UFOの場合3
+            return 0;
+        }
 
         /// <summary>
         /// ランダムに動きます。
@@ -30,7 +43,7 @@ namespace InGame.Model
 
             if (IntervalTime >= CurrentTime)
             {
-                int num=Random.Range(1, 360);
+                var num=Random.Range(1, 360);
                 var value = Mathf.Deg2Rad*num;
 
                 Angle = new Vector3(Mathf.Cos(value), Mathf.Sin(value), 0);
@@ -41,5 +54,13 @@ namespace InGame.Model
             Rb.linearVelocity = Angle;
         }
         
+        /// <summary>
+        /// 死んだかどうかのブール判定。
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDead()
+        {
+            return true;
+        }
     }
 }

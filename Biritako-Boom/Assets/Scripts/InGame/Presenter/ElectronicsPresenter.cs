@@ -55,11 +55,8 @@ namespace InGame.Presenter
         /// <returns></returns>
         private static float RandomRun()
         {
-            var value = Random.Range(-0.5f, 1.5f);
-            if (value is >= 0.0f and <= 1.0f)
-            {
-                RandomRun();
-            }
+            float value;
+            do { value = Random.Range(-0.5f, 1.5f); } while (value is >= 0.0f and <= 1.0f);
             return value;
         }
 
