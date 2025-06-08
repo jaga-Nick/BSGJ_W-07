@@ -19,14 +19,14 @@ namespace InGame.Presenter
 
         void Start()
         {
-            // インスタンスの生成と初期化を分離する
-            // 1. まずインスタンスを生成する
             _cameraModel = new CameraModel();
-            
-            // 2. 次にInitializeメソッドで初期値を設定する
             _cameraModel.Initialize(new Vector3(0, 0, offsetZ));
         }
 
+        /// <summary>
+        /// 外部から追従対象を設定するための公開メソッド（これが重要）
+        /// </summary>
+        /// <param name="targetTransform">追従したい対象のTransform</param>
         public void SetTarget(Transform targetTransform)
         {
             _target = targetTransform;
@@ -34,14 +34,18 @@ namespace InGame.Presenter
 
         private void LateUpdate()
         {
+            // ターゲットが設定されていなければ何もしない
             if (_target == null)
             {
                 return;
             }
 
+            // --- ターゲットを探すロジックはもう不要 ---
+
+            // ターゲットが設定されていれば、シンプルに追従処理を行うだけ
             Vector3 targetPosition = _target.position;
             Vector3 newPosition = targetPosition + _cameraModel.GetOffset();
-            
+                            
             cameraView.SetPosition(newPosition);
         }
     }
