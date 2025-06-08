@@ -11,30 +11,38 @@ namespace InGame.NonMVP
         /// <summary>
         /// スポーンのプロパティ
         /// </summary>
+        [Header("スポーン時間のインターバル")]
         [SerializeField] private float spawnInterval = 3f;
+        [Header("タイマー")]
         [SerializeField] private float timer;
-        [SerializeField] private int maxEnemies = 15;
+        [Header("生成される家電の上限数")]
+        [SerializeField] private int maxElectronics = 15;
+        [Header("生成されるUFOの上限数")]
+        [SerializeField] private int maxUfo = 14;
 
         /// <summary>
         /// Prefab
         /// </summary>
         [SerializeField] private GameObject[] electronicsPrefabs;
-        [SerializeField] private GameObject ufoPrefab;
+        [SerializeField] private GameObject[] ufoPrefabs;
         
         /// <summary>
         /// 現在のEnemyの数
         /// </summary>
-        public int CurrentEnemies { get; set; } = 0;
+        public int CurrentElectronics { get; set; } = 0;
+        public int CurrentUfo { get; set; } = 0;
 
         private void Start()
         {
+            // タイマーをスポーン時間のインターバルにセット
             timer = spawnInterval;
+            SpawnUfo();
         }
 
         private void Update()
         {
             timer -= Time.deltaTime;
-            if (!(timer <= 0) || CurrentEnemies >= maxEnemies) return;
+            if (!(timer <= 0) || CurrentElectronics >= maxElectronics) return;
             SpawnElectronics();
             timer = spawnInterval;
         }
@@ -56,16 +64,44 @@ namespace InGame.NonMVP
             electronics.transform.position = spawnPosition;
             
             // 家電の数をインクリメント
-            CurrentEnemies++;
+            CurrentElectronics++;
+        }
+
+        /// <summary>
+        /// UFOの生成
+        /// </summary>
+        private void SpawnUfo()
+        {
+            for (var i = 0; i < maxUfo; i++)
+            {
+                // UFOを選択して生成する
+                var randomIndex = Random.Range(0, ufoPrefabs.Length);
+                var ufo = Instantiate(ufoPrefabs[randomIndex]);
+            
+                // UFOに付与されているPresenterを取得
+                var presenter = ufo.GetComponent<UfoPresenter>();
+            
+                // Presenterで決定した座標をもとに初期座標を決定
+                var spawnPosition = presenter.DetermineSpawnPoints();
+                ufo.transform.position = spawnPosition;
+            
+                // UFOの数をインクリメント
+                CurrentElectronics++;   
+            }
         }
         
 
         /// <summary>
-        /// Enemyが死んだらカウントを1減らす
+        /// 家電が死んだら家電カウントを1減らす
         /// </summary>
-        public void OnEnemyDeath()
+        public void OnElectronicsDeath()
         {
-            CurrentEnemies--;
+            CurrentElectronics--;
+        }
+
+        public void OnUfoDeath()
+        {
+            CurrentUfo--;
         }
     }
 }
