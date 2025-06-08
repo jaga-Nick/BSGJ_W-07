@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using InGame.Model;
 using InGame.View;
 
@@ -10,9 +11,9 @@ namespace InGame.Presenter
         /// 移動パラメータ
         /// </summary>
         [Header("移動速度")]
-        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float moveSpeed = 1f;
         [Header("前進する秒数")]
-        [SerializeField] private float moveDuration = 3f;
+        [SerializeField] private float moveDuration = 0.5f;
         
         /// <summary>
         /// UFOのステータス
@@ -26,7 +27,7 @@ namespace InGame.Presenter
         /// modelとview
         /// </summary>
         private UfoModel _model;
-        private ElectronicsView _view;
+        private UfoView _view;
         
         /// <summary>
         /// Camera
@@ -43,9 +44,13 @@ namespace InGame.Presenter
         {
             _model = new UfoModel
             {
+                Rb = gameObject.GetComponent<Rigidbody2D>(),
                 MaxUfoHp = maxUfoHp,
                 CurrentUfoHp = maxUfoHp,
+                UfoScore = ufoScore,
             };
+            
+            StartCoroutine(MoveCharacterRoutine());
         }
         
         /// <summary>
@@ -71,6 +76,26 @@ namespace InGame.Presenter
             float value;
             do { value = Random.Range(-1.5f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
             return value;
+        }
+
+        private IEnumerator MoveCharacterRoutine()
+        {
+            // Modelにランダムな移動方向を問い合わせる
+            // modelにセットする
+            _model.Speed = moveSpeed;
+            // 移動開始時にアニメーションを再生
+            var direction = Vector2.up;
+            while (true)
+            {
+                var elapsedTime = 0f;
+                while (elapsedTime < moveDuration)
+                {
+                    _model.Rb.linearVelocity = direction * _model.Speed;
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+                direction *= -1;
+            }
         }
 
         private void OnDestroy()
