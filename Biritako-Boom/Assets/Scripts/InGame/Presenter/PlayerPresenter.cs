@@ -33,6 +33,8 @@ namespace InGame.Presenter
         private void Awake()
         {
             Model = new PlayerModel();
+            //コード生成に必要なクラスを取得。
+            Model?.GetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
             View = gameObject.GetComponent<GameHUDView>();
             //スコアイベントの購読(Singletonの呼び出し）
