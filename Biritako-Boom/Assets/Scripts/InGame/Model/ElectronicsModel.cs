@@ -15,9 +15,10 @@ namespace InGame.Model
         public Vector3 Angle { get; set; }
         
         /// <summary>
-        /// 速さと座標
+        /// 速さと向きと座標
         /// </summary>
         public float Speed { get; set; }
+        public Vector3 Direction { get; set; }
         public Vector3 Position { get; set; }
         
         /// <summary>
@@ -42,9 +43,26 @@ namespace InGame.Model
         /// </summary>
         public virtual void Move()
         {
-            // 上下左右どちらかに進む
-            
+           
         }
+
+        /// <summary>
+        /// ランダムな方向を取得
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetRandomDirection()
+        {
+            var randomIndex = Random.Range(0, 4);
+            return randomIndex switch
+            {
+                0 => Vector2.up,
+                1 => Vector2.down,
+                2 => Vector2.left,
+                3 => Vector2.right,
+                _ => Vector2.down
+            };
+        }
+        
 
         /// <summary>
         /// 家電の座標をセットする

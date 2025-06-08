@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using InGame.Model;
 using InGame.NonMVP;
 using InGame.View;
@@ -10,12 +11,23 @@ namespace InGame.Presenter
     public class ElectronicsPresenter : MonoBehaviour
     {
         /// <summary>
+        /// 移動パラメータ
+        /// </summary>
+        [Header("移動速度")]
+        [SerializeField] private float moveSpeed = 3f;
+        [Header("前進する秒数")]
+        [SerializeField] private float moveDuration = 3f;
+        
+        /// <summary>
         /// modelとview
         /// </summary>
         private ElectronicsModel _model;
         private ElectronicsView _view;
         private UfoModel _ufoModel;
         
+        /// <summary>
+        /// Camera
+        /// </summary>
         private Camera _camera;
 
         private void Awake()
@@ -27,9 +39,12 @@ namespace InGame.Presenter
         {
             _model = new ElectronicsModel
             {
-                Rb = gameObject.GetComponent<Rigidbody2D>()
+                Rb = gameObject.GetComponent<Rigidbody2D>(),
+                Position = transform.position,
             };
             _view = gameObject.GetComponent<ElectronicsView>();
+
+            StartCoroutine(MoveCharacterRoutine());
         }
 
         /// <summary>
@@ -59,18 +74,35 @@ namespace InGame.Presenter
             do { value = Random.Range(-0.5f, 1.5f); } while (value is >= 0.0f and <= 1.0f);
             return value;
         }
-
-        private void Update()
+        
+        /// <summary>
+        /// キャラクターをランダムな方向に向かせて前進させるコルーチン
+        /// </summary>
+        private IEnumerator MoveCharacterRoutine()
         {
-            // 移動ロジックを実装
-            var newPosition = _model.Position + transform.position * (_model.Speed * Time.deltaTime);
-            _model.SetPositon(newPosition);
-            _model.Move();
+            // Modelにランダムな移動方向を問い合わせる
+            var moveDirection = _model.GetRandomDirection();
             
-            // 移動アニメーションの制御
-            _view.PlayMoveAnimation(_model.Speed > 0);
-            
-            // 死んだ場合
+            // modelにセットする
+            _model.Speed = moveSpeed;
+            _model.Direction = moveDirection;
+
+            // 移動開始時にアニメーションを再生
+            _view.PlayMoveAnimation(true);
+
+            while (true)
+            {
+                var elapsedTime = 0f;
+
+                while (elapsedTime < moveDuration)
+                {
+                    _model.Rb.linearVelocity = _model.Direction * _model.Speed;
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                _model.Direction *= -1;
+            }
         }
     }
 }
