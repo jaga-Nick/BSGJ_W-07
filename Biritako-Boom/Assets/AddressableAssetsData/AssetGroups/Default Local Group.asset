@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32578d12da57e1f429fc8560532e0128
+    m_Address: Enemy_Alien
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3797fbd8633120d40ac0c98243466f72
     m_Address: InGame
     m_ReadOnly: 0

@@ -22,7 +22,8 @@ namespace InGame.Presenter
         private void Awake()
         {
             View = GetComponent<MotherShipView>();
-            Model = new MotherShipModel(View.GetRb());
+            Model = GetComponent<MotherShipModel>();
+            Model.Initialize();
             Model.SetRb(View.GetRb());
         }
         
