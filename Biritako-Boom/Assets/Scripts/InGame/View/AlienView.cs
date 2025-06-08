@@ -19,7 +19,7 @@ namespace InGame.View
         public void PlayHitAnimation()
         {
             // Animatorに"Hit"というトリガーをセットしてアニメーションを起動
-            _animator?.SetTrigger("Hit");
+            //_animator?.SetTrigger("Hit");
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace InGame.View
         public void PlayHitEffect()
         {
             // パーティクルシステムが設定されていれば再生
-            _hitEffect?.Play();
+            //_hitEffect?.Play();
         }
 
         /// <summary>
@@ -37,7 +37,6 @@ namespace InGame.View
         public void OnReturnToPool()
         {
             // ここで消滅エフェクトの再生などを行う
-            // Debug.Log("View: プールに戻る際の処理を実行します。");
         }
     }
 }

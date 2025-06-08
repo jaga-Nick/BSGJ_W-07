@@ -5,7 +5,6 @@ namespace InGame.Model
 {
     /// <summary>
     /// エイリアンのデータと振る舞いのロジックを持つコンポーネント。
-    /// 自身ではコンポーネント取得を行わず、外部から設定されるのを待つ。
     /// </summary>
     public class AlienModel : MonoBehaviour, IEnemyModel
     {
@@ -118,7 +117,6 @@ namespace InGame.Model
         /// </summary>
         public void Move()
         {
-            // Rigidbodyが設定されていなければ何もしない（安全対策）
             if (Rb == null) return;
 
             // 状態タイマーを経過時間分だけ進める

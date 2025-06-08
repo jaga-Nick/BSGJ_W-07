@@ -43,14 +43,6 @@ public class AlienManager : MonoBehaviour
             var presenter = _activeAliens[i];
             presenter.Model.Move(); 
             
-            /*
-            // 画面外（一定距離以上離れた）に出たか判定
-            if (Vector3.Distance(Vector3.zero, presenter.transform.position) > presenter.Model.LimitMoveDistance)
-            {
-                // 画面外ならプールに戻す
-                ReturnAlien(presenter);
-            }
-            */
         }
         
 
@@ -62,7 +54,6 @@ public class AlienManager : MonoBehaviour
     private void OnDestroy()
     {
         // Managerが破棄される際に、ロードしたAddressableアセットを解放する
-        // これを忘れるとメモリリークの原因になる
         if (_alienPrefab != null)
         {
             Addressables.Release(_alienPrefab);
