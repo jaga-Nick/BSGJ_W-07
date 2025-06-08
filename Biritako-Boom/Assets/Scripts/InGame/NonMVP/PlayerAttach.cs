@@ -7,6 +7,7 @@ namespace InGame.NonMVP
     /// </summary>
     public class PlayerAttach : MonoBehaviour
     {
-
+        [SerializeField]
+        private PlayerChecker PlayerChecker;
     }
 }

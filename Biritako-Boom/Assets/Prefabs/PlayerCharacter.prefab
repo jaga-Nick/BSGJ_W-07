@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8027450070208031199}
   - component: {fileID: 7842466806053207344}
+  - component: {fileID: 3043995220819967546}
   m_Layer: 0
   m_Name: PositionChecker
   m_TagString: Untagged
@@ -68,6 +69,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &3043995220819967546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3763457473587348876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4270423f71bfa7344b11c342da3b58ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6643896999913150986
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,6 +94,7 @@ GameObject:
   - component: {fileID: 7704203015101111615}
   - component: {fileID: 7422880324377104860}
   - component: {fileID: 933353819660105054}
+  - component: {fileID: 5482545323728838325}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -244,3 +258,16 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.6593685
+--- !u!114 &5482545323728838325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6643896999913150986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d370a255c142864bb8842ee13af7e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerChecker: {fileID: 3043995220819967546}

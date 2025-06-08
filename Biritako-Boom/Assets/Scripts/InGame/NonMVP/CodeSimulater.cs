@@ -1,8 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using System.Net;
+using System.Threading;
+using System;
+using InGame.Model;
 
 namespace InGame.NonMVP
 {
+    /// <summary>
+    /// Codeシミュレーター(GenerateCodeSystem-Classから生成する。)
+    /// </summary>
     public class CodeSimulater : MonoBehaviour
     {
         /// <summary>
@@ -16,7 +25,11 @@ namespace InGame.NonMVP
         /// <param name="stiffness"></param>
         /// <param name="Start"></param>
         /// <param name="End"></param>
-        public void Initialize(LineRenderer lineRenderer, int particleCount, float timeStep, Vector3 gravity, float damping, float stiffness, Transform Start, Transform End)
+        public void Initialize(LineRenderer lineRenderer, int particleCount, float timeStep,
+            Vector3 gravity, float damping, float stiffness,
+            GameObject startObject,GameObject endObject,
+            int explosionTriggerDistance,int maxExplosion
+            )
         {
             this.CodeLineRenderer = lineRenderer;
 
@@ -26,8 +39,11 @@ namespace InGame.NonMVP
             this.Damping = damping;
             this.Stiffness = stiffness;
 
-            this.StartPoint = Start;
-            this.EndPoint = End;
+            this.StartObject = startObject;
+            this.EndObject = endObject;
+
+            this.ExplosionTriggerDistance = explosionTriggerDistance;
+            this.MaxExplosion = maxExplosion;
 
             InitializeRope();
             //位置設定の総量変更
@@ -36,11 +52,18 @@ namespace InGame.NonMVP
                 lineRenderer.positionCount = ParticleCount;
             }
         }
+        /// <summary>
+        /// 始点（家電）
+        /// </summary>
+        private GameObject StartObject;
+        /// <summary>
+        /// 終点（プレイヤーかその場）
+        /// </summary>
+        private GameObject EndObject;
 
-        // ヒモの両端を指定するためのTransform
-        [Header("両端の位置")]
-        public Transform StartPoint;
-        public Transform EndPoint;
+        //爆発関係
+        private int ExplosionTriggerDistance=3;
+        private int MaxExplosion=4;
 
         #region データの実装（外部から設定される。Initializeで設定)
         // ヒモの粒子数
@@ -74,22 +97,119 @@ namespace InGame.NonMVP
         private LineRenderer CodeLineRenderer;
         #endregion
 
+        [Header("アニメーション設定")]
+        [Tooltip("終点が始点まで移動するのにかかる時間（秒）")]
+        public float shrinkDuration = 2.0f;
 
+        // タスクのキャンセルに使用する
+        private CancellationTokenSource cts;
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         public void Update()
         {
             Simulate();
             UpdateLineRenderer();
+
         }
+
+
         /// <summary>
         /// ここで当たった時に消える。
         /// </summary>
         /// <param name="collision"></param>
         public void OnTriggerEnter2D(Collider2D collision)
         {
+            if (collision.gameObject != StartObject && collision.gameObject !=EndObject)
+            {
+                Debug.Log("コードに何か衝突しました。デモ時はまだ何もさせていません。");
+            }
+        }
+
+        /// <summary>
+        /// Codeを置いた時のイベント。
+        /// </summary>
+        private void PutCodeEvent()
+        {
+            //拾う判定を作る為に。
+            EndObject = new GameObject("EndPoint");
+            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
+            EndObject.transform.position = EndObject.transform.position;
+            CircleCollider2D circle=EndObject.AddComponent<CircleCollider2D>();
+            EndObject.AddComponent<CodeEndPointAttach>();
+            //コライダーの情報セット
+            //コライダーの情報セット
+            circle.radius = 80;
+            circle.offset = new Vector2(0,0);
+
+            //判定の為、Rigidbodyを作成。
+            Rigidbody2D rb=EndObject.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0;
+
+            cts?.Cancel();
+            cts = new CancellationTokenSource();
+
+
+            //最終地点に進める。その後消える。
+            MovePointAsync(cts.Token).Forget();
+        }
+        /// <summary>
+        /// 拾うイベント（まだ最悪かかなくていいか。）
+        /// </summary>
+        private void GetCodeEvent()
+        {
 
         }
+
+        /// <summary>
+        /// EndPointをStartPointの位置まで、指定した時間をかけて動かす非同期メソッド
+        /// </summary>
+        public async UniTask MovePointAsync(CancellationToken token)
+        {
+            // GameObjectが破棄された時に自動でキャンセルされるようにトークンをリンク
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
+            var linkedToken = linkedCts.Token;
+
+            try
+            {
+                // アニメーション開始時の各位置を記録
+                Vector3 initialEndPos = EndObject.transform.position;
+                Vector3 targetPos = StartObject.transform.position;
+                float elapsedTime = 0f;
+
+                // 経過時間が指定したアニメーション時間に達するまでループ
+                while (elapsedTime < shrinkDuration)
+                {
+                    // キャンセル要求があったら、例外を投げて処理を中断
+                    linkedToken.ThrowIfCancellationRequested();
+
+                    float t = elapsedTime / shrinkDuration;
+                    EndObject.transform.position = Vector3.Lerp(initialEndPos, targetPos, t);
+
+                    elapsedTime += Time.deltaTime;
+
+                    // 1フレーム待機 (yield return null; のUniTask版)
+                    await UniTask.Yield(PlayerLoopTiming.Update, linkedToken);
+                }
+
+                // ループ終了後、正確に目標位置に設定する
+                EndObject.transform.position = targetPos;
+            }
+            catch (OperationCanceledException)
+            {
+                // キャンセルされた場合はここに飛ぶ（特に何もしなくても良い）
+                Debug.Log("移動タスクがキャンセルされました。");
+            }
+            finally
+            {
+                // タスク完了またはキャンセルの後始末
+                cts?.Dispose();
+                cts = null;
+
+                //このオブジェクトを最終的に削除。
+                Destroy(gameObject);
+            }
+        }
+
 
         /// <summary>
         /// 爆破を呼び出す
@@ -97,12 +217,50 @@ namespace InGame.NonMVP
         public void Explosion()
         {
             //ここでどれだけ離れているかを設定する
+            GenerateExplosionManager generater = GenerateExplosionManager.Instance();
+            //紐の総長さを計算し、基準に地点を
+            float totalDistance = TotalDistance();
+            int num=(int)totalDistance / ExplosionTriggerDistance;
+            //最大４以上の爆発
+            if (num >MaxExplosion)
+            {
+                num = MaxExplosion;
+            }
+            else if (num < 1)
+            {
+                num = 1;
+            }
+            int i = 0;
+            int count = 0;
+            while (count < num)
+            {
+                // 発火位置を均等に取り出す
+                i = (int)((float)(Positions.Length - 1) * count / (num - 1));
 
-            Debug.Log(Positions[4]);
-            Debug.Log(Positions[9]);
-            Debug.Log(Positions[14]);
-            Debug.Log(Positions[19]);
+                // 最後に1つだけだと 0除算になるのを防ぐ
+                if (num == 1) i = (Positions.Length - 1) / 2;
+
+                //爆発させる。（線の途中）
+                generater.Factory(Positions[i], 0);
+                count++;
+            }
         }
+
+        /// <summary>
+        /// 総距離を求める（これによって延長コードゲージを増減させる。）
+        /// </summary>
+        /// <returns></returns>
+        public float TotalDistance()
+        {
+            float totalDistance = 0f;
+            for (int j = 0; j < Positions.Length - 1; j++)
+            {
+                totalDistance += Vector3.Distance(Positions[j], Positions[j + 1]);
+            }
+            return totalDistance;
+        }
+
+
 
 
         #region ロープの設定
@@ -120,7 +278,7 @@ namespace InGame.NonMVP
             for (int i = 0; i < ParticleCount; i++)
             {
                 float t = (float)i / (ParticleCount - 1);
-                Positions[i] = Vector3.Lerp(StartPoint.position, EndPoint.position, t);
+                Positions[i] = Vector3.Lerp(StartObject.transform.position, EndObject.transform.position, t);
                 Velocities[i] = Vector3.zero;
                 Masses[i] = 1f;
             }
@@ -185,8 +343,8 @@ namespace InGame.NonMVP
             }
 
             // 両端を強制的に固定
-            Positions[0] = StartPoint.position;
-            Positions[ParticleCount - 1] = EndPoint.position;
+            Positions[0] = StartObject.transform.position;
+            Positions[ParticleCount - 1] = EndObject.transform.position;
         }
         /// <summary>
         /// LineRendererをロープの現在の状態に合わせて更新。
@@ -200,5 +358,11 @@ namespace InGame.NonMVP
             }
         }
         #endregion
+
+        // このコンポーネントが無効になったり破棄された時に、実行中のタスクを止める
+        private void OnDisable()
+        {
+            cts?.Cancel();
+        }
     }
 }

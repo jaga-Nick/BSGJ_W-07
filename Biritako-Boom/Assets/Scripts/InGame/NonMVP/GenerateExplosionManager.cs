@@ -10,25 +10,21 @@ namespace InGame.NonMVP
     {
         [Header("爆発大")]
         [SerializeField]
-        private GameObject BigExplosion;
-        [SerializeField]
         private float BigExplosionCollisionSize;
         [SerializeField]
-        private float BigExplosionSize;
+        private float BigExplosionSize = 0.25f;
         [Header("爆発中")]
         [SerializeField]
-        private GameObject MiddleExplosion;
-        [SerializeField]
-        private float MiddleCollisionSize;
+        private float MiddleCollisionSize=0.25f;
         [Header("爆発小")]
         [SerializeField]
-        private GameObject SmallExplosion;
-        [SerializeField]
-        private float SmallCollisionSize;
+        private float SmallCollisionSize=0.25f;
 
         [Header("基準値")]
         [SerializeField]
-        private int ExplosionLimit;
+        private GameObject ExplosionObject;
+        [SerializeField]
+        private int ExplosionLimit=30;
 
         public void Awake()
         {
@@ -37,25 +33,37 @@ namespace InGame.NonMVP
         }
 
         /// <summary>
-        /// 爆発生成
+        /// 爆発生成(InterfaceでSwitch変わりしたほうがいいけどプランナーに調節させたらでええわ。）
         /// </summary>
-        public async UniTask Factory(Vector3 point,int ExplosionPower)
+        public async void Factory(Vector3 point,int ExplosionPower)
         {
             GameObject gameObject = null;
             switch (ExplosionPower)
             {
                 case 0:
-                    gameObject=Instantiate(SmallExplosion, point, Quaternion.identity);
+                    gameObject=Instantiate(ExplosionObject, point, Quaternion.identity);
 
-                    gameObject.GetComponent<ExplosionAttach>();
-                    Animator animator = gameObject.GetComponent<Animator>();
+                    ExplosionAttach smallExplosionAttach=gameObject.GetComponent<ExplosionAttach>();
+                    CircleCollider2D collider_sma=gameObject.GetComponent<CircleCollider2D>();
+                    collider_sma.radius=SmallCollisionSize;
 
+                    await smallExplosionAttach.Explosion("Explosion");
                     break;
                 case 1:
-                    Instantiate(MiddleExplosion, point, Quaternion.identity);
+                    gameObject =Instantiate(ExplosionObject, point, Quaternion.identity);
+                    ExplosionAttach middleExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
+                    CircleCollider2D collider_mid = gameObject.GetComponent<CircleCollider2D>();
+                    collider_mid.radius = SmallCollisionSize;
+
+                    await middleExplosionAttach.Explosion("Explosion");
                     break;
                 case 2:
-                    Instantiate(BigExplosion, point, Quaternion.identity);
+                    gameObject=Instantiate(ExplosionObject, point, Quaternion.identity);
+                    CircleCollider2D collider_big = gameObject.GetComponent<CircleCollider2D>();
+                    collider_big.radius = SmallCollisionSize;
+                    ExplosionAttach bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
+
+                    await bigExplosionAttach.Explosion("Explosion");
                     break;
             }
         }

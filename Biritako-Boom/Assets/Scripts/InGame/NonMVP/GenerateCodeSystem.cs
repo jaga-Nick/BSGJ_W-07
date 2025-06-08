@@ -2,11 +2,11 @@
 
 namespace InGame.NonMVP
 {
-
+    /// <summary>
+    /// コードのシミュレートオブジェクトを生成するクラス
+    /// </summary>
     public class GenerateCodeSystem : MonoBehaviour
     {
-        private Transform Init;
-        private Transform End;
         #region　LineRendererの設定まとめ
         [Header("LineRendererの設定")]
         [SerializeField]
@@ -35,6 +35,14 @@ namespace InGame.NonMVP
         [SerializeField]
         private float Stiffness = 2f;
 
+        //------------------------------------
+        [Header("爆発の基準距離")]
+        [SerializeField]
+        private int ExplosionTriggerDistance=3;
+        [Header("最大コード爆発数")]
+        [SerializeField]
+        private int MaxExplosion=4;
+
         /// <summary>
         /// コードを生成
         /// </summary>
@@ -56,7 +64,10 @@ namespace InGame.NonMVP
             CodeSimulater codeSimulater = CodeObject.AddComponent<CodeSimulater>();
             //この時点ではUpdateは発生しない為問題ない
             //設定
-            codeSimulater.Initialize(lineRenderer, ParticleCount, TimeStep, Gravity, Damping, Stiffness, Start.transform, End.transform);
+            codeSimulater.Initialize(lineRenderer, ParticleCount, TimeStep, 
+                                     Gravity, Damping, Stiffness, 
+                                     Start , End, 
+                                     ExplosionTriggerDistance,MaxExplosion);
 
             //オブジェクト設定
 
