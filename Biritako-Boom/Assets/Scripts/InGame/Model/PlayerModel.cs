@@ -17,6 +17,12 @@ namespace InGame.Model
     [Serializable]
     public class PlayerModel
     {
+        public void Initialize(PlayerPresenter playerPresenter)
+        {
+            this.presenter = playerPresenter;
+        }
+        
+        private PlayerPresenter presenter; 
 
         //--データとして保持する為に。
         public GameObject PlayerObject { get; private set; }
@@ -71,7 +77,7 @@ namespace InGame.Model
         {
             if (PlayerObject == null)
             {
-                PlayerObject = UnityEngine.Object.Instantiate(PlayerObject, InstancePosition, Quaternion.identity);
+                PlayerObject = UnityEngine.Object.Instantiate( presenter.characterPrefab , InstancePosition, Quaternion.identity);
                 Rb = PlayerObject?.GetComponent<Rigidbody2D>();
             }     
         }
@@ -102,10 +108,8 @@ namespace InGame.Model
         {
             GameObject instance = null;
             //ソケットが生成されていない時。
-            if (Socket == null)
-            {
-                    instance = UnityEngine.Object.Instantiate(Socket, PlayerObject.transform.position, Quaternion.identity);
-            }
+            instance = UnityEngine.Object.Instantiate(Socket, PlayerObject.transform.position, Quaternion.identity);
+            
         }
 
         /// <summary>
@@ -157,7 +161,7 @@ namespace InGame.Model
         #region 移動関数
         public void MoveInput(InputSystem_Actions Actions)
         {
-            MoveVector = Actions.Player.Move.ReadValue<Vector3>() * Speed;
+            MoveVector = Actions.Player.Move.ReadValue<Vector2>() * Speed;
         }
         public void MovePlayer()
         {

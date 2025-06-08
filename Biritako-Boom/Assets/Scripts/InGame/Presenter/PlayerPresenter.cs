@@ -10,6 +10,9 @@ namespace InGame.Presenter
         [Header("キャラクターPrefabデータ")]
         [SerializeField]
         private GameObject CharacterPrefab;
+
+        public GameObject characterPrefab { get; private set; }
+
         [SerializeField]
         private string CharacterAddress="PlayerCharacter";
 
@@ -32,7 +35,10 @@ namespace InGame.Presenter
 
         private void Awake()
         {
+            characterPrefab = CharacterPrefab;
+
             Model = new PlayerModel();
+            Model.Initialize(this);
 
             //-------------------------------------------
             //デバッグ用生成。（Initializeを用意したほうがいいと思う。）
@@ -49,7 +55,7 @@ namespace InGame.Presenter
             scoreModel.ScoreChanged += ScoreChanged;
 
             playerController = new PlayerController(Model,this);
-
+            playerController.Init();
         }
         private void Update()
         {
