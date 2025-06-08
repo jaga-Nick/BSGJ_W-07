@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using InGame.Model;
+using InGame.View;
 
 namespace InGame.Presenter
 {
@@ -12,8 +13,20 @@ namespace InGame.Presenter
         [SerializeField] private float moveSpeed = 3f;
         [Header("前進する秒数")]
         [SerializeField] private float moveDuration = 3f;
+        
+        /// <summary>
+        /// UFOのステータス
+        /// </summary>
+        [Header("UFOの最大HP")]
+        [SerializeField] private int maxUfoHp = 100;
+        [Header("UFOのスコア")]
+        [SerializeField] private int ufoScore = 100;
 
+        /// <summary>
+        /// modelとview
+        /// </summary>
         private UfoModel _model;
+        private ElectronicsView _view;
         
         /// <summary>
         /// Camera
@@ -28,7 +41,11 @@ namespace InGame.Presenter
 
         private void Start()
         {
-            _model = new UfoModel();
+            _model = new UfoModel
+            {
+                MaxUfoHp = maxUfoHp,
+                CurrentUfoHp = maxUfoHp,
+            };
         }
         
         /// <summary>
@@ -36,9 +53,6 @@ namespace InGame.Presenter
         /// </summary>
         public Vector3 DetermineSpawnPoints()
         {
-            // UFOのmodelを取得して座標を確認
-            // _ufoModel = new UfoModel();
-            
             // ランダムな座標を生成
             var randomPositionX = RandomRun();
             var randomPositionY = RandomRun();

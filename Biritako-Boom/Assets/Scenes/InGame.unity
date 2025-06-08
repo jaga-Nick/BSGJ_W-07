@@ -417,7 +417,8 @@ MonoBehaviour:
   - {fileID: 1357869806}
   - {fileID: 1753875042}
   - {fileID: 1004121517}
-  ufoPrefabs: []
+  ufoPrefabs:
+  - {fileID: 1421975575}
 --- !u!4 &531447711
 Transform:
   m_ObjectHideFlags: 0
@@ -797,6 +798,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8349412741798358215, guid: baa0d0300379d57448d9e862a5e93ddb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1421975576}
+    - targetCorrespondingSourceObject: {fileID: 8349412741798358215, guid: baa0d0300379d57448d9e862a5e93ddb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1421975580}
+    - targetCorrespondingSourceObject: {fileID: 8349412741798358215, guid: baa0d0300379d57448d9e862a5e93ddb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1421975579}
   m_SourcePrefab: {fileID: 100100000, guid: baa0d0300379d57448d9e862a5e93ddb, type: 3}
 --- !u!1 &1127244921
 GameObject:
@@ -1428,6 +1435,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1421975579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421975575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32eca7eb749c29644a1eda6e3ac3afd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  moveDuration: 3
+  maxUfoHp: 100
+  ufoScore: 100
+--- !u!114 &1421975580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421975575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db4b46bd2d8a4763aef676ba7cd4fec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1753875042 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7604963945314577735, guid: 6c8ae611826c1814f9a302cc11b8a985, type: 3}
