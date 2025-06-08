@@ -46,7 +46,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// コードを生成
         /// </summary>
-        public void GenerateCode(GameObject Start, GameObject End)
+        public CodeSimulater GenerateCode(GameObject Start, GameObject End)
         {
             GameObject CodeObject = new GameObject("Code");
 
@@ -70,7 +70,7 @@ namespace InGame.NonMVP
                                      ExplosionTriggerDistance,MaxExplosion);
 
             //オブジェクト設定
-
+            return codeSimulater;
         }
     }
 }
