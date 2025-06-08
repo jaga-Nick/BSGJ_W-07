@@ -57,7 +57,7 @@ namespace InGame.NonMVP
         /// </summary>
         private GameObject StartObject;
         /// <summary>
-        /// 終点（プレイヤーかその場）
+        /// 終点（プレイヤーかその場、ソケット）
         /// </summary>
         private GameObject EndObject;
 
@@ -128,7 +128,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// Codeを置いた時のイベント。
         /// </summary>
-        private void PutCodeEvent()
+        public void PutCodeEvent()
         {
             //拾う判定を作る為に。
             EndObject = new GameObject("EndPoint");
@@ -159,6 +159,16 @@ namespace InGame.NonMVP
         {
 
         }
+
+        /// <summary>
+        /// ソケットにコードを刺す
+        /// 消費電力確定（未記入）
+        /// </summary>
+        public void InjectionSocketCode(GameObject socket)
+        {
+            EndObject = socket;
+        }
+
 
         /// <summary>
         /// EndPointをStartPointの位置まで、指定した時間をかけて動かす非同期メソッド
@@ -244,6 +254,9 @@ namespace InGame.NonMVP
                 generater.Factory(Positions[i], 0);
                 count++;
             }
+
+            //このアタッチしているオブジェクトを全てスクリプトごと削除する。
+            Destroy(gameObject);
         }
 
         /// <summary>

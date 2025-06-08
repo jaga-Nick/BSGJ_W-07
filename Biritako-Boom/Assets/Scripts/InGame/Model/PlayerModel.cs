@@ -1,6 +1,7 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
 using InGame.NonMVP;
+using InGame.Presenter;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace InGame.Model
     {
 
         //--データとして保持する為に。
-        private GameObject PlayerObject;
+        public GameObject PlayerObject { get; private set; }
         private Rigidbody2D Rb;
         //-----------------------
         /// <summary>
@@ -35,37 +36,45 @@ namespace InGame.Model
         private Vector3 MoveVector;
 
         //ソケット（コンセント）
-        private GameObject Socket = null;
-
-
+        public GameObject Socket { get; private set;} = null;
+        
+        //格納。
+        public List<GenerateCodeSystem> code = new List<GenerateCodeSystem>();
         //コードのシミュレートを格納
         public GenerateCodeSystem generateCodeSystem { get; private set; }
+        
+        public CodeSimulater CurrentHaveCode { get; private set; }
         //コードをシミュレートしている。
-        List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
+        public List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
         //-------------------------------
 
         //オブジェクトをスタック
         private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
 
+        private GameObject SocketObject = null;
 
-        public void GetGenerateCodeSystem(GenerateCodeSystem generater)
+
+        /// <summary>
+        /// コードを生成する時、入れる。
+        /// </summary>
+        /// <param name="generater"></param>
+        public void GetGenerateCodeSystem(GenerateCodeSystem _generateCodeSystem)
         {
-            generateCodeSystem = generater;
+            generateCodeSystem = _generateCodeSystem;
         }
 
-        public GameObject GeneratePlayerCharacter(Vector3 generatePosition)
+        #region キャラクター生成
+        /// <summary>
+        /// キャラクター生成。
+        /// </summary>
+        public void GeneratePlayerCharacter()
         {
-            GameObject player = null;
-            if (PlayerObject)
+            if (PlayerObject == null)
             {
-                player = UnityEngine.Object.Instantiate(PlayerObject, generatePosition, Quaternion.identity);
-            }
-            Rb = player?.GetComponent<Rigidbody2D>();
-
-            InputSystemActionsManager manage = InputSystemActionsManager.Instance();
-            return player;
+                PlayerObject = UnityEngine.Object.Instantiate(PlayerObject, InstancePosition, Quaternion.identity);
+                Rb = PlayerObject?.GetComponent<Rigidbody2D>();
+            }     
         }
-
         /// <summary>
         /// Addressable使用自機生成
         /// </summary>
@@ -78,10 +87,32 @@ namespace InGame.Model
             {
                 GameObject prefab = await handle;
                 GameObject instance = UnityEngine.Object.Instantiate(prefab,InstancePosition,Quaternion.identity);
-                Rb = instance.GetComponent<Rigidbody2D>();
                 return instance;
             }
         }
+        #endregion
+
+
+        /// <summary>
+        /// ソケット通常設定
+        /// </summary>
+        /// <param name="Socket"></param>
+        /// <returns></returns>
+        public void GenerateSocket(GameObject Socket)
+        {
+            GameObject instance = null;
+            //ソケットが生成されていない時。
+            if (Socket == null)
+            {
+                    instance = UnityEngine.Object.Instantiate(Socket, PlayerObject.transform.position, Quaternion.identity);
+            }
+        }
+
+        /// <summary>
+        /// ソケットの情報入れてるわけじゃないのでエラーおきます。（まだ）
+        /// </summary>
+        /// <param name="Address"></param>
+        /// <returns></returns>
         public async UniTask AddressGenerateSocket(string Address)
         {
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(Address);
@@ -92,6 +123,16 @@ namespace InGame.Model
                 UnityEngine.Object.Instantiate(prefab, InstancePosition, Quaternion.identity);
             }
         }
+
+        /// <summary>
+        /// ソケットをデリート
+        /// </summary>
+        public void DeleteSocket() {
+            if (Socket!=null)
+            {
+                UnityEngine.Object.Destroy(SocketObject);
+            }
+         }
 
 
         //-----------------
@@ -105,6 +146,12 @@ namespace InGame.Model
         {
             InstancePosition = newPosition;
         }
+
+        public void SetCurrentHaveCode(CodeSimulater code)
+        {
+            CurrentHaveCode = code;
+        }
+
         #endregion
         //---------------------------
         #region 移動関数
@@ -121,13 +168,7 @@ namespace InGame.Model
         }
         #endregion
 
-        /// <summary>
-        /// コード生成
-        /// </summary>
-        public void GenerateCode()
-        {
-            
-        }
+        
         /// <summary>
         /// ゲージ現象
         /// </summary>
@@ -148,7 +189,43 @@ namespace InGame.Model
         /// </summary>
         public void ConnectCode()
         {
-            
+            ComponentChecker checker = new ComponentChecker();
+            GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, 10f);
+            CurrentHaveCode.InjectionSocketCode(socket);
+
+            //CodeSimulatorsに今持っているコードを入れてハブを無くす。
+            CodeSimulaters.Add(CurrentHaveCode);
+            CurrentHaveCode = null;
         }
+        
+        /// <summary>
+        /// コードを置く時。
+        /// </summary>
+        public void PutCode()
+        {
+            CurrentHaveCode.PutCodeEvent();
+            //CodeSimulaters.Add(CurrentHaveCode);
+            CurrentHaveCode = null;
+        }
+
+        
+
+        /// <summary>
+        /// 一斉に爆破する
+        /// </summary>
+        public void Explosion()
+        {
+            //コードが一つ以上生成されており、保持していない時。
+            if (CodeSimulaters.Count > 0 && CurrentHaveCode==null)
+            {
+                foreach (var i in CodeSimulaters)
+                {
+                    i.Explosion();
+                }
+                //リセット。
+                CodeSimulaters = new List<CodeSimulater>();
+            }
+        }
+        
     }
 }

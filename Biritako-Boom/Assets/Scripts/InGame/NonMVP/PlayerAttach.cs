@@ -8,6 +8,6 @@ namespace InGame.NonMVP
     public class PlayerAttach : MonoBehaviour
     {
         [SerializeField]
-        private PlayerChecker PlayerChecker;
+        private ComponentChecker PlayerChecker;
     }
 }
