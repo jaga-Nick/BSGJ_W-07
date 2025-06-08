@@ -11,7 +11,7 @@ namespace InGame.Model
     /// <summary>
     /// 母艦UFOのモデル管理。
     /// </summary>
-    public class MotherShipModel : IEnemyModel
+    public class MotherShipModel : MonoBehaviour, IEnemyModel
     {
         #region 定数
         // この距離までターゲットに近づいたら、目的地に到着したとみなすための閾値
@@ -85,8 +85,9 @@ namespace InGame.Model
 
         #endregion
 
-        #region 
+        #region 初期化・コンストラクタ
 
+        /*
         /// <summary>
         /// MotherShipUfoModelのコンストラクタ
         /// </summary>
@@ -99,6 +100,21 @@ namespace InGame.Model
             _hp = 5000;
             ExplosionPower = 100;
             _score = 1000000;
+            isEnd = false;
+        }
+        
+        */
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        public void Initialize()
+        {
+            IntervalTime = 0.2f;
+            _speed = 5.0f;
+            _hp = 5000;
+            ExplosionPower = 100;
+            //_score = 1000000;
             isEnd = false;
         }
 
