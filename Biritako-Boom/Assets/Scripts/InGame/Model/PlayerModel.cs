@@ -44,11 +44,10 @@ namespace InGame.Model
         //ソケット（コンセント）
         public GameObject Socket { get; private set;} = null;
         
-        //格納。
-        public List<GenerateCodeSystem> code = new List<GenerateCodeSystem>();
         //コードのシミュレートを格納
         public GenerateCodeSystem generateCodeSystem { get; private set; }
         
+        //現在持っているコード
         public CodeSimulater CurrentHaveCode { get; private set; }
         //コードをシミュレートしている。
         public List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
@@ -56,8 +55,6 @@ namespace InGame.Model
 
         //オブジェクトをスタック
         private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
-
-        private GameObject SocketObject = null;
 
 
         /// <summary>
@@ -104,12 +101,13 @@ namespace InGame.Model
         /// </summary>
         /// <param name="Socket"></param>
         /// <returns></returns>
-        public void GenerateSocket(GameObject Socket)
+        public void GenerateSocket(GameObject SocketPrefab)
         {
             GameObject instance = null;
             //ソケットが生成されていない時。
-            instance = UnityEngine.Object.Instantiate(Socket, PlayerObject.transform.position, Quaternion.identity);
+            instance = UnityEngine.Object.Instantiate(SocketPrefab, PlayerObject.transform.position, Quaternion.identity);
             
+            Socket = instance;
         }
 
         /// <summary>
@@ -134,7 +132,8 @@ namespace InGame.Model
         public void DeleteSocket() {
             if (Socket!=null)
             {
-                UnityEngine.Object.Destroy(SocketObject);
+                Debug.Log("削除");
+                UnityEngine.Object.Destroy(Socket);
             }
          }
 
@@ -189,16 +188,20 @@ namespace InGame.Model
         }
 
         /// <summary>
-        /// コード接続
+        /// コード接続(Socketに）
         /// </summary>
-        public void ConnectCode()
+        public void ConnectSocketCode()
         {
             ComponentChecker checker = new ComponentChecker();
             GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, 10f);
-            CurrentHaveCode.InjectionSocketCode(socket);
 
-            //CodeSimulatorsに今持っているコードを入れてハブを無くす。
-            CodeSimulaters.Add(CurrentHaveCode);
+            //Null処理
+            if (CurrentHaveCode != null)
+            {
+                CurrentHaveCode?.InjectionSocketCode(socket);
+                //CodeSimulatorsに今持っているコードを入れてハブを無くす。
+                CodeSimulaters.Add(CurrentHaveCode);
+            }
             CurrentHaveCode = null;
         }
         
@@ -211,6 +214,7 @@ namespace InGame.Model
             //CodeSimulaters.Add(CurrentHaveCode);
             CurrentHaveCode = null;
         }
+
 
         
 

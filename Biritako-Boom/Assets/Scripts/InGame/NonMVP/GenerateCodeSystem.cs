@@ -7,7 +7,6 @@ namespace InGame.NonMVP
     /// </summary>
     public class GenerateCodeSystem : MonoBehaviour
     {
-        #region　LineRendererの設定まとめ
         [Header("LineRendererの設定")]
         [SerializeField]
         //線の細さ太さ。
@@ -15,7 +14,12 @@ namespace InGame.NonMVP
         [SerializeField]
         //マテリアルを設定(virtual)
         private Material LineMaterial;
-        #endregion
+        [Header("描画順")]
+        [SerializeField]
+        private int OrderInLayer = 3;
+
+
+
         [Header("紐計算の設定")]
         // ヒモの粒子数
         [Header("粒子数")]
@@ -38,7 +42,7 @@ namespace InGame.NonMVP
         //------------------------------------
         [Header("爆発の基準距離")]
         [SerializeField]
-        private int ExplosionTriggerDistance=3;
+        private int ExplosionTriggerDistance= 1;
         [Header("最大コード爆発数")]
         [SerializeField]
         private int MaxExplosion=4;
@@ -51,12 +55,11 @@ namespace InGame.NonMVP
             GameObject CodeObject = new GameObject("Code");
 
             LineRenderer lineRenderer = CodeObject.AddComponent<LineRenderer>();
-            //各種コードで設定
+            //LineRendererを修正する。
             lineRenderer.startWidth = LineWidth;
             lineRenderer.endWidth = LineWidth;
             lineRenderer.material = LineMaterial;
-
-            lineRenderer.sortingOrder = 3;
+            lineRenderer.sortingOrder = OrderInLayer;
 
             //物理演算を線で行う為に生成。
             EdgeCollider2D edge = CodeObject.AddComponent<EdgeCollider2D>();

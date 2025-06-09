@@ -16,6 +16,7 @@ namespace InGame.NonMVP{
         /// <returns></returns>
         public T CharacterCheck<T>(Vector3 TransformPosition,float scanRadius) where T :Component
         {
+            Debug.Log(scanRadius);
             //2D用のオーバーラップサーチ
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TransformPosition, scanRadius);
 
@@ -28,9 +29,6 @@ namespace InGame.NonMVP{
             foreach (var hitCollider in hitColliders)
             {
                 GameObject obj = hitCollider.gameObject;
-                //自分自身を除外
-                if (TransformPosition == obj.transform.position) continue;
-
                 //特定のスクリプトがアタッチされている状況
                 T component=obj.GetComponent<T>();
                 if (component == null) continue;
@@ -48,7 +46,7 @@ namespace InGame.NonMVP{
             }
             if (closestObject != null)
             {
-                Debug.Log($"最も近いオブジェクト: {closestObject.name}（距離: {closestDistance:F2}）");
+                //Debug.Log($"最も近いオブジェクト: {closestObject.name}（距離: {closestDistance:F2}）");
             }
             return closestComponent;
         }
@@ -67,8 +65,6 @@ namespace InGame.NonMVP{
             foreach (var hitCollider in hitColliders)
             {
                 GameObject obj = hitCollider.gameObject;
-                //自分自身を除外
-                if (TransformPosition == obj.transform.position) continue;
 
                 //特定のスクリプトがアタッチされている状況
                 T component = obj.GetComponent<T>();
@@ -87,7 +83,7 @@ namespace InGame.NonMVP{
             }
             if (closestObject != null)
             {
-                Debug.Log($"最も近いオブジェクト: {closestObject.name}（距離: {closestDistance:F2}）");
+                //Debug.Log($"最も近いオブジェクト: {closestObject.name}（距離: {closestDistance:F2}）");
             }
             return closestObject;
         }
@@ -103,9 +99,6 @@ namespace InGame.NonMVP{
             foreach (var hitCollider in hitColliders)
             {
                 GameObject obj = hitCollider.gameObject;
-
-                // 自分自身を除外
-                if (transformPosition == obj.transform.position) continue;
 
                 // Componentを全部取得し、Tにキャストできるものを探す
                 Component[] components = obj.GetComponents<Component>();

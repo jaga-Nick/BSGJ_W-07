@@ -2313,12 +2313,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LineWidth: 0.1
   LineMaterial: {fileID: 0}
-  ParticleCount: 20
+  OrderInLayer: 3
+  ParticleCount: 86
   TimeStep: 0.02
   Gravity: {x: 0, y: 0, z: 0}
   Damping: 2
   Stiffness: 2
-  ExplosionTriggerDistance: 3
+  ExplosionTriggerDistance: 1
   MaxExplosion: 4
 --- !u!114 &1927360535
 MonoBehaviour:

@@ -434,7 +434,20 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PlayableCharacterWalk_0: 884884992473661355
+      PlayableCharacterWalk_1: 1632145502276789347
+      PlayableCharacterWalk_10: 121665822500138241
+      PlayableCharacterWalk_11: -8034850401066585252
+      PlayableCharacterWalk_12: -4379698622350434531
+      PlayableCharacterWalk_2: 4148629101652130772
+      PlayableCharacterWalk_3: -674942143460207051
+      PlayableCharacterWalk_4: -4774164537921449518
+      PlayableCharacterWalk_5: -4293098181714849525
+      PlayableCharacterWalk_6: 1266822977504058622
+      PlayableCharacterWalk_7: 2665886716738052930
+      PlayableCharacterWalk_8: 444488453733235096
+      PlayableCharacterWalk_9: -7019566789760237189
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

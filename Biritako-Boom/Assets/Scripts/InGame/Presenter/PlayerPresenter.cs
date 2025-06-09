@@ -84,5 +84,7 @@ namespace InGame.Presenter
             //購読解除
             scoreModel.ScoreChanged -= ScoreChanged;
         }
+
+
     }
 }
