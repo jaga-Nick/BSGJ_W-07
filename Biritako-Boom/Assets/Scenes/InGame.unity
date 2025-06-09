@@ -419,6 +419,10 @@ MonoBehaviour:
   - {fileID: 1004121517}
   ufoPrefabs:
   - {fileID: 1421975575}
+  minDistanceBetweenUfo: 0.1
+  maxSpawnAttempts: 20
+  spawnElectronicsPositions: []
+  spawnUfoPositions: []
 --- !u!4 &531447711
 Transform:
   m_ObjectHideFlags: 0
@@ -1451,7 +1455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  moveDuration: 3
+  rotateSpeed: 0.5
   maxUfoHp: 100
   ufoScore: 100
 --- !u!114 &1421975580
