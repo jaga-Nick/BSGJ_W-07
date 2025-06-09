@@ -55,7 +55,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// 始点（家電）
         /// </summary>
-        private GameObject StartObject;
+        public GameObject StartObject { get; private set; }
         /// <summary>
         /// 終点（プレイヤーかその場、ソケット）
         /// </summary>
@@ -121,7 +121,7 @@ namespace InGame.NonMVP
         {
             if (collision.gameObject != StartObject && collision.gameObject !=EndObject)
             {
-                Debug.Log("コードに何か衝突しました。デモ時はまだ何もさせていません。");
+                //Debug.Log("コードに何か衝突しました。デモ時はまだ何もさせていません。");
             }
         }
 
@@ -131,9 +131,15 @@ namespace InGame.NonMVP
         public void PutCodeEvent()
         {
             //拾う判定を作る為に。
-            EndObject = new GameObject("EndPoint");
-            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
-            EndObject.transform.position = EndObject.transform.position;
+            GameObject endPoint = new GameObject("EndPoint");
+            endPoint.transform.SetParent(this.transform); // 親を this の Transform に設定
+
+            Debug.Log(EndObject.name);
+            Debug.Log(EndObject.transform.position);
+            endPoint.transform.position = EndObject.transform.position;
+
+            EndObject=endPoint;
+
             CircleCollider2D circle=EndObject.AddComponent<CircleCollider2D>();
             EndObject.AddComponent<CodeEndPointAttach>();
             //コライダーの情報セット
@@ -169,10 +175,6 @@ namespace InGame.NonMVP
             EndObject = socket;
         }
 
-
-        /// <summary>
-        /// EndPointをStartPointの位置まで、指定した時間をかけて動かす非同期メソッド
-        /// </summary>
         public async UniTask MovePointAsync(CancellationToken token)
         {
             // GameObjectが破棄された時に自動でキャンセルされるようにトークンをリンク
@@ -193,11 +195,12 @@ namespace InGame.NonMVP
                     linkedToken.ThrowIfCancellationRequested();
 
                     float t = elapsedTime / shrinkDuration;
+                    //指定した秒数方向へ動かす。
                     EndObject.transform.position = Vector3.Lerp(initialEndPos, targetPos, t);
 
                     elapsedTime += Time.deltaTime;
 
-                    // 1フレーム待機 (yield return null; のUniTask版)
+                    // 1フレーム待機
                     await UniTask.Yield(PlayerLoopTiming.Update, linkedToken);
                 }
 
@@ -206,7 +209,6 @@ namespace InGame.NonMVP
             }
             catch (OperationCanceledException)
             {
-                // キャンセルされた場合はここに飛ぶ（特に何もしなくても良い）
                 Debug.Log("移動タスクがキャンセルされました。");
             }
             finally
@@ -215,11 +217,12 @@ namespace InGame.NonMVP
                 cts?.Dispose();
                 cts = null;
 
-                //このオブジェクトを最終的に削除。
-                Destroy(gameObject);
+                if (this != null)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
-
 
         /// <summary>
         /// 爆破を呼び出す
@@ -240,6 +243,9 @@ namespace InGame.NonMVP
             {
                 num = 1;
             }
+
+            Debug.Log(num);
+
             int i = 0;
             int count = 0;
             while (count < num)

@@ -31,7 +31,7 @@ namespace InGame.NonMVP
 
             //ここでIEnemhyModelの処理を呼び出す様にする
             //死亡確認
-            enemies.IsDead();
+            enemies?.IsDead();
         }
     }
 }
