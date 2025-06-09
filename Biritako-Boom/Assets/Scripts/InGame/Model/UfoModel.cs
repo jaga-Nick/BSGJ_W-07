@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Random = UnityEngine.Random;
 
 namespace InGame.Model
 {
@@ -13,7 +14,7 @@ namespace InGame.Model
         /// 移動許容距離
         /// </summary>
         public float LimitMoveDistance { get; }
-        public Rigidbody2D Rb { get; }
+        public Rigidbody2D Rb { get; set; }
         public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
         public Vector3 Angle { get; set; }
@@ -45,7 +46,7 @@ namespace InGame.Model
         /// <summary>
         /// UFOのスコア管理のフィールド
         /// </summary>
-        private const int Score = 100;
+        public int UfoScore { get; set; }
         public int CurrentScore { get; set; }
 
 
@@ -94,6 +95,23 @@ namespace InGame.Model
         private void UpdateUfoHp()
         {
             UfoHpChanged?.Invoke();
+        }
+        
+        /// <summary>
+        /// ランダムな方向を取得
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetRandomDirection()
+        {
+            var randomIndex = Random.Range(0, 4);
+            return randomIndex switch
+            {
+                0 => Vector2.up,
+                1 => Vector2.down,
+                2 => Vector2.left,
+                3 => Vector2.right,
+                _ => Vector2.down
+            };
         }
         
         /// <summary>

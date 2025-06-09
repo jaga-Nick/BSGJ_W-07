@@ -1,4 +1,6 @@
-﻿using InGame.Presenter;
+﻿using System.Collections.Generic;
+using System.Linq;
+using InGame.Presenter;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -11,6 +13,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// スポーンのプロパティ
         /// </summary>
+        [Header("スポーンのプロパティ")]
         [Header("スポーン時間のインターバル")]
         [SerializeField] private float spawnInterval = 3f;
         [Header("タイマー")]
@@ -23,8 +26,26 @@ namespace InGame.NonMVP
         /// <summary>
         /// Prefab
         /// </summary>
+        [Header("Prefab")]
+        [Header("家電")]
         [SerializeField] private GameObject[] electronicsPrefabs;
+        [Header("UFO")]
         [SerializeField] private GameObject[] ufoPrefabs;
+        
+        /// <summary>
+        /// UFOの生成設定（もしかしたらUfoPresenterに移行）
+        /// </summary>
+        [Header("UFOの生成設定")]
+        [Header("生成されるUFO間の最小距離")]
+        [SerializeField] private float minDistanceBetweenUfo = 0.01f;
+        
+
+        /// <summary>
+        /// スポーンされたEnemyの座標を保持するリスト
+        /// </summary>
+        public List<Vector3> spawnElectronicsPositions;
+        public List<Vector3> spawnUfoPositions;
+        
         
         /// <summary>
         /// 現在のEnemyの数
@@ -74,7 +95,7 @@ namespace InGame.NonMVP
         {
             for (var i = 0; i < maxUfo; i++)
             {
-                // UFOを選択して生成する
+                // UFOをランダムに選択する
                 var randomIndex = Random.Range(0, ufoPrefabs.Length);
                 var ufo = Instantiate(ufoPrefabs[randomIndex]);
             
@@ -84,9 +105,12 @@ namespace InGame.NonMVP
                 // Presenterで決定した座標をもとに初期座標を決定
                 var spawnPosition = presenter.DetermineSpawnPoints();
                 ufo.transform.position = spawnPosition;
-            
+                
+                // 生成したUFOの座標を配列に追加する
+                spawnUfoPositions.Add(spawnPosition);
+                
                 // UFOの数をインクリメント
-                CurrentElectronics++;   
+                CurrentUfo++;
             }
         }
         

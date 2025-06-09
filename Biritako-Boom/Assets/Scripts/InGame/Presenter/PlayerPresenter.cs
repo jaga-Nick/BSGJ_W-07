@@ -10,6 +10,9 @@ namespace InGame.Presenter
         [Header("キャラクターPrefabデータ")]
         [SerializeField]
         private GameObject CharacterPrefab;
+
+        public GameObject characterPrefab { get; private set; }
+
         [SerializeField]
         private string CharacterAddress="PlayerCharacter";
 
@@ -32,7 +35,17 @@ namespace InGame.Presenter
 
         private void Awake()
         {
+            characterPrefab = CharacterPrefab;
+
             Model = new PlayerModel();
+            Model.Initialize(this);
+
+            //-------------------------------------------
+            //デバッグ用生成。（Initializeを用意したほうがいいと思う。）
+            Model.SetInstancePosition(new Vector3(0, 0, 0));
+            Model.GeneratePlayerCharacter();
+            //------------------------------------
+
             //コード生成に必要なクラスを取得。
             Model?.GetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
@@ -41,8 +54,8 @@ namespace InGame.Presenter
             scoreModel = ScoreModel.Instance();
             scoreModel.ScoreChanged += ScoreChanged;
 
-            playerController = new PlayerController(Model);
-
+            playerController = new PlayerController(Model,this);
+            playerController.Init();
         }
         private void Update()
         {
@@ -62,11 +75,16 @@ namespace InGame.Presenter
         {
             View.UpdateScoreView(scoreModel.Score);
         } 
-
+        public GameObject GetSocketPrefab()
+        {
+            return SocketPrefab;
+        }
         private void OnDestroy()
         {
             //購読解除
             scoreModel.ScoreChanged -= ScoreChanged;
         }
+
+
     }
 }

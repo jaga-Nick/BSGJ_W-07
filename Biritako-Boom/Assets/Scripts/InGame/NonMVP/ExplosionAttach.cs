@@ -30,6 +30,8 @@ namespace InGame.NonMVP
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
 
             //ここでIEnemhyModelの処理を呼び出す様にする
+            //死亡確認
+            enemies?.IsDead();
         }
     }
 }
