@@ -144,7 +144,6 @@ namespace InGame.NonMVP{
                 // 複数の MonoBehaviour を取得して調べる
                 var behaviours = hit.GetComponents<MonoBehaviour>();
 
-                Debug.Log(behaviours);
                 foreach (var behaviour in behaviours)
                 {
                     if (behaviour is IEnemyModel enemyModel)
@@ -198,7 +197,6 @@ namespace InGame.NonMVP{
                 }
             }
 
-            Debug.Log(closestEnemyGO);
             return closestEnemyGO;
         }
     }

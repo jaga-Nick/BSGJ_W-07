@@ -51,7 +51,8 @@ namespace InGame.NonMVP
                     GameObject electro=checker.FindClosestEnemyOfTypeOneGameObject(Model.PlayerObject.transform.position, 10f);
 
                     //複数のコードを繋げないようにする
-                    var obje=Model.CodeSimulaters.Where(code => code.StartObject).FirstOrDefault();
+                    var obje=Model.CodeSimulaters.Where(code => code.StartObject==electro).FirstOrDefault();
+                    Debug.Log(obje?.name);
                     if (electro && obje == null) {
                         //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
                         var code = Model.generateCodeSystem.GenerateCode(electro, Model.PlayerObject);
@@ -92,8 +93,6 @@ namespace InGame.NonMVP
         }
 
         
-
-
         public void FixedUpdate()
         {
             Model.MovePlayer();

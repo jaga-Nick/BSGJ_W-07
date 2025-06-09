@@ -19,7 +19,6 @@ namespace InGame.NonMVP
         private int OrderInLayer = 3;
 
 
-
         [Header("紐計算の設定")]
         // ヒモの粒子数
         [Header("粒子数")]
