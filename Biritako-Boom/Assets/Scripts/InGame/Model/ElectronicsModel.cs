@@ -3,8 +3,16 @@
 namespace InGame.Model
 {
 
-    public class ElectronicsModel : IEnemyModel
+    public class ElectronicsModel : MonoBehaviour,IEnemyModel
     {
+        public void Initialize(Rigidbody2D rb,Vector3 trans)
+        {
+            this.Rb = rb;
+            this.Position=trans;
+        }
+
+
+
         /// <summary>
         /// 移動許容距離
         /// </summary>

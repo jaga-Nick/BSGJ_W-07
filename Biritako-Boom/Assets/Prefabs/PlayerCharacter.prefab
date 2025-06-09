@@ -79,8 +79,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -8801819111103863087, guid: 3cb257ff1f05e804c866763ecbf52f89, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 1632145502276789347, guid: e7dfbf69d6ce38c499ee3bb461d3e126, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -175,7 +175,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.6593685
+  m_Radius: 0.25236073
 --- !u!114 &5482545323728838325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,4 +188,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d370a255c142864bb8842ee13af7e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerChecker: {fileID: 0}
