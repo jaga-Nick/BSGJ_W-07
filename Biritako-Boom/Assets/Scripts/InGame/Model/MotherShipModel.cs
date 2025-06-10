@@ -1,4 +1,4 @@
-using Common;
+﻿using Common;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
@@ -53,9 +53,11 @@ namespace InGame.Model
         /// 母艦固有プロパティ
         /// </summary>
         private GameObject motherShipObject;
-        
+
         // 母艦のHP
-        private int _hp;
+
+        int IEnemyModel.CurrentHp { get; set;}
+        
         
         // 破壊されたときに得られるスコア
         private int _score { get; } = 1000000;
@@ -112,7 +114,7 @@ namespace InGame.Model
         {
             IntervalTime = 0.2f;
             _speed = 5.0f;
-            _hp = 5000;
+            ((IEnemyModel)this).CurrentHp = 5000;
             ExplosionPower = 100;
             //_score = 1000000;
             isEnd = false;
@@ -173,16 +175,15 @@ namespace InGame.Model
         #endregion
         
         
-        
         #region 公開メソッド
 
         /// <summary>
         /// ダメージを与える
         /// </summary>
-        public async UniTask TakeDamage(int damage)
+        void IEnemyModel.OnDamage(int damage)
         {
-            _hp -= damage;
-            if (_hp <= 0)
+            ((IEnemyModel)this).CurrentHp -= damage;
+            if (((IEnemyModel)this).CurrentHp <= 0)
             {
                 DefeatNotification();
             }

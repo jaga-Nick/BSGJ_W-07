@@ -29,6 +29,8 @@ namespace InGame.NonMVP
             //Debug.Log("ここで一応プレイヤーかIEnemyかの処理")
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
 
+
+
             //ここでIEnemhyModelの処理を呼び出す様にする
             //死亡確認
             enemies?.IsDead();

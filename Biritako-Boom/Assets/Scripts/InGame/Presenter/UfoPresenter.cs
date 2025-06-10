@@ -49,9 +49,10 @@ namespace InGame.Presenter
             {
                 Rb = gameObject.GetComponent<Rigidbody2D>(),
                 MaxUfoHp = maxUfoHp,
-                CurrentUfoHp = maxUfoHp,
                 UfoScore = ufoScore,
             };
+            ((IEnemyModel)_model).CurrentHp = maxUfoHp;
+            
             
             StartCoroutine(MoveCharacterRoutine());
         }

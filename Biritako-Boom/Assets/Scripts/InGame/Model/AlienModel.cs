@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace InGame.Model
@@ -37,8 +37,8 @@ namespace InGame.Model
         // --- IEnemyModel以外の変数とイベント ---
 
         // HPはprivate変数として保持
-        private int _hp;
-        
+        int IEnemyModel.CurrentHp { get; set; }
+
         
         // 現在の状態を保持する変数
         private AlienState _currentState;
@@ -75,7 +75,7 @@ namespace InGame.Model
         public int GetHp()
         {
             // privateなHPの値を返す
-            return _hp;
+            return ((IEnemyModel)this).CurrentHp;
         }
         
         /// <summary>
@@ -84,7 +84,7 @@ namespace InGame.Model
         public void SetInitialState(int initialHp)
         {
             // privateなHPの値を設定
-            _hp = initialHp;
+            ((IEnemyModel)this).CurrentHp = initialHp;
             // タイマーをリセット
             CurrentTime = 0f;
             // 最初の行動までの時間をランダムに設定
@@ -97,10 +97,10 @@ namespace InGame.Model
         public void TakeDamage(int damage)
         {
             // HPを減算
-            _hp -= damage;
+            ((IEnemyModel)this).CurrentHp -= damage;
             
             // HPがまだ残っている場合
-            if (_hp > 0)
+            if (((IEnemyModel)this).CurrentHp > 0)
             {
                 // ダメージを受けたことを外部に通知（イベント発行）
                 OnDamaged?.Invoke();

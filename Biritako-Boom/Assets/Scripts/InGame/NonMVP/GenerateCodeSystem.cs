@@ -44,7 +44,7 @@ namespace InGame.NonMVP
         private int ExplosionTriggerDistance= 1;
         [Header("最大コード爆発数")]
         [SerializeField]
-        private int MaxExplosion=4;
+        private int MaxExplosion;
 
         /// <summary>
         /// コードを生成

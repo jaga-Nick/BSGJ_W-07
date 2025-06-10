@@ -23,8 +23,6 @@ namespace InGame.NonMVP
         [Header("基準値")]
         [SerializeField]
         private GameObject ExplosionObject;
-        [SerializeField]
-        private int ExplosionLimit=30;
 
         public void Awake()
         {

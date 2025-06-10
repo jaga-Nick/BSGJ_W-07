@@ -7,6 +7,8 @@ namespace InGame.Model
     /// </summary>
     public interface IEnemyModel
     {
+        public int CurrentHp { get; set; }
+
         //public int MaxUfoHp { get;}
         /// <summary>
         /// 移動許容距離
@@ -21,6 +23,12 @@ namespace InGame.Model
         /// 爆発力
         /// </summary>
         public float ExplosionPower { get;}
+
+        public virtual void OnDamage(int damage) 
+        {
+            CurrentHp -= damage;
+        }
+
 
         /// <summary>
         /// 何の家電かを数字で判別する
