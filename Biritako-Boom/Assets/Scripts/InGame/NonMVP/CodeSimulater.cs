@@ -76,6 +76,10 @@ namespace InGame.NonMVP
         #region データの実装（外部から設定される。Initializeで設定)
         // ヒモの粒子数
         private int ParticleCount = 20;
+        /// <summary>
+        /// 紐を再度初期化する時に必要になる数値
+        /// </summary>
+
 
         // シミュレーションパラメータ
         private float TimeStep = 0.02f;
@@ -104,6 +108,7 @@ namespace InGame.NonMVP
         private List<Constraint> constraints = new List<Constraint>();
         private LineRenderer CodeLineRenderer;
         #endregion
+
 
         [Header("衝突設定")]
         [Tooltip("衝突対象のレイヤー")]
@@ -135,7 +140,6 @@ namespace InGame.NonMVP
         {
             if (collision.gameObject != StartObject && collision.gameObject != EndObject)
             {
-                //Debug.Log("コードに何か衝突しました。デモ時はまだ何もさせていません。");
             }
         }
 
@@ -179,11 +183,14 @@ namespace InGame.NonMVP
 
 
         /// <summary>
-        /// 拾うイベント（まだ最悪かかなくていいか。）
+        /// 拾うイベント
         /// </summary>
-        private void GetCodeEvent(GameObject game)
+        public void GetCodeEvent(GameObject player)
         {
+            EndObject = player;
 
+            InitializeRope();
+            InitializeEdgeCollider();
         }
 
         /// <summary>
@@ -193,12 +200,16 @@ namespace InGame.NonMVP
         public void InjectionSocketCode(GameObject socket)
         {
             EndObject = socket;
+            //戻る処理
+            _isReturning = false;
+
+            
         }
 
         private int _activeParticleCount;
         private bool _isReturning = false;
         /// <summary>
-        /// 
+        /// 戻るようにする
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -500,7 +511,6 @@ namespace InGame.NonMVP
             {
                 predicted[i] = Positions[i];
             }
-
 
             // 拘束解決（反復）
             for (int iter = 0; iter < 5; iter++)

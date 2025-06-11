@@ -2518,11 +2518,11 @@ MonoBehaviour:
   OrderInLayer: 3
   ParticleCount: 100
   TimeStep: 0.02
-  Gravity: {x: 0, y: 0, z: 0}
+  Gravity: {x: 0, y: 9.8, z: 0}
   Damping: 0.8
-  Stiffness: 1
+  Stiffness: 1.5
   ExplosionTriggerDistance: 1
-  MaxExplosion: 4
+  MaxExplosion: 5
 --- !u!114 &1927360535
 MonoBehaviour:
   m_ObjectHideFlags: 0
