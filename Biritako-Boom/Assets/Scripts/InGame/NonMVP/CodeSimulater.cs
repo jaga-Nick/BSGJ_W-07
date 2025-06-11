@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
-using System.Net;
 using System.Threading;
 using System;
 using InGame.Model;
@@ -150,17 +148,21 @@ namespace InGame.NonMVP
             GameObject endPoint = new GameObject("EndPoint");
             endPoint.transform.SetParent(this.transform); // 親を this の Transform に設定
 
-            Debug.Log(EndObject.name);
-            Debug.Log(EndObject.transform.position);
             endPoint.transform.position = EndObject.transform.position;
 
             EndObject = endPoint;
 
+            //コライダー生成
             CircleCollider2D circle = EndObject.AddComponent<CircleCollider2D>();
-            EndObject.AddComponent<CodeEndPointAttach>();
             //コライダーの情報セット
-            circle.radius = 80;
+            circle.radius = 1;
             circle.offset = new Vector2(0, 0);
+            circle.isTrigger = true;
+
+            //判定用のスクリプト
+            CodeEndPointAttach endPointAttach=EndObject.AddComponent<CodeEndPointAttach>();
+            //EndPointに情報を残す。
+            endPointAttach.SetCodeSimulater(this);
 
             //判定の為、Rigidbodyを作成。
             Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
@@ -171,8 +173,11 @@ namespace InGame.NonMVP
 
 
             //最終地点に進める。その後消える。
-            MovePointAsync(cts.Token).Forget();
+            ReturnEndPoint(cts.Token).Forget();
         }
+
+
+
         /// <summary>
         /// 拾うイベント（まだ最悪かかなくていいか。）
         /// </summary>
@@ -189,12 +194,15 @@ namespace InGame.NonMVP
         {
             EndObject = socket;
         }
+
+        private int _activeParticleCount;
+        private bool _isReturning = false;
         /// <summary>
-        /// 戻す
+        /// 
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async UniTask MovePointAsync(CancellationToken token)
+        public async UniTask ReturnEndPoint(CancellationToken token)
         {
             // GameObjectが破棄された時に自動でキャンセルされるようにトークンをリンク
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
@@ -202,9 +210,11 @@ namespace InGame.NonMVP
 
             try
             {
-                // アニメーション開始時の各位置を記録
-                Vector3 initialEndPos = EndObject.transform.position;
-                Vector3 targetPos = StartObject.transform.position;
+                // 戻り処理中であることを示すフラグを立てる
+                _isReturning = true;
+                // 終点の固定を解除し、紐が縮む際に自然に動くようにする
+                IsFixed[ParticleCount - 1] = false;
+
                 float elapsedTime = 0f;
 
                 // 経過時間が指定したアニメーション時間に達するまでループ
@@ -213,9 +223,18 @@ namespace InGame.NonMVP
                     // キャンセル要求があったら、例外を投げて処理を中断
                     linkedToken.ThrowIfCancellationRequested();
 
+                    // 時間の進捗率 (0.0 から 1.0 へ)
                     float t = elapsedTime / shrinkDuration;
-                    //指定した秒数方向へ動かす。
-                    EndObject.transform.position = Vector3.Lerp(initialEndPos, targetPos, t);
+
+                    // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
+                    // Mathf.CeilToInt を使うことで、最後のパーティクルが残るように調整
+                    _activeParticleCount = Mathf.CeilToInt(Mathf.Lerp(ParticleCount, 1, t));
+
+                    // EndObjectを、アクティブな最後のパーティクルの位置に追従させる
+                    if (_activeParticleCount > 0 && EndObject != null)
+                    {
+                        EndObject.transform.position = Positions[_activeParticleCount - 1];
+                    }
 
                     elapsedTime += Time.deltaTime;
 
@@ -223,8 +242,8 @@ namespace InGame.NonMVP
                     await UniTask.Yield(PlayerLoopTiming.Update, linkedToken);
                 }
 
-                // ループ終了後、正確に目標位置に設定する
-                EndObject.transform.position = targetPos;
+                // 念のため、ループ終了後にパーティクル数を1（始点のみ）に確定させる
+                _activeParticleCount = 1;
             }
             catch (OperationCanceledException)
             {
@@ -238,10 +257,12 @@ namespace InGame.NonMVP
 
                 if (this != null)
                 {
+                    // このオブジェクトを破棄
                     Destroy(gameObject);
                 }
             }
         }
+
 
         /// <summary>
         /// 爆破を呼び出す
@@ -351,15 +372,23 @@ namespace InGame.NonMVP
         {
             if (_edgeCollider == null) return;
 
-            // メンバー変数として保持している頂点配列に、現在のパーティクルの位置を格納します。
-            for (int i = 0; i < ParticleCount; i++)
+            // ↓↓↓ 以下のブロックに全面的に変更 ↓↓↓
+            // パーティクルが2未満だと線にならないのでコライダーを無効化
+            if (_activeParticleCount < 2)
             {
-                // C#はVector3をVector2へ暗黙的に変換（z座標を破棄）します。
-                _colliderPoints[i] = Positions[i];
+                _edgeCollider.enabled = false;
+                return;
             }
+            _edgeCollider.enabled = true;
 
-            // 更新した頂点配列をEdgeCollider2Dに一括でセットすることで効率化します。
-            _edgeCollider.points = _colliderPoints;
+            // EdgeColliderの頂点配列を更新
+            // Note: この方法は毎フレーム niewielkiなGCアロケーションを発生させます
+            var activePoints = new Vector2[_activeParticleCount];
+            for (int i = 0; i < _activeParticleCount; i++)
+            {
+                activePoints[i] = Positions[i];
+            }
+            _edgeCollider.points = activePoints;
         }
 
         #endregion
@@ -393,6 +422,9 @@ namespace InGame.NonMVP
 
             IsFixed[0] = true;
             IsFixed[ParticleCount - 1] = true;
+
+            _activeParticleCount = ParticleCount;
+            _isReturning = false;
         }
         /// <summary>
         /// パーティクルの衝突を解決し、障害物から押し出す（ClosestPointを使った最も確実なバージョン）
@@ -400,7 +432,7 @@ namespace InGame.NonMVP
         /// <param name="predictedPositions">予測されたパーティクルの位置配列</param>
         private void ResolveCollisions(Vector3[] predictedPositions)
         {
-            for (int i = 0; i < ParticleCount; i++)
+            for (int i = 0; i < _activeParticleCount; i++)
             {
                 if (IsFixed[i]) continue;
 
@@ -414,7 +446,7 @@ namespace InGame.NonMVP
                         continue;
                     }
 
-                    // 2. コライダー表面の「最も近い点」を取得する (非常に基本的なAPI)
+                    // 2. コライダー表面の「最も近い点」を取得する 
                     Vector2 closestPoint = hitCollider.ClosestPoint(predictedPositions[i]);
 
                     // 3. パーティクル中心から、その「最も近い点」へのベクトルと距離を計算
@@ -445,34 +477,43 @@ namespace InGame.NonMVP
         private void Simulate()
         {
             // 重力など外力の適用
-            for (int i = 0; i < ParticleCount; i++)
+            for (int i = 0; i < _activeParticleCount; i++) 
             {
                 if (IsFixed[i]) continue;
                 Velocities[i] += Gravity * TimeStep;
             }
 
             // 減衰
-            for (int i = 0; i < ParticleCount; i++)
+            for (int i = 0; i < _activeParticleCount; i++)
             {
                 Velocities[i] *= (1 - Damping);
             }
 
             // 位置予測
-            Vector3[] predicted = new Vector3[ParticleCount];
-            for (int i = 0; i < ParticleCount; i++)
+            Vector3[] predicted = new Vector3[ParticleCount]; 
+            for (int i = 0; i < _activeParticleCount; i++) 
             {
                 predicted[i] = Positions[i] + Velocities[i] * TimeStep;
             }
+            // 非アクティブな予測位置を現在の位置に維持
+            for (int i = _activeParticleCount; i < ParticleCount; i++)
+            {
+                predicted[i] = Positions[i];
+            }
+
 
             // 拘束解決（反復）
-            for (int iter = 0; iter < 5; iter++) // イテレーション回数は必要に応じて調整
+            for (int iter = 0; iter < 5; iter++)
             {
                 // 1. 距離の拘束を解決
                 foreach (var c in constraints)
                 {
+                    //  アクティブなパーティクル間の拘束のみ解決
+                    if (c.j >= _activeParticleCount) continue;
+
                     Vector3 delta = predicted[c.i] - predicted[c.j];
                     float d = delta.magnitude;
-                    if (d == 0) continue; // ゼロ除算を避ける
+                    if (d == 0) continue;
                     float diff = (d - c.restLength) / d;
 
                     Vector3 correction = delta * diff * 0.5f * Stiffness;
@@ -481,21 +522,35 @@ namespace InGame.NonMVP
                     if (!IsFixed[c.j]) predicted[c.j] += correction;
                 }
 
-                // 2. 衝突の拘束を解決
+                // 衝突の拘束を解決
                 ResolveCollisions(predicted);
             }
 
             // 状態の確定（速度と位置）
-            for (int i = 0; i < ParticleCount; i++)
+            for (int i = 0; i < _activeParticleCount; i++) 
             {
                 if (IsFixed[i]) continue;
                 Velocities[i] = (predicted[i] - Positions[i]) / TimeStep;
                 Positions[i] = predicted[i];
             }
 
-            // 両端を強制的に固定
+            // 両端の処理
             Positions[0] = StartObject.transform.position;
-            Positions[ParticleCount - 1] = EndObject.transform.position;
+
+            if (_isReturning)
+            {
+                // 戻り処理中は、非アクティブなパーティクルを始点に集める
+                for (int i = _activeParticleCount; i < ParticleCount; i++)
+                {
+                    Positions[i] = StartObject.transform.position;
+                    Velocities[i] = Vector3.zero;
+                }
+            }
+            else
+            {
+                // 通常時は終点をEndObjectに固定
+                Positions[ParticleCount - 1] = EndObject.transform.position;
+            }
         }
 
         /// <summary>
@@ -504,11 +559,18 @@ namespace InGame.NonMVP
         private void UpdateLineRenderer()
         {
             if (CodeLineRenderer == null) return;
-            for (int i = 0; i < ParticleCount; i++)
+
+            if (CodeLineRenderer.positionCount != _activeParticleCount)
+            {
+                CodeLineRenderer.positionCount = _activeParticleCount;
+            }
+
+            for (int i = 0; i < _activeParticleCount; i++)
             {
                 CodeLineRenderer.SetPosition(i, Positions[i]);
             }
         }
+
         #endregion
 
         // このコンポーネントが無効になったり破棄された時に、実行中のタスクを止める

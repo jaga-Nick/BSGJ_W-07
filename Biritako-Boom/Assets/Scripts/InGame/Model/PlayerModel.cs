@@ -95,7 +95,7 @@ namespace InGame.Model
         }
         #endregion
 
-
+        #region ソケット関連（コンセント）
         /// <summary>
         /// ソケット通常設定
         /// </summary>
@@ -130,13 +130,13 @@ namespace InGame.Model
         /// ソケットをデリート
         /// </summary>
         public void DeleteSocket() {
-            if (Socket!=null)
+            if (Socket!=null && CodeSimulaters.Count == 0)
             {
                 Debug.Log("削除");
                 UnityEngine.Object.Destroy(Socket);
             }
          }
-
+        #endregion
 
         //-----------------
         #region セット

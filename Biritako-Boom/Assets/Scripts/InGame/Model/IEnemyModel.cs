@@ -3,7 +3,7 @@
 namespace InGame.Model
 {
     /// <summary>
-    /// Abstructでの敵（家電）のmodel管理
+    /// Interfaceでの敵（家電）のmodel管理
     /// </summary>
     public interface IEnemyModel
     {

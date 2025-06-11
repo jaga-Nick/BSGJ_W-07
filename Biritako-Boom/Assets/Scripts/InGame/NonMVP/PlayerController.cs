@@ -86,7 +86,7 @@ namespace InGame.NonMVP
                 }
                 else if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
                 {
-                    Debug.Log("ソケットを回収する");
+                    Debug.Log("ソケットを回収するキー");
                     Model.DeleteSocket();
                 }
             }
