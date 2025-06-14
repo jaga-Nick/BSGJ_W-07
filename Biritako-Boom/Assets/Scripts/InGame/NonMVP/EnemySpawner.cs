@@ -97,7 +97,7 @@ namespace InGame.NonMVP
             {
                 // UFOをランダムに選択する
                 var randomIndex = Random.Range(0, ufoPrefabs.Length);
-                var ufo = Instantiate(ufoPrefabs[randomIndex]);
+                var ufo = ufoPrefabs[randomIndex];
             
                 // UFOに付与されているPresenterを取得
                 var presenter = ufo.GetComponent<UfoPresenter>();
@@ -105,6 +105,9 @@ namespace InGame.NonMVP
                 // Presenterで決定した座標をもとに初期座標を決定
                 var spawnPosition = presenter.DetermineSpawnPoints();
                 ufo.transform.position = spawnPosition;
+                
+                // UFOを生成する
+                Instantiate(ufo, spawnPosition, Quaternion.identity);
                 
                 // 生成したUFOの座標を配列に追加する
                 spawnUfoPositions.Add(spawnPosition);

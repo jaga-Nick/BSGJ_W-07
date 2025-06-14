@@ -35,7 +35,7 @@ namespace InGame.Presenter
             _camera = Camera.main;
         }
 
-        public void Start()
+        private void Start()
         {
             _model = gameObject.GetComponent<ElectronicsModel>();
             _model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
@@ -84,7 +84,7 @@ namespace InGame.Presenter
             // modelにセットする
             _model.Speed = moveSpeed;
             _model.Direction = moveDirection;
-
+            
             // 移動開始時にアニメーションを再生
             _view.PlayMoveAnimation(true);
 
