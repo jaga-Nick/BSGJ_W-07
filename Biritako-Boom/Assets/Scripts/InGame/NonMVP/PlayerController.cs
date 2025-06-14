@@ -46,6 +46,8 @@ namespace InGame.NonMVP
             }
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
+
+                //
                 if (checker.FindClosestEnemyOfTypeOne(Model.PlayerObject.transform.position, 1f)!=null) 
                 {
                     GameObject electro=checker.FindClosestEnemyOfTypeOneGameObject(Model.PlayerObject.transform.position, 10f);
@@ -69,7 +71,7 @@ namespace InGame.NonMVP
 
                 }
                 //範囲内にコードがない場合(それで保持している時。)
-                else if (Model.CurrentHaveCode != null)
+                else if (Model.CurrentHaveCodeSimulater != null)
                 {
                     Model.PutCode();
                 }

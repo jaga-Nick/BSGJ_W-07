@@ -74,11 +74,12 @@ namespace InGame.NonMVP
         private int MaxExplosion;
 
         #region データの実装（外部から設定される。Initializeで設定)
-        // ヒモの粒子数
+        // 紐の最大粒子数
         private int ParticleCount = 20;
-        /// <summary>
-        /// 紐を再度初期化する時に必要になる数値
-        /// </summary>
+        //実際の紐の粒子数
+        private int _activeParticleCount;
+        //紐を置いているかどうか
+        private bool _isReturning = false;
 
 
         // シミュレーションパラメータ
@@ -129,18 +130,51 @@ namespace InGame.NonMVP
             Simulate();
             UpdateLineRenderer();
             UpdateEdgeCollider();
+            
+
         }
 
+        //ゲージを増減させるという処理の基準値
+        private float GaugeDistance=0.5f;
 
-        /// <summary>
-        /// ここで当たった時に消える。
-        /// </summary>
-        /// <param name="collision"></param>
+
         public void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject != StartObject && collision.gameObject != EndObject)
             {
             }
+        }
+
+        /// <summary>
+        /// コストの決定方法
+        /// </summary>
+        public float DesideCost()
+        {
+            float num=TotalDistance() / GaugeDistance;
+
+            return num;
+        }
+        /// 紐の長さ
+        public float TotalDistance()
+        {
+            float totalDistance = 0f;
+            for (int j = 0; j < Positions.Length - 1; j++)
+            {
+                totalDistance += Vector3.Distance(Positions[j], Positions[j + 1]);
+            }
+            return totalDistance;
+        }
+
+        /// <summary>
+        /// ソケットにコードを刺す
+        /// 消費電力確定（未記入）
+        /// </summary>
+        public void InjectionSocketCode(GameObject socket)
+        {
+            EndObject = socket;
+            //戻る処理
+            _isReturning = false;
+
         }
 
         /// <summary>
@@ -185,31 +219,20 @@ namespace InGame.NonMVP
         /// <summary>
         /// 拾うイベント
         /// </summary>
-        public void GetCodeEvent(GameObject player)
+        public void TakeCodeEvent(GameObject player)
         {
             EndObject = player;
 
+            //
             InitializeRope();
             InitializeEdgeCollider();
         }
 
-        /// <summary>
-        /// ソケットにコードを刺す
-        /// 消費電力確定（未記入）
-        /// </summary>
-        public void InjectionSocketCode(GameObject socket)
-        {
-            EndObject = socket;
-            //戻る処理
-            _isReturning = false;
+        
 
-            
-        }
-
-        private int _activeParticleCount;
-        private bool _isReturning = false;
+        
         /// <summary>
-        /// 戻るようにする
+        /// 戻るようにする(Codeの回復の処理もここ）
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -231,11 +254,19 @@ namespace InGame.NonMVP
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
                 {
-                    // キャンセル要求があったら、例外を投げて処理を中断
+                    // キャンセル要求があったら、ループ中に例外を投げて処理を中断
                     linkedToken.ThrowIfCancellationRequested();
 
                     // 時間の進捗率 (0.0 から 1.0 へ)
                     float t = elapsedTime / shrinkDuration;
+
+                    //---------------------------------------
+                    //ここで段々数値を距離依存で増やす？
+
+
+                    ///--------------------------------
+
+
 
                     // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
                     // Mathf.CeilToInt を使うことで、最後のパーティクルが残るように調整
@@ -332,19 +363,7 @@ namespace InGame.NonMVP
             Destroy(gameObject);
         }
 
-        /// <summary>
-        /// 総距離を求める（これによって延長コードゲージを増減させる。）
-        /// </summary>
-        /// <returns></returns>
-        public float TotalDistance()
-        {
-            float totalDistance = 0f;
-            for (int j = 0; j < Positions.Length - 1; j++)
-            {
-                totalDistance += Vector3.Distance(Positions[j], Positions[j + 1]);
-            }
-            return totalDistance;
-        }
+        
 
 
         #region EdgeCollider関連
