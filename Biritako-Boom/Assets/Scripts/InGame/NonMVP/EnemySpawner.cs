@@ -19,7 +19,9 @@ namespace InGame.NonMVP
         [Header("タイマー")]
         [SerializeField] private float timer;
         [Header("生成される家電の上限数")]
-        [SerializeField] private int maxElectronics = 15;
+        [SerializeField] private int maxElectronics = 50;
+        [Header("一度に生成される家電の数")]
+        [SerializeField] private int numberOfSpawnElectronics = 3;
         [Header("生成されるUFOの上限数")]
         [SerializeField] private int maxUfo = 14;
         [Header("UFO周辺の半径")]
@@ -34,14 +36,13 @@ namespace InGame.NonMVP
         [Header("家電")]
         [SerializeField] private GameObject[] electronicsPrefabs;
         [Header("UFO")]
-        [SerializeField] private GameObject[] ufoPrefabs;
+        [SerializeField] private GameObject ufoPrefabs;
         
-
+        
         /// <summary>
-        /// スポーンされたEnemyの座標を保持するリスト
+        /// 生成されたUFOたちの管理
         /// </summary>
-        public List<Vector3> spawnElectronicsPositions;
-        public List<Vector3> spawnUfoPositions;
+        private List<GameObject> ufosList = new List<GameObject>();
         
         
         /// <summary>
@@ -70,26 +71,31 @@ namespace InGame.NonMVP
         /// </summary>
         private void SpawnElectronics()
         {
-            // 家電を選択して生成する
-            var randomIndex = Random.Range(0, electronicsPrefabs.Length);
-            var electronics = electronicsPrefabs[randomIndex];
+            for (var i = 0; i < numberOfSpawnElectronics; i++)
+            {
+                // 家電を選択して生成する
+                var randomIndex = Random.Range(0, electronicsPrefabs.Length);
+                var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
-            // UFOの座標をランダムに取得
-            var ufoRandomIndex = Random.Range(0, ufoPrefabs.Length);
-            var ufoPosition = ufoPrefabs[ufoRandomIndex].transform.position;
+                // UFOの座標をランダムに取得
+                var ufoRandomIndex = Random.Range(0, maxUfo);
+                var ufoPosition = ufosList[ufoRandomIndex].transform.position;
             
-            // 家電に付与されているPresenterを取得
-            var presenter = electronics.GetComponent<ElectronicsPresenter>();
+                // UFOがカメラ内にいるときは対象から外す
+                var viewportPosition = Camera.main.WorldToViewportPoint(ufoPosition);
+                var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
+                if (isInView) continue;
+                
+                // 家電に付与されているPresenterを取得
+                var presenter = electronics.GetComponent<ElectronicsPresenter>();
             
-            // Presenterで決定した座標をもとに初期座標を決定
-            var spawnPosition = presenter.DetermineSpawnPoints(ufoPosition, spawnRadius, exclusionRadius);
-            electronics.transform.position = spawnPosition;
+                // Presenterで決定した座標をもとに初期座標を決定
+                var spawnPosition = presenter.DetermineSpawnPoints(ufoPosition, spawnRadius, exclusionRadius);
+                electronics.transform.position = spawnPosition;
             
-            // 家電を生成する
-            Instantiate(electronics, spawnPosition, Quaternion.identity);
-            
-            // 家電の数をインクリメント
-            CurrentElectronics++;
+                // 家電の数をインクリメント
+                CurrentElectronics++;
+            }
         }
 
         /// <summary>
@@ -99,9 +105,11 @@ namespace InGame.NonMVP
         {
             for (var i = 0; i < maxUfo; i++)
             {
-                // UFOをランダムに選択する
-                var randomIndex = Random.Range(0, ufoPrefabs.Length);
-                var ufo = ufoPrefabs[randomIndex];
+                // UFOのPrefabを選択
+                var ufo = Instantiate(ufoPrefabs);
+                
+                // 名前にIndexをつける
+                ufo.name = $"UFO_{i}";
             
                 // UFOに付与されているPresenterを取得
                 var presenter = ufo.GetComponent<UfoPresenter>();
@@ -111,10 +119,10 @@ namespace InGame.NonMVP
                 ufo.transform.position = spawnPosition;
                 
                 // UFOを生成する
-                Instantiate(ufo, spawnPosition, Quaternion.identity);
+                // Instantiate(ufo, spawnPosition, Quaternion.identity);
                 
-                // 生成したUFOの座標を配列に追加する
-                spawnUfoPositions.Add(spawnPosition);
+                // UFO管理リストに追加
+                ufosList.Add(ufo);
                 
                 // UFOの数をインクリメント
                 CurrentUfo++;

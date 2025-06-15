@@ -15,13 +15,13 @@ namespace InGame.Presenter
         [SerializeField] private float moveSpeed = 2.0f;
         [Header("移動範囲")]
         [SerializeField] private float radius = 10f;
+        [Header("停止時間")]
+        [SerializeField] private float stopTime = 2.0f;
         
         /// <summary>
         /// 浮遊パラメータ
         /// </summary>
         [Header("浮遊パラメータ")]
-        [Header("停止時間")]
-        [SerializeField] private float stopTime = 2.0f;
         [Header("浮遊の時間")]
         [SerializeField] private float frequencyTime = 2.0f;
         [Header("浮遊の振幅")]
