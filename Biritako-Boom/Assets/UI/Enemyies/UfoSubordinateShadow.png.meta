@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: ca340bfc5161653498c78660e4eb5c0a
+guid: 986f74471e41d8e4283d5bed791b1273
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7805582143081431407
-    second: ApplianceLaundry_0
-  - first:
-      213: -5329292610728086675
-    second: ApplianceLaundry_1
-  - first:
-      213: -3177784275028992836
-    second: ApplianceLaundry_2
-  - first:
-      213: 8931159526817964635
-    second: ApplianceLaundry_3
-  - first:
-      213: -7307593968154872852
-    second: ApplianceLaundry_4
+      213: 5099623893993860389
+    second: UfoSubordinateShadow_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ApplianceLaundry_0
+      name: UfoSubordinateShadow_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 45
-        height: 44
+        y: 15
+        width: 96
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,96 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 19ebf7885600da390800000000000000
-      internalID: -7805582143081431407
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_1
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d6330793b9c8a06b0800000000000000
-      internalID: -5329292610728086675
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_2
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cbc131ad90e36e3d0800000000000000
-      internalID: -3177784275028992836
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_3
-      rect:
-        serializedVersion: 2
-        x: 133
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b52a454354ad1fb70800000000000000
-      internalID: 8931159526817964635
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_4
-      rect:
-        serializedVersion: 2
-        x: 178
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ce37755d006369a90800000000000000
-      internalID: -7307593968154872852
+      spriteID: 52d2991a9e085c640800000000000000
+      internalID: 5099623893993860389
       vertices: []
       indices: 
       edges: []
@@ -247,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UfoSubordinateShadow_0: 5099623893993860389
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

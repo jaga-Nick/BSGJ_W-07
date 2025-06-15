@@ -13,10 +13,15 @@ namespace InGame.Presenter
         /// <summary>
         /// 移動パラメータ
         /// </summary>
+        [Header("移動パラメータ")]
         [Header("移動速度")]
-        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float moveSpeed = 3.0f;
         [Header("前進する秒数")]
-        [SerializeField] private float moveDuration = 3f;
+        [SerializeField] private float moveDuration = 2.0f;
+        [Header("移動範囲")]
+        [SerializeField] private float radius = 10f;
+        [Header("停止時間")]
+        [SerializeField] private float stopTime = 1.0f;
         
         /// <summary>
         /// modelとview
@@ -35,71 +40,86 @@ namespace InGame.Presenter
             _camera = Camera.main;
         }
 
-        public void Start()
+        private void Start()
         {
+            // modelにセット
             _model = gameObject.GetComponent<ElectronicsModel>();
             _model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
+            _model.Speed = moveSpeed;
             
+            // viewにセット
             _view = gameObject.GetComponent<ElectronicsView>();
 
-            StartCoroutine(MoveCharacterRoutine());
-        }
-
-        /// <summary>
-        /// Enemyをスポーンする座標を決める
-        /// </summary>
-        public Vector3 DetermineSpawnPoints()
-        {
-            // UFOのmodelを取得して座標を確認
-            // _ufoModel = new UfoModel();
-            
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
-
-            // 画面外の座標を取得
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
-        }
-
-        /// <summary>
-        /// ランダムな値を取得
-        /// </summary>
-        /// <returns></returns>
-        private static float RandomRun()
-        {
-            float value;
-            do { value = Random.Range(-0.5f, 1.5f); } while (value is >= 0.0f and <= 1.0f);
-            return value;
+            StartCoroutine(AutoMoveElectronicsRoutine());
         }
         
         /// <summary>
-        /// キャラクターをランダムな方向に向かせて前進させるコルーチン
+        /// 家電をスポーンする座標を決める
         /// </summary>
-        private IEnumerator MoveCharacterRoutine()
+        /// <param name="ufoPosition"></param>
+        /// <param name="spawnRadius"></param>
+        /// <param name="exclusionRadius"></param>
+        /// <returns></returns>
+        public Vector3 DetermineSpawnPoints(Vector3 ufoPosition, float spawnRadius, float exclusionRadius)
         {
-            // Modelにランダムな移動方向を問い合わせる
-            var moveDirection = _model.GetRandomDirection();
+            // UFOの座標半径いくらかを取得してポジションを決める
+            Vector3 spawnOffset;
+            do
+            {
+                var randomCircle = Random.insideUnitCircle * spawnRadius;
+                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
+            } 
+            while (spawnOffset.magnitude < exclusionRadius);
             
-            // modelにセットする
-            _model.Speed = moveSpeed;
-            _model.Direction = moveDirection;
-
-            // 移動開始時にアニメーションを再生
-            _view.PlayMoveAnimation(true);
-
+            // 最終的なスポーン位置
+            var spawnPosition = ufoPosition + spawnOffset;
+            
+            // 画面外の座標に変換
+            return spawnPosition;
+        }
+        
+        
+        /// <summary>
+        /// 家電の自動運転
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator AutoMoveElectronicsRoutine()
+        {
             while (true)
             {
-                var elapsedTime = 0f;
+                // 目的座標をランダムに決める
+                var randomCircle = Random.insideUnitCircle * radius;
+                var target = new Vector3(
+                    transform.position.x + randomCircle.x, 
+                    transform.position.y + randomCircle.y, 
+                    transform.position.z
+                );
+            
+                // 移動アニメーションの開始
+                _view.PlayMoveAnimation(true);
+                // 移動コルーチン
+                yield return StartCoroutine(MoveElectronicsRoutine(target));
+            
+                // 停止コルーチン
+                // yield return StartCoroutine(_view.PlayStopAnimation(frequencyAmplitude, frequencySpeed, transform.position));
+            
+                // 一定時間待機
+                yield return new WaitForSeconds(stopTime);
+            }
+        }
 
-                while (elapsedTime < moveDuration)
-                {
-                    _model.Rb.linearVelocity = _model.Direction * _model.Speed;
-                    elapsedTime += Time.deltaTime;
-                    yield return null;
-                }
-
-                _model.Direction *= -1;
+        /// <summary>
+        /// 家電の移動コルーチン
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator MoveElectronicsRoutine(Vector2 target)
+        {
+            // 家電の移動処理
+            while (Vector2.Distance(transform.position, target) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
+                _model.Position = transform.position;
+                yield return null;
             }
         }
     }

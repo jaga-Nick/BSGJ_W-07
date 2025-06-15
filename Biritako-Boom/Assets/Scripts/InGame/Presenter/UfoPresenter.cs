@@ -12,9 +12,22 @@ namespace InGame.Presenter
         /// </summary>
         [Header("移動パラメータ")]
         [Header("移動速度")]
-        [SerializeField] private float moveSpeed = 0.5f;
-        [Header("上下運動")]
-        [SerializeField] private float rotateSpeed = 0.5f;
+        [SerializeField] private float moveSpeed = 2.0f;
+        [Header("移動範囲")]
+        [SerializeField] private float radius = 10f;
+        [Header("停止時間")]
+        [SerializeField] private float stopTime = 2.0f;
+        
+        /// <summary>
+        /// 浮遊パラメータ
+        /// </summary>
+        [Header("浮遊パラメータ")]
+        [Header("浮遊の時間")]
+        [SerializeField] private float frequencyTime = 2.0f;
+        [Header("浮遊の振幅")]
+        [SerializeField] private float frequencyAmplitude = 0.01f;
+        [Header("浮遊の速さ")]
+        [SerializeField] private float frequencySpeed = 0.5f;
         
         /// <summary>
         /// UFOのステータス
@@ -25,7 +38,6 @@ namespace InGame.Presenter
         [Header("UFOのスコア")]
         [SerializeField] private int ufoScore = 100;
         
-
         /// <summary>
         /// modelとview
         /// </summary>
@@ -48,12 +60,15 @@ namespace InGame.Presenter
             _model = new UfoModel
             {
                 Rb = gameObject.GetComponent<Rigidbody2D>(),
+                Speed = moveSpeed,
+                Position = transform.position,
                 MaxUfoHp = maxUfoHp,
                 CurrentUfoHp = maxUfoHp,
                 UfoScore = ufoScore,
             };
+            _view = gameObject.GetComponent<UfoView>();
             
-            StartCoroutine(MoveCharacterRoutine());
+            StartCoroutine(AutoMoveUfoRoutine());
         }
         
         /// <summary>
@@ -81,28 +96,49 @@ namespace InGame.Presenter
             return value;
         }
 
+        
         /// <summary>
-        /// UFOが浮かんでいるのを表現する
+        /// UFOの自動運転
         /// </summary>
         /// <returns></returns>
-        private IEnumerator MoveCharacterRoutine()
+        private IEnumerator AutoMoveUfoRoutine()
         {
-            // Modelにランダムな移動方向を問い合わせる
-            // modelにセットする
-            _model.Speed = moveSpeed;
-            // 移動開始時にアニメーションを再生
-            var direction = Vector2.up;
             while (true)
             {
-                _model.Rb.linearVelocity = direction * (Mathf.Sin(_model.Speed) * rotateSpeed);
-                yield return null;
+                // 目的座標をランダムに決める
+                var randomCircle = Random.insideUnitCircle * radius;
+                var target = new Vector3(
+                    transform.position.x + randomCircle.x, 
+                    transform.position.y + randomCircle.y, 
+                    transform.position.z
+                );
+            
+                // 移動アニメーションの開始
+                _view.PlayMoveAnimation(true);
+                // 移動コルーチン
+                yield return StartCoroutine(MoveUfoRoutine(target));
+            
+                // 停止コルーチン
+                // yield return StartCoroutine(_view.PlayStopAnimation(frequencyAmplitude, frequencySpeed, transform.position));
+            
+                // 一定時間待機
+                yield return new WaitForSeconds(stopTime);
             }
         }
 
-        private void Update()
+        /// <summary>
+        /// UFOの移動コルーチン
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator MoveUfoRoutine(Vector2 target)
         {
-            var upDown = _model.Position.y + Mathf.Sin(Time.time * _model.Speed) * rotateSpeed;
-            transform.position = new Vector3(transform.position.x, upDown, transform.position.z);
+            // UFOの移動処理
+            while (Vector2.Distance(transform.position, target) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
+                _model.Position = transform.position;
+                yield return null;
+            }
         }
 
         private void OnDestroy()
