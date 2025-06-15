@@ -792,18 +792,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInterval: 5
   timer: 0
-  maxElectronics: 15
+  maxElectronics: 50
+  numberOfSpawnElectronics: 3
   maxUfo: 14
-  spawnRadius: 1
+  spawnRadius: 2
   exclusionRadius: 0.5
   electronicsPrefabs:
   - {fileID: 1357869806}
   - {fileID: 1753875042}
   - {fileID: 1004121517}
-  ufoPrefabs:
-  - {fileID: 1326828294}
-  spawnElectronicsPositions: []
-  spawnUfoPositions: []
+  ufoPrefabs: {fileID: 1326828294}
 --- !u!4 &531447711
 Transform:
   m_ObjectHideFlags: 0
@@ -915,6 +913,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   moveDuration: 1
+  radius: 2
+  stopTime: 1
 --- !u!114 &1004121522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1758,32 +1758,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1357869810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357869806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86e57c217dc6407aa075384838e0ae75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 3
-  moveDuration: 1
---- !u!114 &1357869811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357869806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1acdb17a63f496fa725d4d83c2ababf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &1357869814
 Rigidbody2D:
   serializedVersion: 5
@@ -1811,18 +1785,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1357869816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357869806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4e5a9f0491c1f244b440ac9b49546c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1357869817
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1869,6 +1831,46 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.56, y: 0.55}
   m_EdgeRadius: 0
+--- !u!114 &1357869819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357869806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e5a9f0491c1f244b440ac9b49546c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1357869820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357869806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e57c217dc6407aa075384838e0ae75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  moveDuration: 2
+  radius: 2
+  stopTime: 1
+--- !u!114 &1357869821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357869806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1acdb17a63f496fa725d4d83c2ababf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1386120136
 GameObject:
   m_ObjectHideFlags: 0
@@ -2085,6 +2087,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   moveDuration: 1
+  radius: 2
+  stopTime: 1
 --- !u!114 &1753875047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2577,8 +2581,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 855164290325077894, guid: ad5bfd6baf80a7a49ae5e8ca4d414bd1, type: 3}
-      insertIndex: 1
+      insertIndex: -1
       addedObject: {fileID: 1348554038407502873}
+    - targetCorrespondingSourceObject: {fileID: 855164290325077894, guid: ad5bfd6baf80a7a49ae5e8ca4d414bd1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1348554038407502876}
     - targetCorrespondingSourceObject: {fileID: 855164290325077894, guid: ad5bfd6baf80a7a49ae5e8ca4d414bd1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1348554038407502869}
@@ -2699,6 +2706,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   moveDuration: 1
+  radius: 2
+  stopTime: 1
 --- !u!114 &1348554038407502869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2733,6 +2742,61 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &1348554038407502876
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348554038407502864}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -5013299933229592642, guid: ba2e5c00a501044499f60747efc5a0cb, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.48, y: 0.34}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1001 &1916850652495533322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2956,19 +3020,19 @@ PrefabInstance:
       addedObject: {fileID: 1357869809}
     - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1357869811}
-    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1357869810}
-    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1357869816}
-    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1357869814}
     - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1357869817}
+    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1357869821}
+    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1357869820}
+    - targetCorrespondingSourceObject: {fileID: 9156086205809093396, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1357869819}
   m_SourcePrefab: {fileID: 100100000, guid: a169d0eab8308364c866b201fcb9e446, type: 3}
 --- !u!1001 &6324127691848304075
 PrefabInstance:
