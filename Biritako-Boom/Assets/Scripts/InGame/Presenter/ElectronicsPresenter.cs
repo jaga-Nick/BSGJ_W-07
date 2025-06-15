@@ -42,36 +42,36 @@ namespace InGame.Presenter
             
             _view = gameObject.GetComponent<ElectronicsView>();
 
-            StartCoroutine(MoveCharacterRoutine());
+            // StartCoroutine(MoveCharacterRoutine());
         }
-
+        
         /// <summary>
-        /// Enemyをスポーンする座標を決める
+        /// 家電をスポーンする座標を決める
         /// </summary>
-        public Vector3 DetermineSpawnPoints()
-        {
-            // UFOのmodelを取得して座標を確認
-            // _ufoModel = new UfoModel();
-            
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
-
-            // 画面外の座標を取得
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
-        }
-
-        /// <summary>
-        /// ランダムな値を取得
-        /// </summary>
+        /// <param name="ufoPosition"></param>
+        /// <param name="spawnRadius"></param>
+        /// <param name="exclusionRadius"></param>
         /// <returns></returns>
-        private static float RandomRun()
+        public Vector3 DetermineSpawnPoints(Vector3 ufoPosition, float spawnRadius, float exclusionRadius)
         {
-            float value;
-            do { value = Random.Range(-0.5f, 1.5f); } while (value is >= 0.0f and <= 1.0f);
-            return value;
+            // UFOの座標半径いくらかを取得してポジションを決める
+            Vector3 spawnOffset;
+            do
+            {
+                var randomCircle = Random.insideUnitCircle * spawnRadius;
+                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
+            } 
+            while (spawnOffset.magnitude < exclusionRadius);
+            
+            // 最終的なスポーン位置
+            var spawnPosition = ufoPosition + spawnOffset;
+            
+            // 画面外の座標に変換
+            return  _camera.ViewportToWorldPoint(
+                new Vector3(spawnPosition.x, spawnPosition.y, _camera.nearClipPlane)
+                );;
         }
+        
         
         /// <summary>
         /// キャラクターをランダムな方向に向かせて前進させるコルーチン
