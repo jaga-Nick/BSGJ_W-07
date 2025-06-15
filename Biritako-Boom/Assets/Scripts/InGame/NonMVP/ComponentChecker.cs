@@ -1,4 +1,5 @@
 ﻿using InGame.Model;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -162,6 +163,10 @@ namespace InGame.NonMVP{
             return closestEnemy;
         }
 
+
+
+
+
         /// <summary>
         /// 家電-GameObjectを返り値にしたバージョン。
         /// </summary>
@@ -177,8 +182,6 @@ namespace InGame.NonMVP{
 
             foreach (var hit in hits)
             {
-                if (hit.transform.position == origin) continue;
-
                 var behaviours = hit.GetComponents<MonoBehaviour>();
                 foreach (var behaviour in behaviours)
                 {
@@ -198,5 +201,129 @@ namespace InGame.NonMVP{
 
             return closestEnemyGO;
         }
+
+
+
+
+
+
+        /// <summary>
+        /// 距離、GameObject、コンポーネント内容を一斉に送る関数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="transformPosition"></param>
+        /// <param name="scanRadius"></param>
+        /// <returns></returns>
+        public Contain<T> FindCheckPackage<T>(Vector3 transformPosition, float scanRadius) where T : class
+        {
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transformPosition, scanRadius);
+
+            GameObject closestObject = null;
+            T closestComponent = null;
+            //無限を入れることで初期の距離比較を成立させる。
+            float closestDistance = Mathf.Infinity;
+
+            foreach (var hitCollider in hitColliders)
+            {
+                GameObject obj = hitCollider.gameObject;
+
+                // Componentを全部取得する
+                Component[] components = obj.GetComponents<MonoBehaviour>();
+                T TargetComponent = null;
+                foreach (var comp in components)
+                {
+                    //ここでInterfaceにキャストできるかどうか
+                    TargetComponent = comp as T;
+                    if (TargetComponent != null) break;
+                }
+                //なかった場合終了
+                if (TargetComponent == null) continue;
+
+                //距離を確認する
+                float distance = Vector2.Distance(transformPosition, obj.transform.position);
+
+                //最短距離のものだけを抽出する。
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestObject = obj;
+                    closestComponent = TargetComponent;
+                }
+            }
+
+            Contain<T> result = null;
+            if (closestObject)
+            {
+                result = new Contain<T>(closestDistance, closestComponent, closestObject);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 範囲内全ての情報を渡す関数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="transformPosition"></param>
+        /// <param name="scanRadius"></param>
+        /// <returns></returns>
+        public List<Contain<T>> FindInterfaceContainList<T>(Vector3 transformPosition, float scanRadius) where T : class
+        {
+            // 1. 返却するための新しいリストを作成する
+            List<Contain<T>> resultList = new List<Contain<T>>();
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transformPosition, scanRadius);
+
+
+            foreach (var hitCollider in hitColliders)
+            {
+                GameObject obj = hitCollider.gameObject;
+
+                // Componentを全部取得する
+                Component[] components = obj.GetComponents<MonoBehaviour>();
+                T TargetComponent = null;
+                foreach (var comp in components)
+                {
+                    //ここでInterfaceにキャストできるかどうか
+                    TargetComponent = comp as T;
+                    if (TargetComponent != null) break;
+                }
+                //なかった場合終了
+                if (TargetComponent == null) continue;
+                //距離を確認する
+                float distance = Vector2.Distance(transformPosition, obj.transform.position);
+
+                //全て格納する
+                resultList.Add(new Contain<T>(distance, TargetComponent, obj));
+            }
+            return resultList;
+        }
+
+        /// <summary>
+        /// 格納する内容
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public class Contain<T> where T : class
+        {
+            public Contain(float distance, T component, GameObject target)
+            {
+                this.Distance = distance;
+                this.Component = component;
+                this.Target = target;
+            }
+            /// <summary>
+            /// 距離
+            /// </summary>
+            public float Distance { get; private set; }
+            /// <summary>
+            /// 参照コンポーネント
+            /// </summary>
+            public T Component { get; private set; }
+            /// <summary>
+            /// アタッチオブジェクト
+            /// </summary>
+            public GameObject Target { get; private set; }
+        }
+
+
+
     }
 }

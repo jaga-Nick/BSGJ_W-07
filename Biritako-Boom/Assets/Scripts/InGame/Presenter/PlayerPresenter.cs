@@ -47,7 +47,7 @@ namespace InGame.Presenter
             //------------------------------------
 
             //コード生成に必要なクラスを取得。
-            Model?.GetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
+            Model?.SetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
             View = gameObject.GetComponent<GameHUDView>();
             //スコアイベントの購読(Singletonの呼び出し）

@@ -8,6 +8,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Linq;
+
 
 namespace InGame.Model
 {
@@ -45,6 +47,9 @@ namespace InGame.Model
         //線を伸ばし始めた時
         private float BeforeCodeGauge;
 
+        //探索範囲
+        private float SearchScale =1f;
+
 
         private Vector3 MoveVector;
 
@@ -60,18 +65,16 @@ namespace InGame.Model
         public List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
         //-------------------------------
 
-        //オブジェクトをスタック
-        private LinkedList<GameObject> Objects = new LinkedList<GameObject>();
-
-
         /// <summary>
         /// コードを生成する時、入れる。
         /// </summary>
         /// <param name="generater"></param>
-        public void GetGenerateCodeSystem(GenerateCodeSystem _generateCodeSystem)
+        public void SetGenerateCodeSystem(GenerateCodeSystem _generateCodeSystem)
         {
             generateCodeSystem = _generateCodeSystem;
         }
+
+
 
         #region キャラクター生成
         /// <summary>
@@ -190,6 +193,9 @@ namespace InGame.Model
             return CurrentCodeGauge / MaxCodeGauge;
         }
 
+        //public void 
+
+
 
 
         /// <summary>
@@ -197,7 +203,7 @@ namespace InGame.Model
         /// </summary>
         public void ConnectSocketCode()
         {
-            GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, 10f);
+            GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, SearchScale);
 
             //Null処理
             if (CurrentHaveCodeSimulater != null)
@@ -218,11 +224,14 @@ namespace InGame.Model
         private CancellationTokenSource codeHaveCancellation;
 
 
+        
+
+
         /// <summary>
         /// コードを持っている時。
         /// </summary>
         /// <returns></returns>
-        private async UniTask HaveCode()
+        private async UniTask HavingCode()
         {
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
@@ -254,45 +263,107 @@ namespace InGame.Model
             }
         }
 
-        /// <summary>
-        /// コードを置く時。
-        /// </summary>
-        public void PutCode()
+        
+        //---------------TakeCommand-------------------------
+
+        public void OnHave()
         {
-            //Whileを強制終了させる。
-            codeHaveCancellation?.Cancel();
-            codeHaveCancellation?.Dispose();
+            List<ComponentChecker.Contain<IEnemyModel>> Elects=checker.FindInterfaceContainList<IEnemyModel>(PlayerObject.transform.position, SearchScale);
 
+            //検索結果
+            ComponentChecker.Contain<IEnemyModel> MinDisElectro =null;
+            float closestDist = Mathf.Infinity;
+            //最短距離検索
+            foreach ( var elect in Elects)
+            {
+                //ソート
+                if ( elect.Component.GetEnemyType() != 1) continue;
+                
+                if (MinDisElectro.Distance < closestDist)
+                {
+                    MinDisElectro = elect;
+                }
+                
+            }
 
+            //放置しているプラグ（コード）の場所を検索
+            ComponentChecker.Contain<CodeEndPointAttach> codeEndPoint= checker.FindCheckPackage<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
 
-            CurrentHaveCodeSimulater.PutCodeEvent();
-            //CodeSimulaters.Add(CurrentHaveCode);
-            CurrentHaveCodeSimulater = null;
+            //どちらもNullだった時。
+            if(MinDisElectro == null && codeEndPoint ==null)
+            {
+                return;
+            }
+            //探索で家電しか検索できていない
+            else if( MinDisElectro != null && codeEndPoint == null)
+            {
+                TakeGenerateCode();
+                return;
+            }
+            //放置しているプラグ（コード）のみ
+            else if (MinDisElectro == null && codeEndPoint != null)
+            {
+                TakeCode();
+                return;
+            }
+            //条件式で
+            else 
+            {
+                //家電がプラグ終点より近い時。
+                if (MinDisElectro.Distance <= codeEndPoint.Distance)
+                {
+                    TakeGenerateCode();
+                    return;
+                }
+                //
+                else
+                {
+                    TakeCode();
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// コードを生成する処理。
+        /// </summary>
+        public void TakeGenerateCode()
+        {
+            //家電が周囲に存在している場合。
+            if (checker.FindClosestEnemyOfTypeOne(PlayerObject.transform.position, SearchScale) != null)
+            {
+                GameObject electro = checker.FindClosestEnemyOfTypeOneGameObject(PlayerObject.transform.position, SearchScale);
+
+                //複数のコードを繋げないようにする
+                var obje = CodeSimulaters.Where(code => code.StartObject == electro).FirstOrDefault();
+
+                //近くに家電が存在し、家電に既にコードが繋がれていない場合。
+                if (electro && obje == null)
+                {
+                    //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
+                    var code = generateCodeSystem.GenerateCode(electro, PlayerObject);
+                    SetCurrentHaveCode(code);
+                }
+            }
         }
 
         /// <summary>
         /// コードを『拾う処理』
-        /// (一回コードの生成の処理と拾う処理をできたら統合-比較したいな…
         /// </summary>
         public void TakeCode()
         {
-            CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, 10f);
+            CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
             if (endpoint != null && CurrentHaveCodeSimulater == null)
             {
                 //拾った時、線を再起動し、プレイヤー情報を入れる。
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
                 //完了待機はしない（寧ろ待つとバグが発生する）
-                HaveCode().Forget();
+                HavingCode().Forget();
             }
         }
         
-        /// <summary>
-        /// コードを生成する
-        /// </summary>
-        public void ProduceCode()
-        {
+        //---------------------TakeCommand終了---------------------------------------------
 
-        }
 
 
         /// <summary>
@@ -311,6 +382,26 @@ namespace InGame.Model
                 CodeSimulaters = new List<CodeSimulater>();
             }
         }
-        
+
+
+        //---------------動作関数--------------------
+
+        /// <summary>
+        /// コードを置く時。
+        /// </summary>
+        public void PutCode()
+        {
+            //Whileを強制終了させる。
+            codeHaveCancellation?.Cancel();
+            codeHaveCancellation?.Dispose();
+
+
+
+            CurrentHaveCodeSimulater.PutCodeEvent();
+            //CodeSimulaters.Add(CurrentHaveCode);
+            CurrentHaveCodeSimulater = null;
+        }
+
+
     }
 }
