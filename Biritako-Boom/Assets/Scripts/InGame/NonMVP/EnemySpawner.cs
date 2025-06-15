@@ -22,6 +22,10 @@ namespace InGame.NonMVP
         [SerializeField] private int maxElectronics = 15;
         [Header("生成されるUFOの上限数")]
         [SerializeField] private int maxUfo = 14;
+        [Header("UFO周辺の半径")]
+        [SerializeField] private float spawnRadius = 2.0f;
+        [Header("UFO直下の除外範囲")]
+        [SerializeField] private float exclusionRadius = 0.5f;
 
         /// <summary>
         /// Prefab
@@ -31,13 +35,6 @@ namespace InGame.NonMVP
         [SerializeField] private GameObject[] electronicsPrefabs;
         [Header("UFO")]
         [SerializeField] private GameObject[] ufoPrefabs;
-        
-        /// <summary>
-        /// UFOの生成設定（もしかしたらUfoPresenterに移行）
-        /// </summary>
-        [Header("UFOの生成設定")]
-        [Header("生成されるUFO間の最小距離")]
-        [SerializeField] private float minDistanceBetweenUfo = 0.01f;
         
 
         /// <summary>
@@ -75,14 +72,21 @@ namespace InGame.NonMVP
         {
             // 家電を選択して生成する
             var randomIndex = Random.Range(0, electronicsPrefabs.Length);
-            var electronics = Instantiate(electronicsPrefabs[randomIndex]);
+            var electronics = electronicsPrefabs[randomIndex];
+            
+            // UFOの座標をランダムに取得
+            var ufoRandomIndex = Random.Range(0, ufoPrefabs.Length);
+            var ufoPosition = ufoPrefabs[ufoRandomIndex].transform.position;
             
             // 家電に付与されているPresenterを取得
             var presenter = electronics.GetComponent<ElectronicsPresenter>();
             
             // Presenterで決定した座標をもとに初期座標を決定
-            var spawnPosition = presenter.DetermineSpawnPoints();
+            var spawnPosition = presenter.DetermineSpawnPoints(ufoPosition, spawnRadius, exclusionRadius);
             electronics.transform.position = spawnPosition;
+            
+            // 家電を生成する
+            Instantiate(electronics, spawnPosition, Quaternion.identity);
             
             // 家電の数をインクリメント
             CurrentElectronics++;

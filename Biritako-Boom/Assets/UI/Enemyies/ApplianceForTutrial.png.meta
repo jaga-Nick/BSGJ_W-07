@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ca340bfc5161653498c78660e4eb5c0a
+guid: 0f43afc8795883d479cb4c808c62a5dc
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -11,12 +11,6 @@ TextureImporter:
   - first:
       213: -3177784275028992836
     second: ApplianceLaundry_2
-  - first:
-      213: 8931159526817964635
-    second: ApplianceLaundry_3
-  - first:
-      213: -7307593968154872852
-    second: ApplianceLaundry_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,9 +123,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 45
-        height: 44
+        y: 3
+        width: 56
+        height: 55
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -150,10 +144,10 @@ TextureImporter:
       name: ApplianceLaundry_1
       rect:
         serializedVersion: 2
-        x: 44
+        x: 67
         y: 0
-        width: 45
-        height: 44
+        width: 57
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,10 +166,10 @@ TextureImporter:
       name: ApplianceLaundry_2
       rect:
         serializedVersion: 2
-        x: 88
-        y: 0
-        width: 45
-        height: 44
+        x: 136
+        y: 3
+        width: 56
+        height: 55
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,50 +180,6 @@ TextureImporter:
       bones: []
       spriteID: cbc131ad90e36e3d0800000000000000
       internalID: -3177784275028992836
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_3
-      rect:
-        serializedVersion: 2
-        x: 133
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b52a454354ad1fb70800000000000000
-      internalID: 8931159526817964635
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceLaundry_4
-      rect:
-        serializedVersion: 2
-        x: 178
-        y: 0
-        width: 45
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ce37755d006369a90800000000000000
-      internalID: -7307593968154872852
       vertices: []
       indices: 
       edges: []
@@ -247,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ApplianceLaundry_0: -7805582143081431407
+      ApplianceLaundry_1: -5329292610728086675
+      ApplianceLaundry_2: -3177784275028992836
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UfoSubordinateShadow_0: 5099623893993860389
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
