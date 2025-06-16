@@ -121,7 +121,9 @@ namespace InGame.NonMVP
         [Tooltip("終点が始点まで移動するのにかかる時間（秒）")]
         public float shrinkDuration = 2.0f;
 
-        // タスクのキャンセルに使用する
+        /// <summary>
+        /// コードの返却キャンセルに使用する
+        /// </summary>
         private CancellationTokenSource cts;
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -207,6 +209,8 @@ namespace InGame.NonMVP
             rb.gravityScale = 0;
 
             cts?.Cancel();
+            cts?.Dispose();
+
             cts = new CancellationTokenSource();
 
 
@@ -221,11 +225,17 @@ namespace InGame.NonMVP
         /// </summary>
         public void TakeCodeEvent(GameObject player)
         {
+
+            Destroy(EndObject);
             EndObject = player;
 
             //
             InitializeRope();
             InitializeEdgeCollider();
+
+            cts?.Cancel();
+            cts?.Dispose();
+            cts = new CancellationTokenSource();
         }
 
         
@@ -246,10 +256,17 @@ namespace InGame.NonMVP
             {
                 // 戻り処理中であることを示すフラグを立てる
                 _isReturning = true;
+
+                await UniTask.DelayFrame(2000, PlayerLoopTiming.Update, linkedToken);
+                Debug.Log("2秒立ちました");
+
                 // 終点の固定を解除し、紐が縮む際に自然に動くようにする
                 IsFixed[ParticleCount - 1] = false;
 
                 float elapsedTime = 0f;
+
+
+                
 
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
@@ -264,8 +281,9 @@ namespace InGame.NonMVP
                     //ここで段々数値を距離依存で増やす？
 
 
-                    ///--------------------------------
+                    Debug.Log("テスト");
 
+                    ///--------------------------------
 
 
                     // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
@@ -286,13 +304,7 @@ namespace InGame.NonMVP
 
                 // 念のため、ループ終了後にパーティクル数を1（始点のみ）に確定させる
                 _activeParticleCount = 1;
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log("移動タスクがキャンセルされました。");
-            }
-            finally
-            {
+
                 // タスク完了またはキャンセルの後始末
                 cts?.Dispose();
                 cts = null;
@@ -302,6 +314,14 @@ namespace InGame.NonMVP
                     // このオブジェクトを破棄
                     Destroy(gameObject);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log("移動タスクがキャンセルされました。");
+            }
+            finally
+            {
+                Debug.Log("リターン処理は終了した");
             }
         }
 
@@ -378,7 +398,11 @@ namespace InGame.NonMVP
         /// </summary>
         private void InitializeEdgeCollider()
         {
-            Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+            Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
+            if ( rb==null)
+            {
+                 rb= gameObject.AddComponent<Rigidbody2D>();
+            }
             rb.gravityScale = 0;
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
@@ -457,7 +481,7 @@ namespace InGame.NonMVP
             _isReturning = false;
         }
         /// <summary>
-        /// パーティクルの衝突を解決し、障害物から押し出す（ClosestPointを使った最も確実なバージョン）
+        /// パーティクルの衝突を解決し、障害物から押し出す（ClosestPointを使った）
         /// </summary>
         /// <param name="predictedPositions">予測されたパーティクルの位置配列</param>
         private void ResolveCollisions(Vector3[] predictedPositions)

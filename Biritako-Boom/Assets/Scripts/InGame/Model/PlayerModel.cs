@@ -273,19 +273,22 @@ namespace InGame.Model
             //検索結果
             ComponentChecker.Contain<IEnemyModel> MinDisElectro =null;
             float closestDist = Mathf.Infinity;
-            //最短距離検索
-            foreach ( var elect in Elects)
-            {
-                //ソート
-                if ( elect.Component.GetEnemyType() != 1) continue;
-                
-                if (MinDisElectro.Distance < closestDist)
-                {
-                    MinDisElectro = elect;
-                }
-                
-            }
 
+            if (Elects.Count > 0)
+            {
+                //最短距離検索
+                foreach (var elect in Elects)
+                {
+                    //ソート
+                    if (elect.Component.GetEnemyType() != 1) continue;
+
+                    Debug.Log(MinDisElectro);
+                    if (elect.Distance < closestDist)
+                    {
+                        MinDisElectro = elect;
+                    }
+                }
+            }
             //放置しているプラグ（コード）の場所を検索
             ComponentChecker.Contain<CodeEndPointAttach> codeEndPoint= checker.FindCheckPackage<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
 
@@ -318,7 +321,7 @@ namespace InGame.Model
                 //
                 else
                 {
-                    TakeCode();
+                    //TakeCode();
                     return;
                 }
             }
@@ -353,12 +356,16 @@ namespace InGame.Model
         public void TakeCode()
         {
             CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
+            
+            //何も拾っていない時。
             if (endpoint != null && CurrentHaveCodeSimulater == null)
             {
+                CurrentHaveCodeSimulater = endpoint.CodeSimulater;
                 //拾った時、線を再起動し、プレイヤー情報を入れる。
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
+
                 //完了待機はしない（寧ろ待つとバグが発生する）
-                HavingCode().Forget();
+                //HavingCode().Forget();
             }
         }
         
@@ -395,7 +402,7 @@ namespace InGame.Model
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
 
-
+            Debug.Log("コードを置くイベント");
 
             CurrentHaveCodeSimulater.PutCodeEvent();
             //CodeSimulaters.Add(CurrentHaveCode);

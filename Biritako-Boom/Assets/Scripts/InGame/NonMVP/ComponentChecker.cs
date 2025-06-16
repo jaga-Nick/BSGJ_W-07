@@ -16,7 +16,6 @@ namespace InGame.NonMVP{
         /// <returns></returns>
         public T CharacterCheck<T>(Vector3 TransformPosition,float scanRadius) where T :Component
         {
-            Debug.Log(scanRadius);
             //2D用のオーバーラップサーチ
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TransformPosition, scanRadius);
 
