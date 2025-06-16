@@ -119,21 +119,21 @@ namespace InGame.NonMVP
 
         [Header("アニメーション設定")]
         [Tooltip("終点が始点まで移動するのにかかる時間（秒）")]
-        public float shrinkDuration = 2.0f;
+        public float shrinkDuration = 4.0f;
 
         /// <summary>
         /// コードの返却キャンセルに使用する
         /// </summary>
         private CancellationTokenSource cts;
-        //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-        //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+        //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+        //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+
         public void Update()
         {
             Simulate();
             UpdateLineRenderer();
             UpdateEdgeCollider();
-            
-
         }
 
         //ゲージを増減させるという処理の基準値
@@ -142,15 +142,12 @@ namespace InGame.NonMVP
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject != StartObject && collision.gameObject != EndObject)
-            {
-            }
         }
 
         /// <summary>
         /// コストの決定方法
         /// </summary>
-        public float DesideCost()
+        public float DecideCost()
         {
             float num=TotalDistance() / GaugeDistance;
 
@@ -176,13 +173,12 @@ namespace InGame.NonMVP
             EndObject = socket;
             //戻る処理
             _isReturning = false;
-
         }
 
         /// <summary>
         /// Codeを置いた時のイベント。
         /// </summary>
-        public void PutCodeEvent()
+        public void PutCodeEvent(PlayerModel model)
         {
             //拾う判定を作る為に。
             GameObject endPoint = new GameObject("EndPoint");
@@ -208,14 +204,14 @@ namespace InGame.NonMVP
             Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0;
 
+
             cts?.Cancel();
             cts?.Dispose();
-
             cts = new CancellationTokenSource();
 
 
             //最終地点に進める。その後消える。
-            ReturnEndPoint(cts.Token).Forget();
+            ReturnEndPoint(cts.Token,model).Forget();
         }
 
 
@@ -225,28 +221,47 @@ namespace InGame.NonMVP
         /// </summary>
         public void TakeCodeEvent(GameObject player)
         {
+            // 以前の終点として使用していたGameObjectを破棄します。
+            if (EndObject != null && EndObject.name == "EndPoint")
+            {
+                Destroy(EndObject);
+            }
 
-            Destroy(EndObject);
+            // 新しい終点をプレイヤーに設定します。
             EndObject = player;
 
-            //
-            InitializeRope();
-            InitializeEdgeCollider();
-
+            // 実行中のReturnEndPointタスクがあればキャンセルします。
             cts?.Cancel();
             cts?.Dispose();
             cts = new CancellationTokenSource();
+
+            // 紐が縮んでいる状態（_isReturning）を解除。
+            _isReturning = false;
+
+            // シミュレーション対象のパーティクル数を最大に戻す。
+            // これで、縮んで見えなくなっていた部分の紐が再び表示・計算されるように。
+            _activeParticleCount = ParticleCount;
+
+            // 終点のパーティクルを再度「固定」状態に。
+            IsFixed[ParticleCount - 1] = true;
+
+            // LineRendererの頂点数をアクティブなパーティクル数に合わせる。
+            if (CodeLineRenderer != null)
+            {
+                CodeLineRenderer.positionCount = _activeParticleCount;
+            }
+
         }
 
-        
 
-        
+
+
         /// <summary>
         /// 戻るようにする(Codeの回復の処理もここ）
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async UniTask ReturnEndPoint(CancellationToken token)
+        public async UniTask ReturnEndPoint(CancellationToken token,PlayerModel model)
         {
             // GameObjectが破棄された時に自動でキャンセルされるようにトークンをリンク
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
@@ -257,17 +272,19 @@ namespace InGame.NonMVP
                 // 戻り処理中であることを示すフラグを立てる
                 _isReturning = true;
 
-                await UniTask.DelayFrame(2000, PlayerLoopTiming.Update, linkedToken);
-                Debug.Log("2秒立ちました");
+                await UniTask.DelayFrame(500, PlayerLoopTiming.Update, linkedToken);
 
                 // 終点の固定を解除し、紐が縮む際に自然に動くようにする
                 IsFixed[ParticleCount - 1] = false;
 
                 float elapsedTime = 0f;
 
+                // 回収できるコストの総量
+                float maxCost = DecideCost();
+                //  1秒あたりのコスト加算量
+                float costPerSecond = (maxCost > 0 && shrinkDuration > 0) ? maxCost / shrinkDuration : 0;
 
-                
-
+                Debug.Log(DecideCost()+"コスト決定");
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
                 {
@@ -278,10 +295,18 @@ namespace InGame.NonMVP
                     float t = elapsedTime / shrinkDuration;
 
                     //---------------------------------------
-                    //ここで段々数値を距離依存で増やす？
 
+                    if (costPerSecond > 0)
+                    {
+                        //算出
+                        float costToAdd = costPerSecond * Time.deltaTime;
 
-                    Debug.Log("テスト");
+                        // 計算したコストを加算
+                        model.IncrementCodeGauge(costToAdd);
+
+                        //Debug.Log($"コスト加算中...: {maxnum.ToString("F2")} / {maxCost.ToString("F2")}");
+                    }
+
 
                     ///--------------------------------
 
@@ -322,6 +347,7 @@ namespace InGame.NonMVP
             finally
             {
                 Debug.Log("リターン処理は終了した");
+               
             }
         }
 
@@ -480,6 +506,9 @@ namespace InGame.NonMVP
             _activeParticleCount = ParticleCount;
             _isReturning = false;
         }
+
+
+
         /// <summary>
         /// パーティクルの衝突を解決し、障害物から押し出す（ClosestPointを使った）
         /// </summary>
@@ -524,6 +553,7 @@ namespace InGame.NonMVP
                 }
             }
         }
+
 
         /// <summary>
         /// シミュレーション本体。力適用 → 拘束解決 → 状態更新 の流れ。

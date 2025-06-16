@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Linq;
+using static UnityEditor.PlayerSettings;
 
 
 namespace InGame.Model
@@ -45,7 +46,7 @@ namespace InGame.Model
         //現在の値
         public float CurrentCodeGauge { get; private set; } = 30.0f;
         //線を伸ばし始めた時
-        private float BeforeCodeGauge;
+        private float? BeforeCodeGauge;
 
         //探索範囲
         private float SearchScale =1f;
@@ -185,7 +186,26 @@ namespace InGame.Model
         public void DecreaseCodeGauge(float Num)
         { CurrentCodeGauge -= Num;}
         public void IncrementCodeGauge(float Num)
-            { CurrentCodeGauge += Num; }
+        {
+            CurrentCodeGauge += Num;
+            CurrentCodeGauge = Mathf.Min(CurrentCodeGauge, MaxCodeGauge);
+
+            //減算処理がかかっている時は減算結果に
+            if(BeforeCodeGauge != null)
+            {
+                BeforeCodeGauge += Num;
+            }
+        }
+
+        //テスト減算処理(Beforeから減算で疑似的に計算している。
+        public void TestDecrementCodeGauge(float num)
+        {
+            if (BeforeCodeGauge != null)
+            {
+                CurrentCodeGauge = (float)BeforeCodeGauge - num;
+            }
+        }
+
 
         //ゲージの割合
         public float GetCodeGaugePercent()
@@ -231,20 +251,19 @@ namespace InGame.Model
         /// コードを持っている時。
         /// </summary>
         /// <returns></returns>
-        private async UniTask HavingCode()
+        public async UniTask HavingCode()
         {
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
             codeHaveCancellation= new CancellationTokenSource();
 
-            //var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(a.Token, this.GetCancellationTokenOnDestroy());
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(codeHaveCancellation.Token, PlayerObject.GetCancellationTokenOnDestroy());
 
             try
             {
                 while (true) {
                     codeHaveCancellation.Token.ThrowIfCancellationRequested();
 
-                    CurrentCodeGauge -=CurrentHaveCodeSimulater.DesideCost();
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
                 }
@@ -282,7 +301,6 @@ namespace InGame.Model
                     //ソート
                     if (elect.Component.GetEnemyType() != 1) continue;
 
-                    Debug.Log(MinDisElectro);
                     if (elect.Distance < closestDist)
                     {
                         MinDisElectro = elect;
@@ -292,7 +310,7 @@ namespace InGame.Model
             //放置しているプラグ（コード）の場所を検索
             ComponentChecker.Contain<CodeEndPointAttach> codeEndPoint= checker.FindCheckPackage<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
 
-            //どちらもNullだった時。
+            //どちらもNullだった時何もしない
             if(MinDisElectro == null && codeEndPoint ==null)
             {
                 return;
@@ -309,7 +327,7 @@ namespace InGame.Model
                 TakeCode();
                 return;
             }
-            //条件式で
+            //条件式でどちらが近いか比較し実行
             else 
             {
                 //家電がプラグ終点より近い時。
@@ -321,7 +339,7 @@ namespace InGame.Model
                 //
                 else
                 {
-                    //TakeCode();
+                    TakeCode();
                     return;
                 }
             }
@@ -347,6 +365,9 @@ namespace InGame.Model
                     var code = generateCodeSystem.GenerateCode(electro, PlayerObject);
                     SetCurrentHaveCode(code);
                 }
+
+                //完了待機はしない（寧ろ待つとバグが発生する）
+                HavingCode().Forget();
             }
         }
 
@@ -365,7 +386,7 @@ namespace InGame.Model
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
 
                 //完了待機はしない（寧ろ待つとバグが発生する）
-                //HavingCode().Forget();
+                HavingCode().Forget();
             }
         }
         
@@ -398,14 +419,11 @@ namespace InGame.Model
         /// </summary>
         public void PutCode()
         {
-            //Whileを強制終了させる。
+            //持っている処理をWhileを強制終了させる。
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
 
-            Debug.Log("コードを置くイベント");
-
-            CurrentHaveCodeSimulater.PutCodeEvent();
-            //CodeSimulaters.Add(CurrentHaveCode);
+            CurrentHaveCodeSimulater.PutCodeEvent(this);
             CurrentHaveCodeSimulater = null;
         }
 

@@ -23,7 +23,7 @@ namespace InGame.NonMVP
         // ヒモの粒子数
         [Header("粒子数")]
         [SerializeField]
-        private int ParticleCount = 20;
+        private int ParticleCount = 100;
         // シミュレーションパラメータ
         [Header("計算制度(更新間秒)")]
         [SerializeField]
@@ -33,10 +33,10 @@ namespace InGame.NonMVP
         private Vector3 Gravity = new Vector3(0, 0, 0);
         [Header("速度の減衰係数。\r\nシミュレーションの振動やエネルギーを抑えるために速度にかける減速率。")]
         [SerializeField]
-        private float Damping = 2f;
+        private float Damping = 0.8f;
         [Header("\t拘束の硬さを表す係数。\r\n値が大きいほどヒモの距離拘束が強く、伸び縮みしにくくなる。")]
         [SerializeField]
-        private float Stiffness = 2f;
+        private float Stiffness = 0.9f;
 
         //------------------------------------
         [Header("爆発の基準距離")]
@@ -44,7 +44,7 @@ namespace InGame.NonMVP
         private int ExplosionTriggerDistance= 1;
         [Header("最大コード爆発数")]
         [SerializeField]
-        private int MaxExplosion;
+        private int MaxExplosion = 5;
 
         /// <summary>
         /// コードを生成
