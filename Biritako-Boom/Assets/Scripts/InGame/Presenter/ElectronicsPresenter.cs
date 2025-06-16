@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.NonMVP;
 using InGame.View;
@@ -50,7 +51,7 @@ namespace InGame.Presenter
             // viewにセット
             _view = gameObject.GetComponent<ElectronicsView>();
 
-            StartCoroutine(AutoMoveElectronicsRoutine());
+            AutoMoveElectronicsRoutine().Forget();
         }
         
         /// <summary>
@@ -83,7 +84,7 @@ namespace InGame.Presenter
         /// 家電の自動運転
         /// </summary>
         /// <returns></returns>
-        private IEnumerator AutoMoveElectronicsRoutine()
+        private async UniTask AutoMoveElectronicsRoutine()
         {
             while (true)
             {
@@ -98,13 +99,9 @@ namespace InGame.Presenter
                 // 移動アニメーションの開始
                 _view.PlayMoveAnimation(true);
                 // 移動コルーチン
-                yield return StartCoroutine(MoveElectronicsRoutine(target));
-            
-                // 停止コルーチン
-                // yield return StartCoroutine(_view.PlayStopAnimation(frequencyAmplitude, frequencySpeed, transform.position));
-            
+                await MoveElectronicsRoutine(target);
                 // 一定時間待機
-                yield return new WaitForSeconds(stopTime);
+                await UniTask.WaitForSeconds(stopTime);
             }
         }
 
@@ -112,14 +109,14 @@ namespace InGame.Presenter
         /// 家電の移動コルーチン
         /// </summary>
         /// <returns></returns>
-        private IEnumerator MoveElectronicsRoutine(Vector2 target)
+        private async UniTask MoveElectronicsRoutine(Vector2 target)
         {
             // 家電の移動処理
             while (Vector2.Distance(transform.position, target) > 0.1f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
                 _model.Position = transform.position;
-                yield return null;
+                await UniTask.Yield();
             }
         }
     }
