@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
@@ -68,7 +69,7 @@ namespace InGame.Presenter
             };
             _view = gameObject.GetComponent<UfoView>();
             
-            StartCoroutine(AutoMoveUfoRoutine());
+            AutoMoveUfoRoutine().Forget();
         }
         
         /// <summary>
@@ -101,7 +102,7 @@ namespace InGame.Presenter
         /// UFOの自動運転
         /// </summary>
         /// <returns></returns>
-        private IEnumerator AutoMoveUfoRoutine()
+        private async UniTask AutoMoveUfoRoutine()
         {
             while (true)
             {
@@ -116,13 +117,9 @@ namespace InGame.Presenter
                 // 移動アニメーションの開始
                 _view.PlayMoveAnimation(true);
                 // 移動コルーチン
-                yield return StartCoroutine(MoveUfoRoutine(target));
-            
-                // 停止コルーチン
-                // yield return StartCoroutine(_view.PlayStopAnimation(frequencyAmplitude, frequencySpeed, transform.position));
-            
+                await MoveUfoRoutine(target);
                 // 一定時間待機
-                yield return new WaitForSeconds(stopTime);
+                await UniTask.WaitForSeconds(stopTime);
             }
         }
 
@@ -130,14 +127,14 @@ namespace InGame.Presenter
         /// UFOの移動コルーチン
         /// </summary>
         /// <returns></returns>
-        private IEnumerator MoveUfoRoutine(Vector2 target)
+        private async UniTask MoveUfoRoutine(Vector2 target)
         {
             // UFOの移動処理
             while (Vector2.Distance(transform.position, target) > 0.1f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
                 _model.Position = transform.position;
-                yield return null;
+                await UniTask.Yield();
             }
         }
 

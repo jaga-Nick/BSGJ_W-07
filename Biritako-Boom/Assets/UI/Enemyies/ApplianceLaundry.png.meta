@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ApplianceLaundry_0: -7805582143081431407
+      ApplianceLaundry_1: -5329292610728086675
+      ApplianceLaundry_2: -3177784275028992836
+      ApplianceLaundry_3: 8931159526817964635
+      ApplianceLaundry_4: -7307593968154872852
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
