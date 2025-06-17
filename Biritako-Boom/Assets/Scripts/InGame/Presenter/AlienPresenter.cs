@@ -47,7 +47,7 @@ namespace InGame.Presenter
         // --- イベントハンドラ ---
         private void OnDamaged()
         {
-            _view.PlayHitEffect();
+
         }
 
 

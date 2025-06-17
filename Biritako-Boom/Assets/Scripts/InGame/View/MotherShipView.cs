@@ -24,20 +24,7 @@ namespace InGame.View
         {
             
         }
-        
-        #region コンストラクタ
 
-        /// <summary>
-        /// MotherShipViewのコンストラクタ
-        /// </summary>
-        public MotherShipView()
-        {
-
-            
-            
-        }
-
-        #endregion
         
         # region アクセスメソッド
 

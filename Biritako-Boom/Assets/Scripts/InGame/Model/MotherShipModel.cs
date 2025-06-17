@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using InGame.Presenter;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -193,7 +194,7 @@ namespace InGame.Model
         /// </summary>
         public void FindTargets()
         {
-            test[] ufo = Object.FindObjectsOfType<test>();
+            UfoPresenter[] ufo = Object.FindObjectsOfType<UfoPresenter>();
             
             _ufoTargets.Clear(); 
     
