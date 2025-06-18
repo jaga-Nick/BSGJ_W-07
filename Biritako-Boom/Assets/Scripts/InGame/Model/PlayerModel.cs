@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Linq;
-using static UnityEditor.PlayerSettings;
 
 
 namespace InGame.Model
@@ -46,7 +45,7 @@ namespace InGame.Model
         //現在の値
         public float CurrentCodeGauge { get; private set; } = 30.0f;
         //線を伸ばし始めた時
-        private float? BeforeCodeGauge;
+        public float? BeforeCodeGauge { get; private set; }
 
         //探索範囲
         private float SearchScale =1f;
@@ -164,6 +163,8 @@ namespace InGame.Model
         public void SetCurrentHaveCode(CodeSimulater code)
         {
             CurrentHaveCodeSimulater = code;
+
+
         }
 
         #endregion
@@ -189,12 +190,6 @@ namespace InGame.Model
         {
             CurrentCodeGauge += Num;
             CurrentCodeGauge = Mathf.Min(CurrentCodeGauge, MaxCodeGauge);
-
-            //減算処理がかかっている時は減算結果に
-            if(BeforeCodeGauge != null)
-            {
-                BeforeCodeGauge += Num;
-            }
         }
 
         //テスト減算処理(Beforeから減算で疑似的に計算している。
@@ -204,6 +199,12 @@ namespace InGame.Model
             {
                 CurrentCodeGauge = (float)BeforeCodeGauge - num;
             }
+        }
+
+
+        public void TestTakeDistanceCost()
+        {
+
         }
 
 
@@ -240,10 +241,15 @@ namespace InGame.Model
             CurrentHaveCodeSimulater = null;
         }
 
+
+
+
+
+
+
+
         //ここで特例的にコード『接続中』の処理を態と書いていく
         private CancellationTokenSource codeHaveCancellation;
-
-
         
 
 
@@ -261,8 +267,30 @@ namespace InGame.Model
 
             try
             {
+                if (CurrentHaveCodeSimulater.BeforeCostGauge != null)
+                {
+                    Debug.Log(CurrentCodeGauge +"前");
+                    //Beforeが登録されている時、新コストを旧コストで引いてその分足せば問題ないはず。
+                    CurrentCodeGauge += CurrentHaveCodeSimulater.DecideCostistance();
+                    Debug.Log(CurrentCodeGauge +"後");
+                    Debug.Log("テスト");
+                }
+                //最初の
+                BeforeCodeGauge = CurrentCodeGauge;
+
+
+                Debug.Log(BeforeCodeGauge + "Before");
+
+
                 while (true) {
                     codeHaveCancellation.Token.ThrowIfCancellationRequested();
+
+                    //
+                    if (CurrentHaveCodeSimulater != null)
+                    {
+
+                        TestDecrementCodeGauge(CurrentHaveCodeSimulater.DecideCost());
+                    }
 
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
@@ -270,21 +298,22 @@ namespace InGame.Model
             }
             catch (OperationCanceledException)
             {
-                Debug.Log("エラー");
+                Debug.Log("コードを持つ処理キャンセル");
             }
             finally
             {
                 Debug.Log("終了");
                 //初期化
-                BeforeCodeGauge = 0;
-                codeHaveCancellation?.Cancel();
-                codeHaveCancellation?.Dispose();
+                BeforeCodeGauge = null;
             }
         }
 
         
         //---------------TakeCommand-------------------------
 
+        /// <summary>
+        /// 持つ処理の大枠。
+        /// </summary>
         public void OnHave()
         {
             List<ComponentChecker.Contain<IEnemyModel>> Elects=checker.FindInterfaceContainList<IEnemyModel>(PlayerObject.transform.position, SearchScale);
@@ -381,9 +410,13 @@ namespace InGame.Model
             //何も拾っていない時。
             if (endpoint != null && CurrentHaveCodeSimulater == null)
             {
-                CurrentHaveCodeSimulater = endpoint.CodeSimulater;
+                SetCurrentHaveCode(endpoint.CodeSimulater);
+
                 //拾った時、線を再起動し、プレイヤー情報を入れる。
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
+
+                //CurrentCodeGauge += endpoint.CodeSimulater.DecideCost();
+
 
                 //完了待機はしない（寧ろ待つとバグが発生する）
                 HavingCode().Forget();
@@ -422,6 +455,8 @@ namespace InGame.Model
             //持っている処理をWhileを強制終了させる。
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
+            codeHaveCancellation = null;
+
 
             CurrentHaveCodeSimulater.PutCodeEvent(this);
             CurrentHaveCodeSimulater = null;

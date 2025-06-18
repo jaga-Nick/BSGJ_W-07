@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 using InGame.Model;
+using Unity.VisualScripting;
 
 namespace InGame.NonMVP
 {
@@ -122,6 +123,12 @@ namespace InGame.NonMVP
         public float shrinkDuration = 4.0f;
 
         /// <summary>
+        /// コストの算出量
+        /// </summary>
+        public float? beforeCost { get; private set; } = null;
+        public float? AlreadyTotalCost { get; private set; }
+
+        /// <summary>
         /// コードの返却キャンセルに使用する
         /// </summary>
         private CancellationTokenSource cts;
@@ -136,12 +143,22 @@ namespace InGame.NonMVP
             UpdateEdgeCollider();
         }
 
+        public float? BeforeCostGauge { get; private set; } = null;
         //ゲージを増減させるという処理の基準値
         private float GaugeDistance=0.5f;
 
 
-        public void OnTriggerEnter2D(Collider2D collision)
+        public float DecideCostistance()
         {
+            float num =  (float)BeforeCostGauge - DecideCost() ;
+
+            float ret= (float)BeforeCostGauge - (float)AlreadyTotalCost;
+
+            BeforeCostGauge = null;
+
+            Debug.Log(num +"テスト");
+            Debug.Log(AlreadyTotalCost+"足した");
+            return (float)AlreadyTotalCost;
         }
 
         /// <summary>
@@ -163,6 +180,7 @@ namespace InGame.NonMVP
             }
             return totalDistance;
         }
+
 
         /// <summary>
         /// ソケットにコードを刺す
@@ -204,7 +222,9 @@ namespace InGame.NonMVP
             Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0;
 
-
+            //ここで以前のコスト量を代入。
+            BeforeCostGauge = DecideCost();
+            Debug.Log("決定");
             cts?.Cancel();
             cts?.Dispose();
             cts = new CancellationTokenSource();
@@ -226,6 +246,9 @@ namespace InGame.NonMVP
             {
                 Destroy(EndObject);
             }
+
+
+
 
             // 新しい終点をプレイヤーに設定します。
             EndObject = player;
@@ -284,7 +307,10 @@ namespace InGame.NonMVP
                 //  1秒あたりのコスト加算量
                 float costPerSecond = (maxCost > 0 && shrinkDuration > 0) ? maxCost / shrinkDuration : 0;
 
-                Debug.Log(DecideCost()+"コスト決定");
+                //Debug.Log(DecideCost()+"コスト決定");
+
+                AlreadyTotalCost = 0;
+
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
                 {
@@ -301,6 +327,9 @@ namespace InGame.NonMVP
                         //算出
                         float costToAdd = costPerSecond * Time.deltaTime;
 
+
+                        AlreadyTotalCost += costToAdd;
+                        
                         // 計算したコストを加算
                         model.IncrementCodeGauge(costToAdd);
 
@@ -341,15 +370,15 @@ namespace InGame.NonMVP
                 }
             }
             catch (OperationCanceledException)
-            {
-                Debug.Log("移動タスクがキャンセルされました。");
+            { 
+                Debug.Log("算出終了");
             }
             finally
             {
-                Debug.Log("リターン処理は終了した");
-               
             }
         }
+
+
 
 
         /// <summary>
@@ -403,6 +432,10 @@ namespace InGame.NonMVP
                     generater.Factory(Positions[i], 0);
                     count++;
                 }
+
+                //家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）
+                generater.Factory(StartObject.transform.position, 1);
+                Destroy(StartObject);
             }
 
             //このアタッチしているオブジェクトを全てスクリプトごと削除する。

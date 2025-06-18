@@ -57,14 +57,14 @@ namespace InGame.NonMVP
             {
                 if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 1f) != null)
                 {
-                    Debug.Log("プラグを刺す");
+                    //Debug.Log("プラグを刺す");
                     Model.ConnectSocketCode();
 
                 }
                 //範囲内にコードがない場合(それで保持している時。)
                 else if (Model.CurrentHaveCodeSimulater != null)
                 {
-                    Debug.Log("プラグを置く");
+                    //Debug.Log("プラグを置く");
                     Model.PutCode();
                 }
 
@@ -75,13 +75,13 @@ namespace InGame.NonMVP
             {
                 if (Model.Socket==null)
                 {
-                    Debug.Log("コンセント生成");
+                    //Debug.Log("コンセント生成");
                     //コンセントを生成する。
                     Model.GenerateSocket(Presenter.GetSocketPrefab());
                 }
                 else if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
                 {
-                    Debug.Log("コンセント回収");
+                    //Debug.Log("コンセント回収");
                     Model.DeleteSocket();
                 }
             }

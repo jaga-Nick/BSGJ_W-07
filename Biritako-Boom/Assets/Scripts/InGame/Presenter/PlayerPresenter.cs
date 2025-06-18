@@ -24,7 +24,7 @@ namespace InGame.Presenter
         //----------------------------------------------
 
         //Player統括
-        private PlayerModel Model;
+        public PlayerModel Model { get; private set; }
         private GameHUDView View;
         
         //システムモデル
