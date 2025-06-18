@@ -1,29 +1,91 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace InGame.NonMVP
 {
-    public class TimeManager : ISceneInfo
+    /// <summary>
+    /// TimeManager
+    /// ゲーム内の時間を管理するクラス。
+    /// </summary>
+    public class TimeManager : SingletonMonoBehaviourBase<TimeManager>
     {
-        public string SceneName { get; }
-        public UniTask Init()
+        /// <summary>
+        /// ゲーム状態のパラメタ
+        /// </summary>
+        private float _inGameTime;
+        private bool _isPaused;
+
+        /// <summary>
+        /// 常時タイマーを減らしていく
+        /// </summary>
+        private void Update()
         {
-            throw new System.NotImplementedException();
+            if (!_isPaused)
+            {
+                _inGameTime -= Time.deltaTime;
+            }
         }
 
-        public UniTask End()
+        private void CountDownTimer()
         {
-            throw new System.NotImplementedException();
+            var time = 3f;
+            while (time > 0f)
+            {
+                time -= Time.deltaTime;
+            }
         }
 
-        public void InputStart()
+        /// <summary>
+        /// ゲーム時間の取得
+        /// </summary>
+        /// <returns></returns>
+        public float GetInGameTime()
         {
-            throw new System.NotImplementedException();
+            return _inGameTime;
         }
 
-        public void InputStop()
+        /// <summary>
+        /// ゲーム時間をリセットする
+        /// </summary>
+        public void ResetInGameTime(float inGameMinutes)
         {
-            throw new System.NotImplementedException();
+            _inGameTime = inGameMinutes * 60f;
+        }
+
+        /// <summary>
+        /// ゲーム時間を加算する
+        /// </summary>
+        /// <param name="time"></param>
+        public void AddInGameTime(float time)
+        {
+            _inGameTime += time;
+        }
+
+        /// <summary>
+        /// 一時停止
+        /// </summary>
+        public void Pause()
+        {
+            _isPaused = true;
+        }
+
+        /// <summary>
+        /// 再開
+        /// </summary>
+        public void Resume()
+        {
+            _isPaused = false;
+        }
+
+        /// <summary>
+        /// 一時停止状態かどうか
+        /// </summary>
+        /// <returns></returns>
+        public bool IsPaused()
+        {
+            return _isPaused;
         }
     }
 }

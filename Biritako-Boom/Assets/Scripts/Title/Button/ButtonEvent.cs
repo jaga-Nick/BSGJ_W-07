@@ -13,6 +13,8 @@ namespace Title.Button
         /// </summary>
         private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
         private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
+        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
+        
 
         /// <summary>
         /// Panel
@@ -50,7 +52,8 @@ namespace Title.Button
         public async void OnClickPlayButton()
         {
             await _sceneFadeManager.End();
-            await SceneManager.Instance().LoadMainScene(_introSceneLoader);
+            // await SceneManager.Instance().LoadMainScene(_introSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
             await _panelFadeManager.Init();
         }
 
