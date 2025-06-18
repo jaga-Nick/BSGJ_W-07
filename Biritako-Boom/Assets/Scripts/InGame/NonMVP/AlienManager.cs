@@ -48,7 +48,7 @@ public class AlienManager : MonoBehaviour
         {
             var presenter = _activeAliens[i];
             presenter.Model.Move(); 
-            
+            presenter.View.FlipAlien(presenter.Model.GetFlip());
         }
         
 

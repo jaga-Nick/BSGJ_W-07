@@ -46,6 +46,8 @@ namespace InGame.Model
         private float _stateTimer;
         // 状態を切り替える間隔（秒）
         private const float STATE_CHANGE_INTERVAL = 3.0f;
+
+        private bool _isRightFlip = true;
         
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace InGame.Model
         /// </summary>
         public event Action OnReturnedToPool;
 
-        // --- アクセサメソッド ---
+        #region アクセサメソッド
 
         /// <summary>
         /// このModelが使用するRigidbody2Dを設定します（外部から注入）。
@@ -91,6 +93,14 @@ namespace InGame.Model
             IntervalTime = UnityEngine.Random.Range(0f, 1.5f);
         }
 
+        public bool GetFlip()
+        {
+            return _isRightFlip;
+        }
+        
+        
+        #endregion
+
         /// <summary>
         /// ダメージを受ける処理。
         /// </summary>
@@ -111,6 +121,7 @@ namespace InGame.Model
                 OnReturnedToPool?.Invoke();
             }
         }
+        
 
         /// <summary>
         /// 移動処理
@@ -136,6 +147,7 @@ namespace InGame.Model
 
                     // 新しいランダムな移動方向を計算
                     int num = UnityEngine.Random.Range(0, 360);
+                    JudgeFlip(num);
                     float rad = Mathf.Deg2Rad * num;
                     Angle = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0);
 
@@ -152,5 +164,21 @@ namespace InGame.Model
                 }
             }
         }
+
+        #region 非公開メソッド
+
+        private void JudgeFlip(int rad)
+        {
+            if (rad  <= 90 || 270 < rad)
+            {
+                _isRightFlip = true;
+            }
+            else
+            {
+                _isRightFlip = false;
+            }
+        }
+
+        #endregion
     }
 }

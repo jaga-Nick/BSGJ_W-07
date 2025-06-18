@@ -1,19 +1,31 @@
 fileFormatVersion: 2
-guid: f7d01ed46a832a848b0d62fcfa1d3404
+guid: ec5ca77aa88fa1f47849f358cd3f8596
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7897507592471590671
-    second: UfoBoss (1)_0
+      213: 4142367117331641809
+    second: UiDirectionToUfoBoss_0
   - first:
-      213: 2358208432122220350
-    second: UfoBoss (1)_1
+      213: -8969308266730366247
+    second: UiDirectionToUfoBoss_1
   - first:
-      213: 2021746232332697877
-    second: UfoBoss (1)_2
+      213: -3707672853652538639
+    second: UiDirectionToUfoBoss_2
   - first:
-      213: 6582726572714391951
-    second: UfoBoss (1)_3
+      213: -3053297373372450638
+    second: UiDirectionToUfoBoss_3
+  - first:
+      213: -4565111228597534930
+    second: UiDirectionToUfoBoss_4
+  - first:
+      213: 7148240178839469225
+    second: UiDirectionToUfoBoss_5
+  - first:
+      213: 5124233986867755217
+    second: UiDirectionToUfoBoss_6
+  - first:
+      213: 8616535466800122365
+    second: UiDirectionToUfoBoss_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 192
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -122,78 +134,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UfoBoss (1)_0
+      name: UiDirectionToUfoBoss_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
-        width: 186
-        height: 182
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f8c7cbffaa666290800000000000000
-      internalID: -7897507592471590671
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UfoBoss (1)_1
-      rect:
-        serializedVersion: 2
-        x: 196
-        y: 6
-        width: 186
-        height: 181
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e3fc9fe131a0ab020800000000000000
-      internalID: 2358208432122220350
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UfoBoss (1)_2
-      rect:
-        serializedVersion: 2
-        x: 388
-        y: 12
-        width: 186
-        height: 180
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 511cc249c7fae0c10800000000000000
-      internalID: 2021746232332697877
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UfoBoss (1)_3
-      rect:
-        serializedVersion: 2
-        x: 481
-        y: 11
-        width: 10
+        x: 86
+        y: 54
+        width: 19
         height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -203,8 +149,162 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f897a2ce0fa8a5b50800000000000000
-      internalID: 6582726572714391951
+      spriteID: 1d5bfcd22f4ac7930800000000000000
+      internalID: 4142367117331641809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_1
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 13
+        width: 42
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dadf8027ad968380800000000000000
+      internalID: -8969308266730366247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_2
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 23
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fa7ea60f23bb8cc0800000000000000
+      internalID: -3707672853652538639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_3
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 13
+        width: 42
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b8708a473280a5d0800000000000000
+      internalID: -3053297373372450638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_4
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 22
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2ffb4b468775a0c0800000000000000
+      internalID: -4565111228597534930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_5
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 13
+        width: 42
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9acb6e4d196a33360800000000000000
+      internalID: 7148240178839469225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_6
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 13
+        width: 42
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d87c3569afec1740800000000000000
+      internalID: 5124233986867755217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiDirectionToUfoBoss_7
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 0
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df90d2dca55149770800000000000000
+      internalID: 8616535466800122365
       vertices: []
       indices: 
       edges: []
@@ -223,10 +323,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UfoBoss (1)_0: -7897507592471590671
-      UfoBoss (1)_1: 2358208432122220350
-      UfoBoss (1)_2: 2021746232332697877
-      UfoBoss (1)_3: 6582726572714391951
+      UiDirectionToUfoBoss_0: 4142367117331641809
+      UiDirectionToUfoBoss_1: -8969308266730366247
+      UiDirectionToUfoBoss_2: -3707672853652538639
+      UiDirectionToUfoBoss_3: -3053297373372450638
+      UiDirectionToUfoBoss_4: -4565111228597534930
+      UiDirectionToUfoBoss_5: 7148240178839469225
+      UiDirectionToUfoBoss_6: 5124233986867755217
+      UiDirectionToUfoBoss_7: 8616535466800122365
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

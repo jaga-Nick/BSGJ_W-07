@@ -8,9 +8,28 @@ namespace InGame.View
     public class AlienView : MonoBehaviour
     {
         private Animator _animator;
+        private SpriteRenderer _spriteRenderer;
 
 
+        public void SetSprite(SpriteRenderer spriteRenderer)
+        {
+            this._spriteRenderer = spriteRenderer;
+        }
 
+        /// <summary>
+        /// Alienの向きを進行方向に合わせて変える
+        /// </summary>
+        public void FlipAlien(bool isRight)
+        {
+            if (isRight)
+            {
+                _spriteRenderer.flipX = false; // 右向き
+            }
+            else
+            {
+                _spriteRenderer.flipX = true; // 左向き
+            }
+        }
 
 
         /// <summary>
