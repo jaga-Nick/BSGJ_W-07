@@ -1,5 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using Common;
 using InGame.Presenter;
 using UnityEngine;
 
@@ -28,6 +34,23 @@ namespace InGame.NonMVP
         [SerializeField] private float spawnRadius = 2.0f;
         [Header("UFO直下の除外範囲")]
         [SerializeField] private float exclusionRadius = 0.5f;
+        
+        [Header("宇宙人スポーン時間のインターバル")]
+        [SerializeField] private int alienSpawnInterval = 10;
+        [Header("一度に生成される宇宙人の数")]
+        [SerializeField] private int numberOfSpawnAlien = 5;
+        
+        /// <summary>
+        /// 外部マネージャーへの参照
+        /// </summary>
+        private AlienManager _alienManager;
+
+        /// <summary>
+        /// Addressableアセットのキー
+        /// </summary>
+        [Header("母艦のアドレス")]
+        [SerializeField] private string _motherShipAddress = "Enemy_MotherShip";
+        
 
         /// <summary>
         /// Prefab
@@ -56,6 +79,10 @@ namespace InGame.NonMVP
             // タイマーをスポーン時間のインターバルにセット
             timer = spawnInterval;
             SpawnUfo();
+            
+            GenerateMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
+            _alienManager = FindObjectOfType<AlienManager>();
+            SpawnAlien().Forget();
         }
 
         private void Update()
@@ -141,6 +168,56 @@ namespace InGame.NonMVP
         public void OnUfoDeath()
         {
             CurrentUfo--;
+        }
+
+
+
+        /// <summary>
+        /// MotherShipの生成とスポーン
+        /// </summary>
+        public async UniTask GenerateMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        {
+            // Addressables経由でプレハブを非同期ロード
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+
+            using (new HandleDisposable<GameObject>(handle))
+            {
+                GameObject prefab = await handle;
+                // ロードしたプレハブからGameObjectをインスタンス化
+                Instantiate(prefab,position,Quaternion.identity);
+            }
+        }
+        
+        
+        /// <summary>
+        /// Alienのスポーン
+        /// </summary>
+        public async UniTask SpawnAlien()
+        {
+            // AlienManagerが設定されているか確認
+            if (_alienManager == null)
+            {
+                Debug.LogError("EnemySpawnerにAlienManagerが設定されていません！");
+                return;
+            }
+
+            while (this.isActiveAndEnabled)
+            {
+                for (int i = 0; i < numberOfSpawnAlien; i++)
+                {
+                    Vector3 position = _alienManager.GetRandomPosition();
+                    var viewPosition = Camera.main.WorldToViewportPoint(position);
+                    var isInView = viewPosition.z > 0 && 
+                                   viewPosition.x >= 0 && viewPosition.x <= 1 && 
+                                   viewPosition.y >= 0 && viewPosition.y <= 1;
+                    if (isInView) continue;
+                    
+                    // 実際のスポーン処理はAlienManagerにすべて任せる
+                    _alienManager.SpawnAlien(position, 1);
+                }
+                
+                await UniTask.Delay(alienSpawnInterval * 100, cancellationToken: this.GetCancellationTokenOnDestroy());
+            }
         }
     }
 }

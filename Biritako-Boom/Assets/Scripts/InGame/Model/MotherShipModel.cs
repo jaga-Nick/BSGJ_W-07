@@ -167,8 +167,7 @@ namespace InGame.Model
                 GameObject prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
                 GameObject instance = UnityEngine.Object.Instantiate(prefab,position,Quaternion.identity);
-                // 生成したインスタンスからコンポーネントを取得し、自身のフィールドに保持
-                Rb = instance.GetComponent<Rigidbody2D>();
+                // 生成したインスタンス保持
                 return instance;
             }
         }
