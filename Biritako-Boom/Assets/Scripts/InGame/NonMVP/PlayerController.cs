@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.Presenter;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace InGame.NonMVP
 {
@@ -40,53 +39,49 @@ namespace InGame.NonMVP
             //移動処理
             Model.MoveInput(ActionMap);
 
+            //爆発
             if (ActionMap.Player.Attack.WasPressedThisFrame())
             {
                 Model.Explosion();
             }
+
+            //コードを保持する
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
-                if (checker.FindClosestEnemyOfTypeOne(Model.PlayerObject.transform.position, 1f)!=null) 
-                {
-                    GameObject electro=checker.FindClosestEnemyOfTypeOneGameObject(Model.PlayerObject.transform.position, 10f);
-
-                    //複数のコードを繋げないようにする
-                    var obje=Model.CodeSimulaters.Where(code => code.StartObject==electro).FirstOrDefault();
-                    Debug.Log(obje?.name);
-                    if (electro && obje == null) {
-                        //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
-                        var code = Model.generateCodeSystem.GenerateCode(electro, Model.PlayerObject);
-                        Model.SetCurrentHaveCode(code);
-                    }
-                }
+                //コードを生成-保持する為の処理
+                Model.OnHave();
             }
+
+            //ーーー
             if (ActionMap.Player.Have.WasReleasedThisFrame())
             {
                 if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 1f) != null)
                 {
-                    Debug.Log("プラグを刺す");
+                    //Debug.Log("プラグを刺す");
                     Model.ConnectSocketCode();
 
                 }
                 //範囲内にコードがない場合(それで保持している時。)
-                else if (Model.CurrentHaveCode != null)
+                else if (Model.CurrentHaveCodeSimulater != null)
                 {
+                    //Debug.Log("プラグを置く");
                     Model.PutCode();
                 }
 
             }
+
+            //コンセント生成/回収
             if (ActionMap.Player.Jump.WasPressedThisFrame()) 
             {
                 if (Model.Socket==null)
                 {
-                    Debug.Log("コンセント");
+                    //Debug.Log("コンセント生成");
                     //コンセントを生成する。
                     Model.GenerateSocket(Presenter.GetSocketPrefab());
-                    Debug.Log(Model.Socket.name);
                 }
                 else if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
                 {
-                    Debug.Log("ソケットを回収する");
+                    //Debug.Log("コンセント回収");
                     Model.DeleteSocket();
                 }
             }

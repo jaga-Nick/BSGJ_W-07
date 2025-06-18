@@ -11,7 +11,7 @@ namespace InGame.Model
             this.Position=trans;
         }
 
-
+        int IEnemyModel.CurrentHp { get; set; } = 1;
 
         /// <summary>
         /// 移動許容距離
@@ -85,7 +85,7 @@ namespace InGame.Model
         /// 家電が死んだときの処理
         /// </summary>
         /// <returns></returns>
-        public virtual bool IsDead()
+        bool IEnemyModel.IsDead()
         {
             return false;
         }

@@ -40,7 +40,8 @@ namespace InGame.Model
         /// </summary>
         public int MinUfoHp { get; set; } = 0;
         public int MaxUfoHp { get; set; } = 100;
-        public int CurrentUfoHp { get; set; }
+
+        int IEnemyModel.CurrentHp { get; set; } = 1;
         
 
         /// <summary>
@@ -56,8 +57,8 @@ namespace InGame.Model
         /// <param name="amount"></param>
         public void IncrementUfoHp(int amount)
         {
-            CurrentUfoHp += amount;
-            CurrentUfoHp = Mathf.Clamp(CurrentUfoHp, MinUfoHp, MaxUfoHp);
+            ((IEnemyModel)this).CurrentHp += amount;
+            ((IEnemyModel)this).CurrentHp = Mathf.Clamp(((IEnemyModel)this).CurrentHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -67,8 +68,8 @@ namespace InGame.Model
         /// <param name="amount"></param>
         public void DecrementUfoHp(int amount)
         {
-            CurrentUfoHp -= amount;
-            CurrentUfoHp = Mathf.Clamp(CurrentUfoHp, MinUfoHp, MaxUfoHp);
+            ((IEnemyModel)this).CurrentHp -= amount;
+            ((IEnemyModel)this).CurrentHp = Mathf.Clamp(((IEnemyModel)this).CurrentHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
 
@@ -78,7 +79,7 @@ namespace InGame.Model
         /// <returns></returns>
         public bool IsDead()
         {
-            return CurrentUfoHp <= 0;
+            return ((IEnemyModel)this).CurrentHp <= 0;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace InGame.Model
         /// </summary>
         public void RestoreUfoHp()
         {
-            CurrentUfoHp = MaxUfoHp;
+            ((IEnemyModel)this).CurrentHp = MaxUfoHp;
         }
 
         /// <summary>

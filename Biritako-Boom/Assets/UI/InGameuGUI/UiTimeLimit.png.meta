@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 44be2945d557668478c67f4c16678283
+guid: 446f905f23e15c747ac12c1d637483c7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3298995681524961215
-    second: UfoBoss_0
+      213: -5845806444551941121
+    second: UiTimeLimit_0
+  - first:
+      213: 8249457783630515499
+    second: UiTimeLimit_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UfoBoss_0
+      name: UiTimeLimit_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 190
-        height: 189
+        x: 2
+        y: 26
+        width: 34
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 140382f08ec9732d0800000000000000
-      internalID: -3298995681524961215
+      spriteID: ff3dac6d2068fdea0800000000000000
+      internalID: -5845806444551941121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UiTimeLimit_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 6
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2dc0ee8526fb7270800000000000000
+      internalID: 8249457783630515499
       vertices: []
       indices: 
       edges: []
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UfoBoss_0: -3298995681524961215
+      UiTimeLimit_0: -5845806444551941121
+      UiTimeLimit_1: 8249457783630515499
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

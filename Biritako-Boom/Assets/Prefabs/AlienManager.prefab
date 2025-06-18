@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterAddress: Enemy_Alien
   _initialPoolSize: 50
+  _spawnAreaMin: {x: -20, y: -20}
+  _spawnAreaMax: {x: 20, y: 20}

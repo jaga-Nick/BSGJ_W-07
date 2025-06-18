@@ -64,7 +64,7 @@ namespace InGame.Presenter
                 Speed = moveSpeed,
                 Position = transform.position,
                 MaxUfoHp = maxUfoHp,
-                CurrentUfoHp = maxUfoHp,
+                //CurrentUfoHp = maxUfoHp,
                 UfoScore = ufoScore,
             };
             _view = gameObject.GetComponent<UfoView>();

@@ -4,18 +4,24 @@ using System;
 using UnityEngine.AddressableAssets; // Addressablesの機能を使うために必要
 using Cysharp.Threading.Tasks;
 using InGame.Presenter;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// エイリアンの生成、更新、オブジェクトプールを管理するクラス。
 /// </summary>
 public class AlienManager : MonoBehaviour
 {
-    [Header("Pool Settings")]
+    [Header("プール設定")]
     [Tooltip("Addressablesに設定したエイリアンのアドレス")]
     [SerializeField] private string _characterAddress = "Enemy_Alien"; // ここでキーを指定
 
     [Header("エイリアン最大数")]
     [SerializeField] private int _initialPoolSize = 50;
+    
+    [Header("マップ左下")]
+    [SerializeField] private Vector2 _spawnAreaMin　= new Vector2(-20f, -20f);
+    [Header("マップ右上")]
+    [SerializeField] private Vector2 _spawnAreaMax　= new Vector2(20f, 20f);
     
     // プール（待機中のエイリアン）を管理するキュー
     private readonly Queue<AlienPresenter> _pool = new Queue<AlienPresenter>();
@@ -28,11 +34,11 @@ public class AlienManager : MonoBehaviour
     private bool _isInitialized = false;
     
 
-    private async void Start()
+    private void Start()
     {
-        await InitializePool();
+        InitializePool();
         
-        SpawnTest().Forget();
+        // SpawnTest().Forget();
         
     }
     
@@ -42,7 +48,7 @@ public class AlienManager : MonoBehaviour
         {
             var presenter = _activeAliens[i];
             presenter.Model.Move(); 
-            
+            presenter.View.FlipAlien(presenter.Model.GetFlip());
         }
         
 
@@ -88,7 +94,7 @@ public class AlienManager : MonoBehaviour
     public void SpawnAlien(Vector3 position, int initialHp)
     {
         // プールが空の場合、動的に新しいエイリアンを生成して補充する
-        if (_pool.Count == 0) GeneratePoolAlien();
+        if (_pool.Count == 0) return;
         
         // プールから待機中のPresenterを一つ取り出す
         var presenter = _pool.Dequeue();
@@ -152,5 +158,13 @@ public class AlienManager : MonoBehaviour
             // CancellationTokenを指定することで、このオブジェクトが破棄された時に待機を安全に中断できる
             await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: this.GetCancellationTokenOnDestroy());
         }
+    }
+
+    public Vector3 GetRandomPosition()
+    {
+        // 1. マップ境界内でランダムな位置を生成
+        float randomX = Random.Range(_spawnAreaMin.x, _spawnAreaMax.x);
+        float randomY = Random.Range(_spawnAreaMin.y, _spawnAreaMax.y);
+        return  new Vector3(randomX, randomY, 0f);
     }
 }
