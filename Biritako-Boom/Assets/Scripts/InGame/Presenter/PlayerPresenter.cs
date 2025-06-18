@@ -24,7 +24,7 @@ namespace InGame.Presenter
         //----------------------------------------------
 
         //Player統括
-        private PlayerModel Model;
+        public PlayerModel Model { get; private set; }
         private GameHUDView View;
         
         //システムモデル
@@ -47,7 +47,7 @@ namespace InGame.Presenter
             //------------------------------------
 
             //コード生成に必要なクラスを取得。
-            Model?.GetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
+            Model?.SetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
             View = gameObject.GetComponent<GameHUDView>();
             //スコアイベントの購読(Singletonの呼び出し）
