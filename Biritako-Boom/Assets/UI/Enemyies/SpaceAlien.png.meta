@@ -62,11 +62,11 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 1
+  spriteExtrude: 0
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -128,133 +128,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpaceAlien (1)_0
+      name: SpaceAlien_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 2
-        width: 47
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1924e1907b89ca9e0800000000000000
-      internalID: -1608743054978694511
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpaceAlien (1)_1
-      rect:
-        serializedVersion: 2
-        x: 73
-        y: 2
-        width: 49
-        height: 42
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b9770adb50561cf10800000000000000
-      internalID: 2288221161011574683
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpaceAlien (1)_2
-      rect:
-        serializedVersion: 2
-        x: 137
+        x: 0
         y: 0
-        width: 50
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ba3919c8038eaade0800000000000000
-      internalID: -1320988245465394261
+      spriteID: f7f71122a502b884da04c5fae0a88198
+      internalID: -79376298
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpaceAlien (1)_3
+      name: SpaceAlien_1
       rect:
         serializedVersion: 2
-        x: 205
-        y: 10
-        width: 38
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b979a375d178dbb80800000000000000
-      internalID: -8377391171751995493
+      spriteID: 5841ea529fc411c46a78a99040a071bf
+      internalID: 1373165538
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpaceAlien (1)_4
+      name: SpaceAlien_2
       rect:
         serializedVersion: 2
-        x: 267
-        y: 7
-        width: 45
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 98a80d2a778ecddc0800000000000000
-      internalID: -3612757200527652215
+      spriteID: 99363b660dcba9e41b925db6e40d5129
+      internalID: -1027131794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpaceAlien (1)_5
+      name: SpaceAlien_3
       rect:
         serializedVersion: 2
-        x: 328
-        y: 2
-        width: 51
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e99844967597efc70800000000000000
-      internalID: 9006769721122785694
+      spriteID: a1922c490a6d4ad4fac4188c436821f0
+      internalID: -987954411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpaceAlien_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c78dbf17a6899c040ad5ce96d09d0301
+      internalID: -725546245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpaceAlien_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61ddb98181259504aaef05f0fe8c3cac
+      internalID: 1770269051
       vertices: []
       indices: 
       edges: []
@@ -263,7 +263,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b160c3a1690acc646bf1985aaab16d38
     internalID: 0
     vertices: []
     indices: 
@@ -273,12 +273,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpaceAlien (1)_0: -1608743054978694511
-      SpaceAlien (1)_1: 2288221161011574683
-      SpaceAlien (1)_2: -1320988245465394261
-      SpaceAlien (1)_3: -8377391171751995493
-      SpaceAlien (1)_4: -3612757200527652215
-      SpaceAlien (1)_5: 9006769721122785694
+      SpaceAlien_0: -79376298
+      SpaceAlien_1: 1373165538
+      SpaceAlien_2: -1027131794
+      SpaceAlien_3: -987954411
+      SpaceAlien_4: -725546245
+      SpaceAlien_5: 1770269051
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

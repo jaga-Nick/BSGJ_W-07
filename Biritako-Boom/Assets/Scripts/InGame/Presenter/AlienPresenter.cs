@@ -14,7 +14,7 @@ namespace InGame.Presenter
         public AlienModel Model { get; private set; }
 
         // 自身が担当するView
-        private AlienView _view;
+        public AlienView View { get; private set; }
         // 自分を管理するManagerへの参照
         private AlienManager _manager;
 
@@ -23,11 +23,10 @@ namespace InGame.Presenter
         {
             // --- 自身が持つ各コンポーネントの参照を取得 ---
             Model = GetComponent<AlienModel>();
-            _view = GetComponent<AlienView>();
-            var rb = GetComponent<Rigidbody2D>();
-
-            // --- Modelに必要な参照を設定（注入）する ---
-            Model.SetRigidbody(rb);
+            View = GetComponent<AlienView>();
+            
+            Model.SetRigidbody(GetComponent<Rigidbody2D>());
+            View.SetSprite(GetComponent<SpriteRenderer>());
             
 
             // --- Modelのイベントを購読 ---
@@ -53,7 +52,7 @@ namespace InGame.Presenter
 
         private void OnReturnedToPool()
         {
-            _view.OnReturnToPool();
+            View.OnReturnToPool();
             _manager?.ReturnAlien(this);
         }
     }
