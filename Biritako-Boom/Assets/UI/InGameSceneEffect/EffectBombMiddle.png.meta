@@ -1,0 +1,373 @@
+fileFormatVersion: 2
+guid: f072eb5f3951ce246bd0e60c7a67a625
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5557304345629004075
+    second: EffectBombMiddle_0
+  - first:
+      213: -5225429101677312276
+    second: EffectBombMiddle_1
+  - first:
+      213: 3532198159350192395
+    second: EffectBombMiddle_2
+  - first:
+      213: -2145471335884638274
+    second: EffectBombMiddle_3
+  - first:
+      213: 2680930067650401128
+    second: EffectBombMiddle_4
+  - first:
+      213: 3547042741995984727
+    second: EffectBombMiddle_5
+  - first:
+      213: 3580674917118773570
+    second: EffectBombMiddle_6
+  - first:
+      213: -6287879412698080477
+    second: EffectBombMiddle_7
+  - first:
+      213: -1035013398704758292
+    second: EffectBombMiddle_8
+  - first:
+      213: 1120274266123015219
+    second: EffectBombMiddle_9
+  - first:
+      213: -5552105366137574210
+    second: EffectBombMiddle_10
+  - first:
+      213: -838590528717323939
+    second: EffectBombMiddle_11
+  - first:
+      213: -7182560275898733370
+    second: EffectBombMiddle_12
+  - first:
+      213: -3688429022250831301
+    second: EffectBombMiddle_13
+  - first:
+      213: -9015098611158696635
+    second: EffectBombMiddle_14
+  - first:
+      213: 4124753469517801650
+    second: EffectBombMiddle_15
+  - first:
+      213: 2430567776657398296
+    second: EffectBombMiddle_16
+  - first:
+      213: 9130121506585769211
+    second: EffectBombMiddle_17
+  - first:
+      213: 2714961827459949921
+    second: EffectBombMiddle_18
+  - first:
+      213: -1824330778205735285
+    second: EffectBombMiddle_19
+  - first:
+      213: 833616976893857239
+    second: EffectBombMiddle_20
+  - first:
+      213: -870418869104848424
+    second: EffectBombMiddle_21
+  - first:
+      213: 6640486598682832513
+    second: EffectBombMiddle_22
+  - first:
+      213: -736251289838890607
+    second: EffectBombMiddle_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EffectBombMiddle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 97
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5912b918873d2f24eb7e5dbf5eee3a7f
+      internalID: 1098799370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_1
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfed9862c3514f341b7ed757cf2a4890
+      internalID: 634636770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_2
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c977e8bb5a690b4d9f59c35b909b601
+      internalID: 894765756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_3
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a91dba7a74fc34581e561410ed860c
+      internalID: 626802259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_4
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a6dab9a6395b8d47ab4b52561e9fec0
+      internalID: -447476412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_5
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 050fee3b0df1a444383e3be0cde65092
+      internalID: 1020444731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_6
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 0
+        width: 105
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c38c1b4d9f4e90c44a05eb170fb04cf7
+      internalID: -1507012575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EffectBombMiddle_7
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 0
+        width: 99
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4acd27c4a0eee6240ac833dfb4a723c3
+      internalID: -206706331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 42867a4e99d8f0d459467e9f921cc4a7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      EffectBombMiddle_0: 1098799370
+      EffectBombMiddle_1: 634636770
+      EffectBombMiddle_2: 894765756
+      EffectBombMiddle_3: 626802259
+      EffectBombMiddle_4: -447476412
+      EffectBombMiddle_5: 1020444731
+      EffectBombMiddle_6: -1507012575
+      EffectBombMiddle_7: -206706331
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
