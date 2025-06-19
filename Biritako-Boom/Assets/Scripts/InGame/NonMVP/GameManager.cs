@@ -51,7 +51,9 @@ namespace InGame.NonMVP
             timerUI.fillAmount = time / inGameSecond;
             // 時間経過とともに色を変えていく
             var t = Mathf.Clamp01(time / inGameSecond);
-            timerUI.color = Color.Lerp(endColor, startColor, t);
+            var color = Color.Lerp(endColor, startColor, t);
+            color.a = 1.0f;
+            timerUI.color = color;
         }
     }
 }
