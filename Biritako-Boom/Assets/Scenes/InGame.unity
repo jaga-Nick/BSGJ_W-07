@@ -1996,8 +1996,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920f74f5175d43a9b0fb59d4759ab391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGameMinutes: 1
-  timerText: {fileID: 1307623441}
+  inGameSecond: 10
+  middleTime: 5
+  shortTime: 0
+  timerUI: {fileID: 649037241}
 --- !u!4 &1374796245
 Transform:
   m_ObjectHideFlags: 0

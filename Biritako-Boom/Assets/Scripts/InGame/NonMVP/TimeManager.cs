@@ -1,7 +1,7 @@
 ﻿using System;
 using Common;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace InGame.NonMVP
 {
@@ -28,15 +28,6 @@ namespace InGame.NonMVP
             }
         }
 
-        private void CountDownTimer()
-        {
-            var time = 3f;
-            while (time > 0f)
-            {
-                time -= Time.deltaTime;
-            }
-        }
-
         /// <summary>
         /// ゲーム時間の取得
         /// </summary>
@@ -49,9 +40,9 @@ namespace InGame.NonMVP
         /// <summary>
         /// ゲーム時間をリセットする
         /// </summary>
-        public void ResetInGameTime(float inGameMinutes)
+        public void ResetInGameTime(float inGameSecond)
         {
-            _inGameTime = inGameMinutes * 60f;
+            _inGameTime = inGameSecond;
         }
 
         /// <summary>
