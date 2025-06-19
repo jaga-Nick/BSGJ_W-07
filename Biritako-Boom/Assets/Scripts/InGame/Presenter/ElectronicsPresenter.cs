@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.NonMVP;
@@ -86,22 +87,36 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask AutoMoveElectronicsRoutine()
         {
-            while (true)
+            CancellationTokenSource cts=new CancellationTokenSource();
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
+            var linkedToken = linkedCts.Token;
+            try
             {
-                // 目的座標をランダムに決める
-                var randomCircle = Random.insideUnitCircle * radius;
-                var target = new Vector3(
-                    transform.position.x + randomCircle.x, 
-                    transform.position.y + randomCircle.y, 
-                    transform.position.z
-                );
-            
-                // 移動アニメーションの開始
-                _view.PlayMoveAnimation(true);
-                // 移動コルーチン
-                await MoveElectronicsRoutine(target);
-                // 一定時間待機
-                await UniTask.WaitForSeconds(stopTime);
+                while (true)
+                {
+                    // キャンセル要求があったら、例外を投げて処理を中断
+                    linkedToken.ThrowIfCancellationRequested();
+
+
+                    // 目的座標をランダムに決める
+                    var randomCircle = Random.insideUnitCircle * radius;
+                    var target = new Vector3(
+                        transform.position.x + randomCircle.x,
+                        transform.position.y + randomCircle.y,
+                        transform.position.z
+                    );
+
+                    // 移動アニメーションの開始
+                    _view.PlayMoveAnimation(true);
+                    // 移動コルーチン
+                    await MoveElectronicsRoutine(target);
+                    // 一定時間待機
+                    await UniTask.WaitForSeconds(stopTime);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+
             }
         }
 
@@ -111,12 +126,26 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask MoveElectronicsRoutine(Vector2 target)
         {
-            // 家電の移動処理
-            while (Vector2.Distance(transform.position, target) > 0.1f)
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
+            var linkedToken = linkedCts.Token;
+            try
             {
-                transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
-                _model.Position = transform.position;
-                await UniTask.Yield();
+                // 家電の移動処理
+                while (Vector2.Distance(transform.position, target) > 0.1f)
+                {
+                    // キャンセル要求があったら、例外を投げて処理を中断
+                    linkedToken.ThrowIfCancellationRequested();
+
+
+                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
+                    _model.Position = transform.position;
+                    await UniTask.Yield();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+
             }
         }
     }

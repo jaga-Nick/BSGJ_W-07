@@ -45,7 +45,7 @@ namespace InGame.NonMVP
                     CircleCollider2D collider_sma=gameObject.GetComponent<CircleCollider2D>();
                     collider_sma.radius=SmallCollisionSize;
 
-                    await smallExplosionAttach.Explosion("Explosion");
+                    await smallExplosionAttach.Explosion("SmallExplosion");
                     break;
                 case 1:
                     gameObject =Instantiate(ExplosionObject, point, Quaternion.identity);
@@ -53,7 +53,7 @@ namespace InGame.NonMVP
                     CircleCollider2D collider_mid = gameObject.GetComponent<CircleCollider2D>();
                     collider_mid.radius = SmallCollisionSize;
 
-                    await middleExplosionAttach.Explosion("Explosion");
+                    await middleExplosionAttach.Explosion("MiddiumExplosion");
                     break;
                 case 2:
                     gameObject=Instantiate(ExplosionObject, point, Quaternion.identity);
@@ -61,7 +61,7 @@ namespace InGame.NonMVP
                     collider_big.radius = SmallCollisionSize;
                     ExplosionAttach bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
 
-                    await bigExplosionAttach.Explosion("Explosion");
+                    await bigExplosionAttach.Explosion("BigExplosion");
                     break;
             }
         }
