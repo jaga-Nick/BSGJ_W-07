@@ -1,6 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using InGame.Model;
 using InGame.View;
+using InGame.NonMVP;
 
 namespace InGame.Presenter
 {

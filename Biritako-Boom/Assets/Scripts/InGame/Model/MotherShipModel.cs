@@ -143,7 +143,7 @@ namespace InGame.Model
         /// <summary>
         /// 撃破状態から呼び出され、isEndフラグを立てます。
         /// </summary>
-        public void DefeatNotification()
+        public async UniTask OnDead()
         {
             Debug.Log("第三部　完!!");
             
@@ -176,18 +176,6 @@ namespace InGame.Model
         
         
         #region 公開メソッド
-
-        /// <summary>
-        /// ダメージを与える
-        /// </summary>
-        void IEnemyModel.OnDamage(int damage)
-        {
-            ((IEnemyModel)this).CurrentHp -= damage;
-            if (((IEnemyModel)this).CurrentHp <= 0)
-            {
-                DefeatNotification();
-            }
-        }
 
         /// <summary>
         /// シーン内に存在する全てのモブUFOを探し出し、巡回ターゲットのリストとして設定します。

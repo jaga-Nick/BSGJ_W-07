@@ -111,7 +111,7 @@ namespace InGame.Presenter
                     // 移動コルーチン
                     await MoveElectronicsRoutine(target);
                     // 一定時間待機
-                    await UniTask.WaitForSeconds(stopTime);
+                    await UniTask.Delay(TimeSpan.FromSeconds(stopTime), cancellationToken: linkedToken);
                 }
             }
             catch (OperationCanceledException)
@@ -140,7 +140,7 @@ namespace InGame.Presenter
 
                     transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
                     _model.Position = transform.position;
-                    await UniTask.Yield();
+                    await UniTask.Yield(linkedToken);
                 }
             }
             catch (OperationCanceledException)

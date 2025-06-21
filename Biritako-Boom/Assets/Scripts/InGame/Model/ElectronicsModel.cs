@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace InGame.Model
 {
@@ -80,14 +81,11 @@ namespace InGame.Model
         {
             Position = newPosition;
         }
-        
-        /// <summary>
-        /// 家電が死んだときの処理
-        /// </summary>
-        /// <returns></returns>
-        bool IEnemyModel.IsDead()
+       
+
+        public async UniTask OnDead()
         {
-            return false;
+            
         }
     }
 }
