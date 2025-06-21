@@ -52233,7 +52233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920f74f5175d43a9b0fb59d4759ab391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGameSecond: 10
+  inGameSecond: 60
   timerUI: {fileID: 649037241}
   startColor: {r: 1, g: 0.4239885, b: 0, a: 0}
   endColor: {r: 1, g: 0, b: 0, a: 0}
