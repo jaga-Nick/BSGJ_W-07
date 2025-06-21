@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace InGame.Model
@@ -104,7 +105,7 @@ namespace InGame.Model
         /// <summary>
         /// ダメージを受ける処理。
         /// </summary>
-        public void TakeDamage(int damage)
+        public void OnDamage(int damage)
         {
             // HPを減算
             ((IEnemyModel)this).CurrentHp -= damage;
@@ -118,10 +119,13 @@ namespace InGame.Model
             else // HPが0以下になった場合
             {
                 // プールに戻るべきことを外部に通知（イベント発行）
-                OnReturnedToPool?.Invoke();
+                OnDead().Forget();
             }
         }
-        
+        public async UniTask OnDead()
+        {
+            OnReturnedToPool?.Invoke();
+        }
 
         /// <summary>
         /// 移動処理
