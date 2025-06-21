@@ -124,6 +124,7 @@ namespace InGame.Model
             Position = newPosition;
         }
         
+        /*
         /// <summary>
         /// UFOを破壊する、
         /// </summary>
@@ -134,5 +135,6 @@ namespace InGame.Model
             Addressables.ReleaseInstance(ufoInstance); 
             ufoInstance = null;
         }
+        */
     }
 }
