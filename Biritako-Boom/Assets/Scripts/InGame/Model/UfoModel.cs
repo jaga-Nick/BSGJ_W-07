@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
@@ -123,7 +124,17 @@ namespace InGame.Model
         {
             Position = newPosition;
         }
-        
+
+        /// <summary>
+        /// 死亡時処理
+        /// </summary>
+        /// <returns></returns>
+        public async UniTask OnDead()
+        {
+            
+        }
+
+        /*
         /// <summary>
         /// UFOを破壊する、
         /// </summary>
@@ -134,5 +145,6 @@ namespace InGame.Model
             Addressables.ReleaseInstance(ufoInstance); 
             ufoInstance = null;
         }
+        */
     }
 }

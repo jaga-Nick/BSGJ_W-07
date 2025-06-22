@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
+using System.Threading;
+using System;
+using Random = UnityEngine.Random;
 
 namespace InGame.Presenter
 {
@@ -49,7 +52,9 @@ namespace InGame.Presenter
         /// Camera
         /// </summary>
         private Camera _camera;
-        
+
+        private CancellationTokenSource AutoMoveCancel;
+        private CancellationTokenSource MoveCancel;
         
         private void Awake()
         {
@@ -104,22 +109,40 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask AutoMoveUfoRoutine()
         {
-            while (true)
+            AutoMoveCancel?.Cancel();
+            AutoMoveCancel?.Dispose();
+            AutoMoveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(AutoMoveCancel.Token, destroyCancellationToken);
+            var linkedToken = linked.Token;
+            try
             {
-                // 目的座標をランダムに決める
-                var randomCircle = Random.insideUnitCircle * radius;
-                var target = new Vector3(
-                    transform.position.x + randomCircle.x, 
-                    transform.position.y + randomCircle.y, 
-                    transform.position.z
-                );
-            
-                // 移動アニメーションの開始
-                _view.PlayMoveAnimation(true);
-                // 移動コルーチン
-                await MoveUfoRoutine(target);
-                // 一定時間待機
-                await UniTask.WaitForSeconds(stopTime);
+                while (true)
+                {
+                    linkedToken.ThrowIfCancellationRequested();
+
+                    // 目的座標をランダムに決める
+                    var randomCircle = Random.insideUnitCircle * radius;
+                    var target = new Vector3(
+                        transform.position.x + randomCircle.x,
+                        transform.position.y + randomCircle.y,
+                        transform.position.z
+                    );
+
+                    // 移動アニメーションの開始
+                    _view.PlayMoveAnimation(true);
+                    // 移動コルーチン
+                    await MoveUfoRoutine(target);
+                    // 時間待機
+                    await UniTask.Delay(TimeSpan.FromSeconds(stopTime), cancellationToken: linkedToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            finally
+            {
+                AutoMoveCancel = null;
             }
         }
 
@@ -129,18 +152,36 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask MoveUfoRoutine(Vector2 target)
         {
-            // UFOの移動処理
-            while (Vector2.Distance(transform.position, target) > 0.1f)
+            MoveCancel?.Cancel();
+            MoveCancel?.Dispose();
+            MoveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(MoveCancel.Token, destroyCancellationToken);
+            var linkedToken = linked.Token;
+            try
             {
-                transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
-                _model.Position = transform.position;
-                await UniTask.Yield();
+                // UFOの移動処理
+                while (Vector2.Distance(transform.position, target) > 0.1f)
+                {
+                    linkedToken.ThrowIfCancellationRequested();
+
+                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
+                    _model.Position = transform.position;
+                    await UniTask.Yield(linkedToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            finally
+            {
+                MoveCancel = null;
             }
         }
 
         private void OnDestroy()
         {
-            _model?.DestroyUfo(gameObject);
+            //_model?.DestroyUfo(gameObject);
         }
     }
 }
