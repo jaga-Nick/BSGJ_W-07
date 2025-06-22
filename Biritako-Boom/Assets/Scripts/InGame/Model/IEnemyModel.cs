@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace InGame.Model
 {
@@ -24,9 +25,10 @@ namespace InGame.Model
         /// </summary>
         public float ExplosionPower { get;}
 
-        public virtual void OnDamage(int damage) 
+        public void OnDamage(int damage) 
         {
             CurrentHp -= damage;
+            if (CurrentHp <= 0) OnDead();
         }
 
 
@@ -61,14 +63,11 @@ namespace InGame.Model
             }
             Rb.linearVelocity = Angle;
         }
-        
+
         /// <summary>
-        /// 死んだかどうかのブール判定。
+        /// 死亡時の演出、処理。
         /// </summary>
         /// <returns></returns>
-        public bool IsDead()
-        {
-            return true;
-        }
+        public UniTask OnDead();
     }
 }
