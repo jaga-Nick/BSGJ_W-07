@@ -292,6 +292,12 @@ namespace InGame.Model
                         TestDecrementCodeGauge(CurrentHaveCodeSimulater.DecideCost());
                     }
 
+                    //0になった時。自動的にプラグを落とす。
+                    if(CurrentCodeGauge <= 0)
+                    {
+                        PutCode();
+                    }
+
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
                 }
@@ -441,6 +447,8 @@ namespace InGame.Model
                 }
                 //リセット。
                 CodeSimulaters = new List<CodeSimulater>();
+
+                CurrentCodeGauge = MaxCodeGauge;
             }
         }
 
