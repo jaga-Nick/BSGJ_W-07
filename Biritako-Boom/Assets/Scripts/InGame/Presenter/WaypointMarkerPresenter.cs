@@ -52,9 +52,11 @@ namespace InGame.Presenter
 
             Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
 
+            
             bool isTargetVisible = targetScreenPosition.z > 0 &&
                                    targetScreenPosition.x > 0 && targetScreenPosition.x < Screen.width &&
                                    targetScreenPosition.y > 0 && targetScreenPosition.y < Screen.height;
+            
 
             _view.SetVisibility(!isTargetVisible);
 
