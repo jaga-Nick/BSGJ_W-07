@@ -8,6 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Common;
 using InGame.Presenter;
 using UnityEngine;
+using System;
 
 namespace InGame.NonMVP
 {
@@ -50,7 +51,9 @@ namespace InGame.NonMVP
         /// </summary>
         [Header("母艦のアドレス")]
         [SerializeField] private string _motherShipAddress = "Enemy_MotherShip";
-        
+
+        public static event Action OnGenerateMotherShip;
+
 
         /// <summary>
         /// Prefab
@@ -101,11 +104,11 @@ namespace InGame.NonMVP
             for (var i = 0; i < numberOfSpawnElectronics; i++)
             {
                 // 家電を選択して生成する
-                var randomIndex = Random.Range(0, electronicsPrefabs.Length);
+                var randomIndex = UnityEngine.Random.Range(0, electronicsPrefabs.Length);
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
                 // UFOの座標をランダムに取得
-                var ufoRandomIndex = Random.Range(0, maxUfo);
+                var ufoRandomIndex = UnityEngine.Random.Range(0, maxUfo);
                 var ufoPosition = ufosList[ufoRandomIndex].transform.position;
             
                 // UFOがカメラ内にいるときは対象から外す
@@ -186,6 +189,7 @@ namespace InGame.NonMVP
                 // ロードしたプレハブからGameObjectをインスタンス化
                 Instantiate(prefab,position,Quaternion.identity);
             }
+            OnGenerateMotherShip?.Invoke();
         }
         
         

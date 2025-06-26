@@ -1,6 +1,9 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Common;
+using System.Threading;
+using System;
 
 namespace Common
 {
@@ -8,15 +11,39 @@ namespace Common
     /// カメラの追従、ポストプロセスエフェクトの実行と制御をすべて担当する統合マネージャー。
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class CameraManager : MonoBehaviour
+    public class CameraManager : DestroyAvailable_SingletonMonoBehaviourBase<CameraManager>
     {
         [Header("ポストプロセス設定")]
         [Tooltip("ポストプロセス用のマテリアル")]
         [SerializeField] private Material effectMaterial;
 
-        [Header("カメラ追従設定")]
+        [Header("カメラ設定")]
+        [Header("Z軸オフセット")]
         [Tooltip("プレイヤーからのZ軸オフセット")]
         [SerializeField] private float offsetZ = -10f;
+
+        [Header("デフォルトカメラサイズ")]
+        [SerializeField] private float _defaultSize = 5.625f;
+
+        [Header("カメラ拡縮設定")]
+        [Tooltip("拡大（ズームイン）する際のカメラサイズ")]
+        [SerializeField] private float zoomInSize = 4.0f;
+        [Tooltip("縮小（ズームアウト）する際のカメラサイズ")]
+        [SerializeField] private float zoomOutSize = 7.0f;
+
+        [Space(10)]
+
+        [Tooltip("拡大（ズームイン）にかかる時間")]
+        [SerializeField] private float zoomInTime = 0.1f;
+        [Tooltip("縮小（ズームアウト）にかかる時間")]
+        [SerializeField] private float zoomOutTime = 0.1f;
+        [Tooltip("デフォルトサイズに戻るのにかかる時間")]
+        [SerializeField] private float defaultTime = 0.3f;
+
+        [Space(10)]
+
+        [Tooltip("ズームした状態で待機する時間")]
+        [SerializeField] private float zoomHoldTime = 0.2f;
 
         [Header("色覚異常対応モード（初期設定）")]
         [Tooltip("起動時に色覚異常対応モードを有効にするか")]
@@ -31,11 +58,14 @@ namespace Common
         private bool _isFocusEnabled;
         private Vector4 _focusPoint;
         private bool _isColorblindModeEnabled;
-        
+        private CancellationTokenSource _cameraSizeCts;
+
         private void Awake()
         {
             // 自身のCameraコンポーネントを取得
             _camera = GetComponent<Camera>();
+
+            _cameraSizeCts = new CancellationTokenSource();
         }
 
         private void Start()
@@ -47,6 +77,9 @@ namespace Common
 
             // カメラのオフセットを初期化
             _offset = new Vector3(0, 0, offsetZ);
+
+            // カメラのサイズを初期化
+            _camera.orthographicSize = _defaultSize;
 
             // 起動時の色覚異常モードを設定
             _isColorblindModeEnabled = enableColorblindModeOnStart;
@@ -79,6 +112,92 @@ namespace Common
                 _target = playerObj.transform;
             }
         }
+
+
+        #region カメラワーク(FoV)
+
+        private void CancelPreviousSizeAnimation()
+        {
+            _cameraSizeCts?.Cancel();
+            _cameraSizeCts = new CancellationTokenSource();
+        }
+
+        private async UniTask AnimateFoV(float targetValue, float duration, CancellationToken cancellationToken)
+        {
+            float startValue = _camera.orthographicSize;
+            float elapsedTime = 0f;
+            if (duration <= 0f) { _camera.orthographicSize = targetValue; return; }
+            try { while (elapsedTime < duration) { elapsedTime += Time.deltaTime; float t = Mathf.SmoothStep(0.0f, 1.0f, elapsedTime / duration); float currentValue = Mathf.Lerp(startValue, targetValue, t); _camera.orthographicSize = currentValue; await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken); } } catch (OperationCanceledException) { return; }
+            _camera.orthographicSize = targetValue;
+        }
+
+
+        /// <summary>
+        /// カメラをズームインし、一定時間後に元のサイズに戻す
+        /// </summary>
+        public async UniTask ZoomInAndReturn()
+        {
+            CancelPreviousSizeAnimation();
+            try
+            {
+                await AnimateFoV(zoomInSize, zoomInTime, _cameraSizeCts.Token);
+                await UniTask.Delay(TimeSpan.FromSeconds(zoomHoldTime), cancellationToken: _cameraSizeCts.Token);
+                await AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // 一連の動作がキャンセルされた
+            }
+        }
+
+        /// <summary>
+        /// カメラをズームアウトし、一定時間後に元のサイズに戻す
+        /// </summary>
+        public async UniTask ZoomOutAndReturn()
+        {
+            CancelPreviousSizeAnimation();
+            try
+            {
+                await AnimateFoV(zoomOutSize, zoomOutTime, _cameraSizeCts.Token);
+                await UniTask.Delay(TimeSpan.FromSeconds(zoomHoldTime), cancellationToken: _cameraSizeCts.Token);
+                await AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // 一連の動作がキャンセルされた
+            }
+        }
+
+
+        /// <summary>
+        /// カメラをズームインする
+        /// </summary>
+        public void ZoomIn()
+        {
+            CancelPreviousSizeAnimation();
+            AnimateFoV(zoomInSize, zoomInTime, _cameraSizeCts.Token).Forget();
+        }
+
+        /// <summary>
+        /// カメラをズームアウトする
+        /// </summary>
+        public void ZoomOut()
+        {
+            CancelPreviousSizeAnimation();
+            AnimateFoV(zoomOutSize, zoomOutTime, _cameraSizeCts.Token).Forget();
+        }
+
+        /// <summary>
+        /// カメラをデフォルトのサイズに戻す
+        /// </summary>
+        public void DefaultFoV()
+        {
+            CancelPreviousSizeAnimation();
+            AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token).Forget();
+        }
+
+        #endregion
+
 
         /// <summary>
         /// シェーダーに必要なパラメータを更新

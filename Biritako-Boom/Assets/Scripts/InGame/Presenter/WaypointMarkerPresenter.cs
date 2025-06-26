@@ -1,4 +1,5 @@
 using System;
+using InGame.NonMVP;
 using InGame.View;
 using UnityEngine;
 
@@ -23,25 +24,39 @@ namespace InGame.Presenter
         private Camera _mainCamera;
         private Transform _target;
 
+
+        void OnEnable()
+        {
+            // イベントに自分の更新処理を登録
+            EnemySpawner.OnGenerateMotherShip += FindTarget;
+        }
+
+        void OnDisable()
+        {
+            // オブジェクトが破棄される際などに、イベントから登録を解除（重要）
+            EnemySpawner.OnGenerateMotherShip -= FindTarget;
+        }
+
         private void Awake()
         {
             _mainCamera = Camera.main;
             _view = GetComponent<WaypointMarkerView>();
             _view.SetVisibility(false);
+            EnemySpawner.OnGenerateMotherShip += FindTarget;
         }
         
 
         void LateUpdate()
         {
-            if (_target == null)
-            {
-                _target = FindObjectOfType<MotherShipPresenter>().gameObject.transform;
-            }
+            if (_target == null) return;
+
             Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
 
+            
             bool isTargetVisible = targetScreenPosition.z > 0 &&
                                    targetScreenPosition.x > 0 && targetScreenPosition.x < Screen.width &&
                                    targetScreenPosition.y > 0 && targetScreenPosition.y < Screen.height;
+            
 
             _view.SetVisibility(!isTargetVisible);
 
@@ -49,6 +64,11 @@ namespace InGame.Presenter
             {
                 UpdateMarkerPositionAndRotation(targetScreenPosition);
             }
+        }
+
+        public void FindTarget()
+        {
+            _target = FindObjectOfType<MotherShipPresenter>().gameObject.transform;
         }
 
         private void UpdateMarkerPositionAndRotation(Vector3 targetScreenPosition)

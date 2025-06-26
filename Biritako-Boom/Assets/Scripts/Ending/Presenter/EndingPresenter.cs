@@ -1,16 +1,34 @@
 using Cysharp.Threading.Tasks;
 using Ending.Model;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Ending.Presenter
 {
     public class EndingPresenter : MonoBehaviour
-    { 
+    {
+        [SerializeField]
+        private VideoPlayer _vp;
+
+
         EndingEvent _endingEvent =  new EndingEvent();
-        [SerializeField, Header("待機時間")] private float delayTime;
+        [SerializeField, Header("待機時間")] private float delayTime = 10f;
         async　void Start()
         {
-            await UniTask.Delay(System.TimeSpan.FromSeconds(delayTime));
+            if(_vp == null)
+            {
+                await UniTask.Delay(System.TimeSpan.FromSeconds(delayTime));
+                _endingEvent.OnResultLoder();
+            }
+            else
+            {
+                _vp.loopPointReached += LoopPointReached;
+                _vp.Play();
+            }
+        }
+
+        public void LoopPointReached(VideoPlayer vp)
+        {
             _endingEvent.OnResultLoder();
         }
     }

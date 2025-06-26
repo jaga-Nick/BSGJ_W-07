@@ -19,8 +19,6 @@ namespace InGame.Model
             Moving   // 移動中
         }
         
-        
-        // --- IEnemyModelの実装 ---
 
         // 移動できる限界距離
         public float LimitMoveDistance { get; private set; } = 20f;
