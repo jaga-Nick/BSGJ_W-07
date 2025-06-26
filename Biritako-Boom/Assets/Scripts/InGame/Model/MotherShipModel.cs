@@ -90,24 +90,6 @@ namespace InGame.Model
 
         #region 初期化・コンストラクタ
 
-        /*
-        /// <summary>
-        /// MotherShipUfoModelのコンストラクタ
-        /// </summary>
-        public MotherShipModel(Rigidbody2D rb)
-        {
-            // --- ステータスを初期化 ---
-            IntervalTime = 0.2f;
-            
-            _speed = 5.0f;
-            _hp = 5000;
-            ExplosionPower = 100;
-            _score = 1000000;
-            isEnd = false;
-        }
-        
-        */
-
         /// <summary>
         /// 初期化
         /// </summary>
@@ -135,20 +117,6 @@ namespace InGame.Model
         
         public void SetSpeed(float speed) { _speed = speed; }
         
-        
-        
-        
-        
-        
-        /// <summary>
-        /// 撃破状態から呼び出され、isEndフラグを立てます。
-        /// </summary>
-        public async UniTask OnDead()
-        {
-            Debug.Log("第三部　完!!");
-            
-            isEnd = true;
-        }
         
         #endregion
         
@@ -209,7 +177,7 @@ namespace InGame.Model
         /// <summary>
         /// PresenterのUpdateから毎フレーム呼び出される更新処理です。
         /// </summary>
-        public void Move()
+        public virtual void Move()
         {
             
             // 状態に応じて処理を分岐させます
@@ -242,7 +210,40 @@ namespace InGame.Model
             }
             */
         }
-        
+
+
+        /// <summary>
+        /// 何の家電かを数字で判別する
+        /// </summary>
+        public virtual int GetEnemyType()
+        {
+            // 家電の場合1
+            // UFOの場合2
+            // 母艦UFOの場合3
+            return 3;
+        }
+
+        /// <summary>
+        /// ダメージを与える
+        /// </summary>
+        public void OnDamage(int damage)
+        {
+            ((IEnemyModel)this).CurrentHp -= damage;
+            if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
+        }
+
+        /// <summary>
+        /// 撃破状態から呼び出され、isEndフラグを立てます。
+        /// </summary>
+        public async UniTask OnDead()
+        {
+            Debug.Log("第三部　完!!");
+
+            isEnd = true;
+        }
+
+
+
         /// <summary>
         /// 母艦を破壊する、
         /// </summary>
@@ -323,7 +324,7 @@ namespace InGame.Model
         /// </summary>
         private void MoveTowards(Vector2 targetPosition)
         {
-            if (Rb == null || _transform == null) return;
+            if (Rb == null || _transform == null || Time.timeScale == 0f) return;
             
             Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
 
