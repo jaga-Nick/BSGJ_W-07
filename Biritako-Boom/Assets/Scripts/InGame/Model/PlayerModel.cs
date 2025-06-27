@@ -202,21 +202,11 @@ namespace InGame.Model
         }
 
 
-        public void TestTakeDistanceCost()
-        {
-
-        }
-
-
         //ゲージの割合
         public float GetCodeGaugePercent()
         {
             return CurrentCodeGauge / MaxCodeGauge;
         }
-
-        //public void 
-
-
 
 
         /// <summary>
@@ -235,18 +225,9 @@ namespace InGame.Model
 
                 //数値を決める。
                 BeforeCodeGauge = CurrentCodeGauge;
-
-                
             }
             CurrentHaveCodeSimulater = null;
         }
-
-
-
-
-
-
-
 
         //ここで特例的にコード『接続中』の処理を態と書いていく
         private CancellationTokenSource codeHaveCancellation;

@@ -12,8 +12,6 @@ namespace InGame.NonMVP
     public class ExplosionAttach : MonoBehaviour
     {
         private int Damage=0;
-
-
         private Animator animator;
         public async UniTask Explosion(string AnimationName)
         {
@@ -26,9 +24,9 @@ namespace InGame.NonMVP
             Destroy(gameObject);
         }
 
-        public void SetDamage()
+        public void SetDamage(int num)
         {
-
+            Damage = num;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -37,9 +35,6 @@ namespace InGame.NonMVP
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
 
             enemies.OnDamage(Damage);
-            //ここでIEnemhyModelの処理を呼び出す様にする
-            //死亡確認
-            //enemies?.IsDead();
         }
     }
 }
