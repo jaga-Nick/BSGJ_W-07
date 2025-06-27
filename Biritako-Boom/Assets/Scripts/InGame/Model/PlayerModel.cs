@@ -202,21 +202,11 @@ namespace InGame.Model
         }
 
 
-        public void TestTakeDistanceCost()
-        {
-
-        }
-
-
         //ゲージの割合
         public float GetCodeGaugePercent()
         {
             return CurrentCodeGauge / MaxCodeGauge;
         }
-
-        //public void 
-
-
 
 
         /// <summary>
@@ -235,18 +225,9 @@ namespace InGame.Model
 
                 //数値を決める。
                 BeforeCodeGauge = CurrentCodeGauge;
-
-                
             }
             CurrentHaveCodeSimulater = null;
         }
-
-
-
-
-
-
-
 
         //ここで特例的にコード『接続中』の処理を態と書いていく
         private CancellationTokenSource codeHaveCancellation;
@@ -290,6 +271,12 @@ namespace InGame.Model
                     {
 
                         TestDecrementCodeGauge(CurrentHaveCodeSimulater.DecideCost());
+                    }
+
+                    //0になった時。自動的にプラグを落とす。
+                    if(CurrentCodeGauge <= 0)
+                    {
+                        PutCode();
                     }
 
                     //毎秒待機で軽くする。
@@ -441,6 +428,8 @@ namespace InGame.Model
                 }
                 //リセット。
                 CodeSimulaters = new List<CodeSimulater>();
+
+                CurrentCodeGauge = MaxCodeGauge;
             }
         }
 
