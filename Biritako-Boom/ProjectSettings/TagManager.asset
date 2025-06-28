@@ -44,5 +44,11 @@ TagManager:
   - name: MapObjects
     uniqueID: 414247109
     locked: 0
+  - name: Characters
+    uniqueID: 2577973021
+    locked: 0
+  - name: UFO
+    uniqueID: 1931349267
+    locked: 0
   m_RenderingLayers:
   - Default
