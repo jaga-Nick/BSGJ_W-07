@@ -81,9 +81,11 @@ namespace InGame.NonMVP
         {
             // タイマーをスポーン時間のインターバルにセット
             timer = spawnInterval;
+            // UFOをスポーンする
             SpawnUfo();
+            // 母艦をスポーンする
+            SpawnMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
             
-            GenerateMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
             _alienManager = FindObjectOfType<AlienManager>();
             SpawnAlien().Forget();
         }
@@ -178,14 +180,14 @@ namespace InGame.NonMVP
         /// <summary>
         /// MotherShipの生成とスポーン
         /// </summary>
-        public async UniTask GenerateMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        public async UniTask SpawnMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
         {
             // Addressables経由でプレハブを非同期ロード
-            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+            var handle = Addressables.LoadAssetAsync<GameObject>(address);
 
             using (new HandleDisposable<GameObject>(handle))
             {
-                GameObject prefab = await handle;
+                var prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
                 Instantiate(prefab,position,Quaternion.identity);
             }
