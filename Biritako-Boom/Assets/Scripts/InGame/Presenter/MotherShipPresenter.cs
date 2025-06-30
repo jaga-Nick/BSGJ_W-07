@@ -12,7 +12,7 @@ namespace InGame.Presenter
         //[SerializeField]
         //private GameObject CharacterPrefab;
         [SerializeField]
-        private string CharacterAddress="Enemy_MotherShip";
+        private string CharacterAddress="MotherShip";
         
         //MotherShip統括
         private MotherShipModel Model;
