@@ -834,7 +834,7 @@ MonoBehaviour:
   exclusionRadius: 0.5
   alienSpawnInterval: 10
   numberOfSpawnAlien: 1
-  _motherShipAddress: MotherShipPrefab
+  _motherShipAddress: MotherShip
   electronicsPrefabs:
   - {fileID: 2689977577218633989, guid: 74162686ec438734aa88b9b787ffa0a0, type: 3}
   - {fileID: 8277500876530028816, guid: 5a233f36e1ca3004fbb063930b0834e3, type: 3}
