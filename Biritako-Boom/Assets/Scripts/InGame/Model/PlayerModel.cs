@@ -415,6 +415,9 @@ namespace InGame.Model
             //コードが一つ以上生成されており、保持していない時。
             if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
             {
+                //カットイン挿入
+                GenerateExplosionManager.Instance().GenerateCutIn();
+
                 foreach (var i in CodeSimulaters)
                 {
                     i.Explosion();
