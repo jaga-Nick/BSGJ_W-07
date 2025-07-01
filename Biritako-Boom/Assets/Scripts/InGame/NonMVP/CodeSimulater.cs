@@ -62,7 +62,7 @@ namespace InGame.NonMVP
             }
         }
         /// <summary>
-        /// 始点（家電）
+        /// 始点（家電）→ここは基本変わらない想定。
         /// </summary>
         public GameObject StartObject { get; private set; }
         /// <summary>
@@ -138,9 +138,15 @@ namespace InGame.NonMVP
 
         public void Update()
         {
-            Simulate();
-            UpdateLineRenderer();
-            UpdateEdgeCollider();
+            if (StartObject!=null) {
+                Simulate();
+                UpdateLineRenderer();
+                UpdateEdgeCollider();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         public float? BeforeCostGauge { get; private set; } = null;
@@ -233,9 +239,6 @@ namespace InGame.NonMVP
             //最終地点に進める。その後消える。
             ReturnEndPoint(cts.Token,model).Forget();
         }
-
-
-
         /// <summary>
         /// 拾うイベント
         /// </summary>
@@ -246,9 +249,6 @@ namespace InGame.NonMVP
             {
                 Destroy(EndObject);
             }
-
-
-
 
             // 新しい終点をプレイヤーに設定します。
             EndObject = player;
@@ -275,8 +275,6 @@ namespace InGame.NonMVP
             }
 
         }
-
-
 
 
         /// <summary>
@@ -378,9 +376,6 @@ namespace InGame.NonMVP
             }
         }
 
-
-
-
         /// <summary>
         /// 爆破を呼び出す
         /// </summary>
@@ -441,9 +436,6 @@ namespace InGame.NonMVP
             //このアタッチしているオブジェクトを全てスクリプトごと削除する。
             Destroy(gameObject);
         }
-
-        
-
 
         #region EdgeCollider関連
 
