@@ -49,5 +49,53 @@ namespace InGame.View
         {
             if (arrowRectTransform != null) arrowRectTransform.rotation = rotation;
         }
+        
+        
+        
+        // 親CanvasのRectTransformをキャッシュするための変数を追加
+        private RectTransform _parentCanvasRect;
+
+// Awakeメソッドを追加
+        private void Awake()
+        {
+            // 自分自身の親であるCanvasのRectTransformを取得して保持
+            _parentCanvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+        }
+
+// 古いSetIconPositionとSetArrowPositionを削除し、以下の新しいメソッドを追加します
+
+        /// <summary>
+        /// スクリーン座標を元にアイコンの位置を設定します
+        /// </summary>
+        public void SetIconScreenPosition(Vector2 screenPosition, Camera camera)
+        {
+            SetElementPosition(iconRectTransform, screenPosition, camera);
+        }
+
+        /// <summary>
+        /// スクリーン座標を元に矢印の位置を設定します
+        /// </summary>
+        public void SetArrowScreenPosition(Vector2 screenPosition, Camera camera)
+        {
+            SetElementPosition(arrowRectTransform, screenPosition, camera);
+        }
+
+        /// <summary>
+        /// RectTransformUtilityを使ってUI要素を配置する共通メソッド
+        /// </summary>
+        private void SetElementPosition(RectTransform element, Vector2 screenPosition, Camera camera)
+        {
+            if (element == null) return;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                _parentCanvasRect,
+                screenPosition,
+                camera,
+                out Vector2 localPoint
+            );
+            // UI要素の配置には、positionよりもanchoredPositionを使うのが堅牢です
+            element.anchoredPosition = localPoint;
+        }
+        
     }
 }

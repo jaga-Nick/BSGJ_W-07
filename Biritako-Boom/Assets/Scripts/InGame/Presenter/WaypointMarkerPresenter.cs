@@ -52,17 +52,22 @@ namespace InGame.Presenter
             EnemySpawner.OnGenerateMotherShip += FindAndSetTarget;
         }
 
-
         private void LateUpdate()
         {
             if (!_target) return;
 
-            var targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
+            Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
 
+            Debug.Log(targetScreenPosition);
             
-            var isTargetVisible = targetScreenPosition.z > 0 &&
-                                  targetScreenPosition.x > 0 && targetScreenPosition.x < Screen.width &&
-                                  targetScreenPosition.y > 0 && targetScreenPosition.y < Screen.height;
+            
+            
+            
+            
+            
+            bool isTargetVisible = targetScreenPosition.z > 0 &&
+                                  targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
+                                  targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
             
 
             _view.SetVisibility(!isTargetVisible);
@@ -76,6 +81,7 @@ namespace InGame.Presenter
         private void FindAndSetTarget()
         {
             _target = FindObjectOfType<MotherShipPresenter>().gameObject.transform;
+            _mainCamera = Camera.main;
         }
 
         private void UpdateMarkerPositionAndRotation(Vector3 targetScreenPosition)
@@ -86,7 +92,7 @@ namespace InGame.Presenter
             }
             
             // アイコンの位置を、個別のマージンを使って画面内にクランプする
-            var iconPosition = new Vector3(
+            Vector3 iconPosition = new Vector3(
                 Mathf.Clamp(targetScreenPosition.x, margins.left, Screen.width - margins.right),
                 Mathf.Clamp(targetScreenPosition.y, margins.bottom, Screen.height - margins.top),
                 0f
@@ -94,14 +100,14 @@ namespace InGame.Presenter
             _view.SetIconPosition(iconPosition);
 
             // アイコンからターゲットのスクリーン座標への方向を計算
-            var direction = (targetScreenPosition - iconPosition).normalized;
+            Vector3 direction = (targetScreenPosition - iconPosition).normalized;
             
             // 矢印の回転を計算
-            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            var arrowRotation = Quaternion.Euler(0, 0, angle);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            Quaternion arrowRotation = Quaternion.Euler(0, 0, angle);
             
             // 矢印の位置をアイコンの位置からdirectionの方向に一定距離離れた場所に設定
-            var arrowPosition = iconPosition + direction * arrowDistanceFromIcon;
+            Vector3 arrowPosition = iconPosition + direction * arrowDistanceFromIcon;
             
             // Viewに矢印の位置と回転を指示
             _view.SetArrowPosition(arrowPosition);
