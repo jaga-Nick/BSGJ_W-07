@@ -37,7 +37,7 @@ namespace InGame.Model
         private Vector3 InstancePosition = new Vector3(0,0,0);
 
         //---ステータス部分-----------
-        public float Speed { get; private set; } = 3.0f;
+        public float Speed { get; private set; } = 10.0f;
 
 
         //最大値
@@ -137,12 +137,11 @@ namespace InGame.Model
         }
 
         /// <summary>
-        /// ソケットをデリート
+        /// ソケットを回収する
         /// </summary>
         public void DeleteSocket() {
             if (Socket!=null && CodeSimulaters.Count == 0)
             {
-                Debug.Log("削除");
                 UnityEngine.Object.Destroy(Socket);
             }
          }
@@ -163,8 +162,6 @@ namespace InGame.Model
         public void SetCurrentHaveCode(CodeSimulater code)
         {
             CurrentHaveCodeSimulater = code;
-
-
         }
 
         #endregion
@@ -250,18 +247,11 @@ namespace InGame.Model
             {
                 if (CurrentHaveCodeSimulater.BeforeCostGauge != null)
                 {
-                    Debug.Log(CurrentCodeGauge +"前");
                     //Beforeが登録されている時、新コストを旧コストで引いてその分足せば問題ないはず。
                     CurrentCodeGauge += CurrentHaveCodeSimulater.DecideCostistance();
-                    Debug.Log(CurrentCodeGauge +"後");
-                    Debug.Log("テスト");
                 }
                 //最初の
                 BeforeCodeGauge = CurrentCodeGauge;
-
-
-                Debug.Log(BeforeCodeGauge + "Before");
-
 
                 while (true) {
                     codeHaveCancellation.Token.ThrowIfCancellationRequested();
@@ -277,6 +267,7 @@ namespace InGame.Model
                     if(CurrentCodeGauge <= 0)
                     {
                         PutCode();
+                        break;
                     }
 
                     //毎秒待機で軽くする。
@@ -380,10 +371,12 @@ namespace InGame.Model
                     //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
                     var code = generateCodeSystem.GenerateCode(electro, PlayerObject);
                     SetCurrentHaveCode(code);
+
+                    //完了待機はしない（寧ろ待つとバグが発生する）
+                    HavingCode().Forget();
                 }
 
-                //完了待機はしない（寧ろ待つとバグが発生する）
-                HavingCode().Forget();
+                
             }
         }
 
@@ -422,6 +415,9 @@ namespace InGame.Model
             //コードが一つ以上生成されており、保持していない時。
             if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
             {
+                //カットイン挿入
+                GenerateExplosionManager.Instance().GenerateCutIn();
+
                 foreach (var i in CodeSimulaters)
                 {
                     i.Explosion();
