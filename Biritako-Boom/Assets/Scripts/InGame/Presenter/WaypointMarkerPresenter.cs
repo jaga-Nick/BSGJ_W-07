@@ -7,132 +7,86 @@ using UnityEngine;
 namespace InGame.Presenter
 {
     /// <summary>
-    /// Waypointマーカーのロジックを担当するPresenter。
-    /// この最終修正版では、UIの座標系問題を解決し、構造を安定させています。
+    /// WaypointマーカーのModelとViewを仲介するPresenter。
     /// </summary>
     public class WaypointMarkerPresenter : MonoBehaviour
     {
         private WaypointMarkerView _view;
         private WaypointMarkerModel _model = new WaypointMarkerModel();
-
-        /// <summary>
-        /// 位置案内アイコンの設定
-        /// </summary>
-        [Header("設定")]
-        [Tooltip("画面の端からのマージン（ピクセル）")]
-        [SerializeField] private ScreenMargins margins = new ScreenMargins { top = 150f, bottom = 50f, left = 50f, right = 50f };
-        [Tooltip("アイコンから矢印までの距離")]
-        [SerializeField] private float arrowDistanceFromIcon = 40f;
-
-        /// <summary>
-        /// Presenterが管理する内部フィールド
-        /// </summary>
-        private Camera _mainCamera;
-        private Transform _target;
-
-
+        
+        
         private void OnEnable()
         {
             // イベントに自分の更新処理を登録
             EnemySpawner.OnGenerateMotherShip += FindAndSetTarget;
         }
-
+        
         private void OnDisable()
         {
             // オブジェクトが破棄される際などに、イベントから登録を解除（重要）
             EnemySpawner.OnGenerateMotherShip -= FindAndSetTarget;
         }
-
+        
         private void Awake()
         {
-            _mainCamera = Camera.main;
+            // 自身のGameObjectにあるViewコンポーネントを取得
             _view = GetComponent<WaypointMarkerView>();
-            // ★修正点：Awakeでのイベント二重登録を削除
-        }
-
-        private void Start()
-        {
             if (_view == null)
             {
                 Debug.LogError("同じGameObjectにWaypointMarkerViewが見つかりません！", this);
                 enabled = false;
                 return;
             }
+            
+            // ViewとModelの初期化
+            _view.Initialize();
+            _model.SetMainCamera(Camera.main);
+        }
+        
+        private void Start()
+        {
+            // 初期状態では非表示
             _view.SetVisibility(false);
         }
 
+
         private void LateUpdate()
         {
-            if (_target == null) return;
+            // Modelにターゲットの可視性判定を依頼
+            var (isOnScreen, screenPosition) = _model.CheckTargetVisibility();
 
-            // ステップ1：判定は全てスクリーン座標系で行う
-            Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
+            // 結果をViewに反映
+            _view.SetVisibility(!isOnScreen);
 
-            // 可視性判定は、マージンを考慮しない画面全体で行う
-            bool isTargetOnScreen = targetScreenPosition.z > 0 &&
-                                    targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
-                                    targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
-
-            _view.SetVisibility(!isTargetOnScreen);
-
-            if (!isTargetOnScreen)
+            // マーカーを表示する場合
+            if (!isOnScreen)
             {
-                // ターゲットがカメラの後方にある場合、座標を反転させて向きを補正
-                if (targetScreenPosition.z < 0)
-                {
-                    targetScreenPosition *= -1;
-                }
+                // Viewから見た目の設定を取得
+                var margins = _view.GetMargins();
+                var distance = _view.GetArrowDistanceFromIcon();
 
-                // 配置ロジックを呼び出す
-                UpdateMarkerPositionAndRotation(targetScreenPosition);
+                // Modelにマーカーの位置・回転計算を依頼
+                var (iconPos, arrowPos, arrowRot) = _model.CalculateMarkerTransform(screenPosition, margins, distance);
+
+                // 計算結果をViewの更新メソッドに渡す
+                _view.SetIconScreenPosition(iconPos);
+                _view.SetArrowScreenPosition(arrowPos);
+                _view.SetArrowRotation(arrowRot);
             }
         }
+        
 
+        /// <summary>
+        /// EnemySpawnerのイベントから呼び出され、ターゲットをModelに設定
+        /// </summary>
         private void FindAndSetTarget()
         {
             var motherShip = FindObjectOfType<MotherShipPresenter>();
             if (motherShip != null)
             {
-                _target = motherShip.gameObject.transform;
+                // 見つけたターゲットをModelに設定
+                _model.SetTarget(motherShip.gameObject.transform);
             }
         }
-
-        private void UpdateMarkerPositionAndRotation(Vector3 targetScreenPosition)
-        {
-            // アイコンを配置すべきスクリーン座標を計算
-            Vector3 iconScreenPosition = new Vector3(
-                Mathf.Clamp(targetScreenPosition.x, margins.left, Screen.width - margins.right),
-                Mathf.Clamp(targetScreenPosition.y, margins.bottom, Screen.height - margins.top),
-                0f
-            );
-
-            // ★修正点：Viewへの指示をシンプルに（カメラ情報を渡さない）
-            _view.SetIconScreenPosition(iconScreenPosition);
-
-            // 方向の計算はスクリーン座標系で行う
-            Vector3 direction = (targetScreenPosition - iconScreenPosition).normalized;
-
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion arrowRotation = Quaternion.Euler(0, 0, angle);
-
-            // 矢印の位置を計算
-            Vector3 arrowScreenPosition = iconScreenPosition + direction * arrowDistanceFromIcon;
-
-            // ★修正点：Viewへの指示をシンプルに（カメラ情報を渡さない）
-            _view.SetArrowScreenPosition(arrowScreenPosition);
-            _view.SetArrowRotation(arrowRotation);
-        }
-    }
-
-    /// <summary>
-    /// 上下左右で異なるマージンを設定するための構造体
-    /// </summary>
-    [System.Serializable]
-    public struct ScreenMargins
-    {
-        public float top;
-        public float bottom;
-        public float left;
-        public float right;
     }
 }

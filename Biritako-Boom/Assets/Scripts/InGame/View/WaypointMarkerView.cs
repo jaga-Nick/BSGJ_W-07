@@ -4,7 +4,19 @@ using UnityEngine.UI;
 namespace InGame.View
 {
     /// <summary>
-    /// WaypointマーカーのUI要素の参照を保持し、Presenterからの指示で表示を更新する「純粋な」View。
+    /// 上下左右で異なるマージンを設定するための構造体
+    /// </summary>
+    [System.Serializable]
+    public struct ScreenMargins
+    {
+        public float top;
+        public float bottom;
+        public float left;
+        public float right;
+    }
+
+    /// <summary>
+    /// Waypointマーカーの表示更新のみを行うView
     /// </summary>
     public class WaypointMarkerView : MonoBehaviour
     {
@@ -14,10 +26,21 @@ namespace InGame.View
         [SerializeField] private Image iconImage;
         [SerializeField] private Image arrowImage;
 
+        [Header("見た目の設定")]
+        [Tooltip("画面の端からのマージン（ピクセル）")]
+        [SerializeField] private ScreenMargins margins = new ScreenMargins { top = 150f, bottom = 50f, left = 50f, right = 50f };
+        [Tooltip("アイコンから矢印までの距離")]
+        [SerializeField] private float arrowDistanceFromIcon = 40f;
+        
         private Canvas _parentCanvas;
-        private Camera _uiCamera; // RenderModeに応じて設定される、座標変換用のカメラ
+        private Camera _uiCamera;
 
-        private void Awake()
+        // --- 初期化 ---
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        public void Initialize()
         {
             // 親であるCanvasのコンポーネントを取得
             _parentCanvas = GetComponentInParent<Canvas>();
@@ -25,16 +48,29 @@ namespace InGame.View
             // CanvasのRenderModeに応じて、座標変換に使うカメラを決定する
             if (_parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
             {
-                // Overlayモードでは、カメラはnullを指定する必要がある
-                _uiCamera = null;
+                _uiCamera = null; // Overlayモードではカメラはnull
             }
             else
             {
-                // ScreenSpaceCameraモードやWorldSpaceモードでは、Canvasに設定されているカメラを使用
-                _uiCamera = _parentCanvas.worldCamera;
+                _uiCamera = _parentCanvas.worldCamera; // それ以外のモードではCanvas設定のカメラを使用
             }
         }
 
+        #region アクセスメソッド
+
+        /// <summary>
+        /// 設定されているマージン情報を返す
+        /// </summary>
+        public ScreenMargins GetMargins() => margins;
+        
+        /// <summary>
+        /// 設定されているアイコンと矢印の距離を返す
+        /// </summary>
+        public float GetArrowDistanceFromIcon() => arrowDistanceFromIcon;
+
+        #endregion
+
+        // --- 表示更新メソッド ---
 
         /// <summary>
         /// マーカー全体の表示・非表示を切り替える
@@ -46,16 +82,7 @@ namespace InGame.View
         }
 
         /// <summary>
-        /// 矢印の回転を設定する
-        /// </summary>
-        public void SetArrowRotation(Quaternion rotation)
-        {
-            if (arrowRectTransform != null) arrowRectTransform.rotation = rotation;
-        }
-
-
-        /// <summary>
-        /// スクリーン座標を元にアイコンの位置を設定します
+        /// スクリーン座標を元にアイコンの位置を設定
         /// </summary>
         public void SetIconScreenPosition(Vector2 screenPosition)
         {
@@ -63,7 +90,7 @@ namespace InGame.View
         }
 
         /// <summary>
-        /// スクリーン座標を元に矢印の位置を設定します
+        /// スクリーン座標を元に矢印の位置を設定
         /// </summary>
         public void SetArrowScreenPosition(Vector2 screenPosition)
         {
@@ -71,7 +98,15 @@ namespace InGame.View
         }
 
         /// <summary>
-        /// スクリーン座標を、Canvas Scalerの影響を考慮したUIのローカル座標に変換して配置する
+        /// 矢印の回転を設定
+        /// </summary>
+        public void SetArrowRotation(Quaternion rotation)
+        {
+            if (arrowRectTransform != null) arrowRectTransform.rotation = rotation;
+        }
+
+        /// <summary>
+        /// スクリーン座標を、Canvas上のローカル座標に変換してUI要素を配置。
         /// </summary>
         private void SetElementPosition(RectTransform element, Vector2 screenPosition)
         {
@@ -80,7 +115,7 @@ namespace InGame.View
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 _parentCanvas.GetComponent<RectTransform>(),
                 screenPosition,
-                _uiCamera, // Awakeで設定した正しいカメラ情報を使用
+                _uiCamera, // Initializeで設定した正しいカメラ情報を使用
                 out Vector2 localPoint
             );
             element.anchoredPosition = localPoint;

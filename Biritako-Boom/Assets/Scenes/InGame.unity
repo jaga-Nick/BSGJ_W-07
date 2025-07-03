@@ -358,6 +358,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4170222949461605391, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: _canvasRectTransform
+      value: 
+      objectReference: {fileID: 2126630025}
     - target: {fileID: 8583346181685917207, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_Name
       value: MotherShipMarker
@@ -834,7 +838,7 @@ MonoBehaviour:
   exclusionRadius: 0.5
   alienSpawnInterval: 10
   numberOfSpawnAlien: 1
-  _motherShipAddress: MotherShip
+  _motherShipAddress: Enemy_MotherShip
   electronicsPrefabs:
   - {fileID: 2689977577218633989, guid: 74162686ec438734aa88b9b787ffa0a0, type: 3}
   - {fileID: 8277500876530028816, guid: 5a233f36e1ca3004fbb063930b0834e3, type: 3}
