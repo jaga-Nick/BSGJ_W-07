@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8544101600501276726}
+  - component: {fileID: 9054054628699632387}
+  - component: {fileID: 794025818559320594}
+  - component: {fileID: -8769087046718871239}
   - component: {fileID: 5994752085223824498}
   - component: {fileID: 8017675619962139825}
   - component: {fileID: 4558666829951707394}
@@ -35,6 +38,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9054054628699632387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507075229319319441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d306c6ca1285648a4e9ff737bc0fc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterAddress: MotherShipPrefab
+--- !u!114 &794025818559320594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507075229319319441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0136965e35020664fa151887b3a922d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-8769087046718871239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507075229319319441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c807f249ab6cdb4c942f9fe03180d04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 8017675619962139825}
 --- !u!212 &5994752085223824498
 SpriteRenderer:
   m_ObjectHideFlags: 0
