@@ -1,4 +1,5 @@
 using System;
+using InGame.Model;
 using InGame.NonMVP;
 using InGame.View;
 using UnityEngine;
@@ -7,15 +8,13 @@ namespace InGame.Presenter
 {
     /// <summary>
     /// Waypointマーカーのロジックを担当するPresenter。
-    /// ViewのRectTransformの操作も含め、すべてのロジックを担う。
+    /// この最終修正版では、UIの座標系問題を解決し、構造を安定させています。
     /// </summary>
     public class WaypointMarkerPresenter : MonoBehaviour
     {
-        /// <summary>
-        /// view
-        /// </summary>
         private WaypointMarkerView _view;
-        
+        private WaypointMarkerModel _model = new WaypointMarkerModel();
+
         /// <summary>
         /// 位置案内アイコンの設定
         /// </summary>
@@ -48,74 +47,83 @@ namespace InGame.Presenter
         {
             _mainCamera = Camera.main;
             _view = GetComponent<WaypointMarkerView>();
+            // ★修正点：Awakeでのイベント二重登録を削除
+        }
+
+        private void Start()
+        {
+            if (_view == null)
+            {
+                Debug.LogError("同じGameObjectにWaypointMarkerViewが見つかりません！", this);
+                enabled = false;
+                return;
+            }
             _view.SetVisibility(false);
-            EnemySpawner.OnGenerateMotherShip += FindAndSetTarget;
         }
 
         private void LateUpdate()
         {
-            if (!_target) return;
+            if (_target == null) return;
 
+            // ステップ1：判定は全てスクリーン座標系で行う
             Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
 
-            Debug.Log(targetScreenPosition);
-            
-            
-            
-            
-            
-            
-            bool isTargetVisible = targetScreenPosition.z > 0 &&
-                                  targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
-                                  targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
-            
+            // 可視性判定は、マージンを考慮しない画面全体で行う
+            bool isTargetOnScreen = targetScreenPosition.z > 0 &&
+                                    targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
+                                    targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
 
-            _view.SetVisibility(!isTargetVisible);
+            _view.SetVisibility(!isTargetOnScreen);
 
-            if (!isTargetVisible)
+            if (!isTargetOnScreen)
             {
+                // ターゲットがカメラの後方にある場合、座標を反転させて向きを補正
+                if (targetScreenPosition.z < 0)
+                {
+                    targetScreenPosition *= -1;
+                }
+
+                // 配置ロジックを呼び出す
                 UpdateMarkerPositionAndRotation(targetScreenPosition);
             }
         }
 
         private void FindAndSetTarget()
         {
-            _target = FindObjectOfType<MotherShipPresenter>().gameObject.transform;
-            _mainCamera = Camera.main;
+            var motherShip = FindObjectOfType<MotherShipPresenter>();
+            if (motherShip != null)
+            {
+                _target = motherShip.gameObject.transform;
+            }
         }
 
         private void UpdateMarkerPositionAndRotation(Vector3 targetScreenPosition)
         {
-            if (targetScreenPosition.z < 0)
-            {
-                targetScreenPosition *= -1;
-            }
-            
-            // アイコンの位置を、個別のマージンを使って画面内にクランプする
-            Vector3 iconPosition = new Vector3(
+            // アイコンを配置すべきスクリーン座標を計算
+            Vector3 iconScreenPosition = new Vector3(
                 Mathf.Clamp(targetScreenPosition.x, margins.left, Screen.width - margins.right),
                 Mathf.Clamp(targetScreenPosition.y, margins.bottom, Screen.height - margins.top),
                 0f
             );
-            _view.SetIconPosition(iconPosition);
 
-            // アイコンからターゲットのスクリーン座標への方向を計算
-            Vector3 direction = (targetScreenPosition - iconPosition).normalized;
-            
-            // 矢印の回転を計算
+            // ★修正点：Viewへの指示をシンプルに（カメラ情報を渡さない）
+            _view.SetIconScreenPosition(iconScreenPosition);
+
+            // 方向の計算はスクリーン座標系で行う
+            Vector3 direction = (targetScreenPosition - iconScreenPosition).normalized;
+
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             Quaternion arrowRotation = Quaternion.Euler(0, 0, angle);
-            
-            // 矢印の位置をアイコンの位置からdirectionの方向に一定距離離れた場所に設定
-            Vector3 arrowPosition = iconPosition + direction * arrowDistanceFromIcon;
-            
-            // Viewに矢印の位置と回転を指示
-            _view.SetArrowPosition(arrowPosition);
+
+            // 矢印の位置を計算
+            Vector3 arrowScreenPosition = iconScreenPosition + direction * arrowDistanceFromIcon;
+
+            // ★修正点：Viewへの指示をシンプルに（カメラ情報を渡さない）
+            _view.SetArrowScreenPosition(arrowScreenPosition);
             _view.SetArrowRotation(arrowRotation);
         }
     }
-    
-    
+
     /// <summary>
     /// 上下左右で異なるマージンを設定するための構造体
     /// </summary>

@@ -9,13 +9,32 @@ namespace InGame.View
     public class WaypointMarkerView : MonoBehaviour
     {
         [Header("UI要素")]
-        // Inspectorで設定しやすいように、ImageではなくRectTransformを直接参照します
         [SerializeField] private RectTransform iconRectTransform;
         [SerializeField] private RectTransform arrowRectTransform;
-        
-        // Imageコンポーネントはenabledの切り替えに使うため、こちらも参照します
         [SerializeField] private Image iconImage;
         [SerializeField] private Image arrowImage;
+
+        private Canvas _parentCanvas;
+        private Camera _uiCamera; // RenderModeに応じて設定される、座標変換用のカメラ
+
+        private void Awake()
+        {
+            // 親であるCanvasのコンポーネントを取得
+            _parentCanvas = GetComponentInParent<Canvas>();
+
+            // CanvasのRenderModeに応じて、座標変換に使うカメラを決定する
+            if (_parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                // Overlayモードでは、カメラはnullを指定する必要がある
+                _uiCamera = null;
+            }
+            else
+            {
+                // ScreenSpaceCameraモードやWorldSpaceモードでは、Canvasに設定されているカメラを使用
+                _uiCamera = _parentCanvas.worldCamera;
+            }
+        }
+
 
         /// <summary>
         /// マーカー全体の表示・非表示を切り替える
@@ -27,75 +46,44 @@ namespace InGame.View
         }
 
         /// <summary>
-        /// アイコンの位置を設定する
-        /// </summary>
-        public void SetIconPosition(Vector3 position)
-        {
-            if (iconRectTransform != null) iconRectTransform.position = position;
-        }
-
-        /// <summary>
-        /// 矢印の位置を設定する
-        /// </summary>
-        public void SetArrowPosition(Vector3 position)
-        {
-            if (arrowRectTransform != null) arrowRectTransform.position = position;
-        }
-
-        /// <summary>
         /// 矢印の回転を設定する
         /// </summary>
         public void SetArrowRotation(Quaternion rotation)
         {
             if (arrowRectTransform != null) arrowRectTransform.rotation = rotation;
         }
-        
-        
-        
-        // 親CanvasのRectTransformをキャッシュするための変数を追加
-        private RectTransform _parentCanvasRect;
 
-// Awakeメソッドを追加
-        private void Awake()
-        {
-            // 自分自身の親であるCanvasのRectTransformを取得して保持
-            _parentCanvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
-        }
-
-// 古いSetIconPositionとSetArrowPositionを削除し、以下の新しいメソッドを追加します
 
         /// <summary>
         /// スクリーン座標を元にアイコンの位置を設定します
         /// </summary>
-        public void SetIconScreenPosition(Vector2 screenPosition, Camera camera)
+        public void SetIconScreenPosition(Vector2 screenPosition)
         {
-            SetElementPosition(iconRectTransform, screenPosition, camera);
+            SetElementPosition(iconRectTransform, screenPosition);
         }
 
         /// <summary>
         /// スクリーン座標を元に矢印の位置を設定します
         /// </summary>
-        public void SetArrowScreenPosition(Vector2 screenPosition, Camera camera)
+        public void SetArrowScreenPosition(Vector2 screenPosition)
         {
-            SetElementPosition(arrowRectTransform, screenPosition, camera);
+            SetElementPosition(arrowRectTransform, screenPosition);
         }
 
         /// <summary>
-        /// RectTransformUtilityを使ってUI要素を配置する共通メソッド
+        /// スクリーン座標を、Canvas Scalerの影響を考慮したUIのローカル座標に変換して配置する
         /// </summary>
-        private void SetElementPosition(RectTransform element, Vector2 screenPosition, Camera camera)
+        private void SetElementPosition(RectTransform element, Vector2 screenPosition)
         {
             if (element == null) return;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                _parentCanvasRect,
+                _parentCanvas.GetComponent<RectTransform>(),
                 screenPosition,
-                camera,
+                _uiCamera, // Awakeで設定した正しいカメラ情報を使用
                 out Vector2 localPoint
             );
-            // UI要素の配置には、positionよりもanchoredPositionを使うのが堅牢です
             element.anchoredPosition = localPoint;
         }
-        
     }
 }
