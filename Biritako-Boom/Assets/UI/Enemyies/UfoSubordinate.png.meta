@@ -52,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,10 +63,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -90,7 +90,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -128,133 +128,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UfoSubordinate 1_0
+      name: UfoSubordinate_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
-        width: 97
-        height: 86
+        y: 9
+        width: 96
+        height: 84
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d0f2c89730f136e50800000000000000
-      internalID: 6801313962044174093
+      spriteID: 4458b785ca5fb7341b76436be58a06b8
+      internalID: -1958619285
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UfoSubordinate 1_1
+      name: UfoSubordinate_1
       rect:
         serializedVersion: 2
-        x: 129
-        y: 6
-        width: 98
-        height: 87
+        x: 130
+        y: 7
+        width: 96
+        height: 85
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cc2b0c2dcf268bb70800000000000000
-      internalID: 8914984300387021516
+      spriteID: c3553416e46be38479d36b59f0ae4cb4
+      internalID: 310537958
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UfoSubordinate 1_2
+      name: UfoSubordinate_2
       rect:
         serializedVersion: 2
-        x: 258
-        y: 2
-        width: 98
-        height: 90
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 255dc4772e68701b0800000000000000
-      internalID: -5690431296937077422
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UfoSubordinate 1_3
-      rect:
-        serializedVersion: 2
-        x: 388
+        x: 259
         y: 3
-        width: 98
-        height: 87
+        width: 96
+        height: 88
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6579f2a99936e8870800000000000000
-      internalID: 8686990242612221782
+      spriteID: 2ae711a0eff210943ba830b80bd0f939
+      internalID: -1823744853
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UfoSubordinate 1_4
+      name: UfoSubordinate_3
       rect:
         serializedVersion: 2
-        x: 517
-        y: 2
-        width: 98
-        height: 90
+        x: 389
+        y: 4
+        width: 96
+        height: 85
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 485c62a388a092080800000000000000
-      internalID: -9211819982602189436
+      spriteID: 3cbdff1a4ece6794bb72725d1f46ddf9
+      internalID: 156803101
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UfoSubordinate 1_5
+      name: UfoSubordinate_4
       rect:
         serializedVersion: 2
-        x: 647
-        y: 6
-        width: 97
-        height: 87
+        x: 518
+        y: 3
+        width: 96
+        height: 88
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 76a27f0cf2430a9e0800000000000000
-      internalID: -1612231286893106585
+      spriteID: f08a844fa63a30942b9f21d1241d6028
+      internalID: -709322951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UfoSubordinate_5
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 7
+        width: 96
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65460e63b8969dc4cba56cf4d83882c2
+      internalID: 1033931780
       vertices: []
       indices: 
       edges: []
@@ -263,7 +263,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 33a1ef0af000955459119db3992de69f
     internalID: 0
     vertices: []
     indices: 
@@ -273,12 +273,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UfoSubordinate 1_0: 6801313962044174093
-      UfoSubordinate 1_1: 8914984300387021516
-      UfoSubordinate 1_2: -5690431296937077422
-      UfoSubordinate 1_3: 8686990242612221782
-      UfoSubordinate 1_4: -9211819982602189436
-      UfoSubordinate 1_5: -1612231286893106585
+      UfoSubordinate_0: -1958619285
+      UfoSubordinate_1: 310537958
+      UfoSubordinate_2: -1823744853
+      UfoSubordinate_3: 156803101
+      UfoSubordinate_4: -709322951
+      UfoSubordinate_5: 1033931780
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

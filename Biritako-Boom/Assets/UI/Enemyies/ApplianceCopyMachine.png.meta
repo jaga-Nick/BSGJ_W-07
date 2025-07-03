@@ -52,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,10 +63,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -90,7 +90,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -128,100 +128,34 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ApplianceCopyMachine 1_0
+      name: ApplianceCopyMachine_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 7
-        width: 49
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eba04afd85e9cf310800000000000000
-      internalID: 1440200085398096574
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCopyMachine 1_1
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 6
+        y: 8
         width: 48
-        height: 51
+        height: 45
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 713f06eeaa2896c90800000000000000
-      internalID: -7176060860582792425
+      spriteID: 79ea7c2aa49d46f40a8b9389d3e7be25
+      internalID: -1675805996
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ApplianceCopyMachine 1_2
+      name: ApplianceCopyMachine_1
       rect:
         serializedVersion: 2
-        x: 129
-        y: 8
-        width: 50
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a88a6c1a744dbba60800000000000000
-      internalID: 7690974192787171466
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCopyMachine 1_3
-      rect:
-        serializedVersion: 2
-        x: 207
-        y: 6
-        width: 47
-        height: 53
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 888ce8269fbf37bc0800000000000000
-      internalID: -3786405813169502072
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCopyMachine 1_4
-      rect:
-        serializedVersion: 2
-        x: 273
-        y: 8
-        width: 50
+        x: 67
+        y: 7
+        width: 46
         height: 49
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -229,20 +163,20 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0687151982be59700800000000000000
-      internalID: 546601489264638048
+      spriteID: e2da763f20ba88b4e93914a892766cc7
+      internalID: -315630789
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ApplianceCopyMachine 1_5
+      name: ApplianceCopyMachine_2
       rect:
         serializedVersion: 2
-        x: 341
-        y: 6
+        x: 130
+        y: 9
         width: 48
         height: 48
       alignment: 0
@@ -251,10 +185,76 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a20a342e35c9946b0800000000000000
-      internalID: -5311542401414488022
+      spriteID: 2a81d0cec59372c46a2537a6623f9cf9
+      internalID: 564752334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCopyMachine_3
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 7
+        width: 45
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d14082282b6ec7488307c0e4dceb9f2
+      internalID: 151061674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCopyMachine_4
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 9
+        width: 48
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44c6000fb40b6fd42933aeedd839d366
+      internalID: -907193440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCopyMachine_5
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 7
+        width: 46
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 081f6a39e1658124c955ee5e76667aa9
+      internalID: -421264459
       vertices: []
       indices: 
       edges: []
@@ -263,7 +263,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c11ada672608e644895e4cd9a64865c0
     internalID: 0
     vertices: []
     indices: 
@@ -273,12 +273,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ApplianceCopyMachine 1_0: 1440200085398096574
-      ApplianceCopyMachine 1_1: -7176060860582792425
-      ApplianceCopyMachine 1_2: 7690974192787171466
-      ApplianceCopyMachine 1_3: -3786405813169502072
-      ApplianceCopyMachine 1_4: 546601489264638048
-      ApplianceCopyMachine 1_5: -5311542401414488022
+      ApplianceCopyMachine_0: -1675805996
+      ApplianceCopyMachine_1: -315630789
+      ApplianceCopyMachine_2: 564752334
+      ApplianceCopyMachine_3: 151061674
+      ApplianceCopyMachine_4: -907193440
+      ApplianceCopyMachine_5: -421264459
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

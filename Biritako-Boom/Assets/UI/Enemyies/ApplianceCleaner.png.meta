@@ -61,7 +61,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,10 +72,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -99,7 +99,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -141,19 +141,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 14
-        width: 48
-        height: 34
+        y: 15
+        width: 47
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ebf4c57b54e2d6ab0800000000000000
-      internalID: -5013299933229592642
+      spriteID: d12061d69e9bf164ebb58ea66376f74e
+      internalID: 1865899424
       vertices: []
       indices: 
       edges: []
@@ -162,20 +162,20 @@ TextureImporter:
       name: ApplianceCleaner_1
       rect:
         serializedVersion: 2
-        x: 61
-        y: 13
-        width: 49
-        height: 29
+        x: 62
+        y: 14
+        width: 47
+        height: 27
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c5838f407ced261c0800000000000000
-      internalID: -4511798930308581284
+      spriteID: 27d5e7004b9da6345901185355fc6968
+      internalID: -1276940158
       vertices: []
       indices: 
       edges: []
@@ -184,20 +184,20 @@ TextureImporter:
       name: ApplianceCleaner_2
       rect:
         serializedVersion: 2
-        x: 123
-        y: 13
-        width: 50
-        height: 35
+        x: 124
+        y: 14
+        width: 48
+        height: 33
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aaf550fab0c8ffb20800000000000000
-      internalID: 3170406644501012394
+      spriteID: 2ecb92fe0b285fa45bac458f1c6ceca5
+      internalID: -1034352438
       vertices: []
       indices: 
       edges: []
@@ -206,117 +206,7 @@ TextureImporter:
       name: ApplianceCleaner_3
       rect:
         serializedVersion: 2
-        x: 184
-        y: 13
-        width: 51
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 51f0c2722ad660750800000000000000
-      internalID: 6270820074369322773
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCleaner_4
-      rect:
-        serializedVersion: 2
-        x: 245
-        y: 14
-        width: 52
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 39d4365ca2deb7200800000000000000
-      internalID: 178997378167295379
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCleaner_5
-      rect:
-        serializedVersion: 2
-        x: 309
-        y: 13
-        width: 51
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3821e91bf40386dd0800000000000000
-      internalID: -2492689274909093245
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCleaner_6
-      rect:
-        serializedVersion: 2
-        x: 371
-        y: 14
-        width: 51
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: caf6922c29ba9d600800000000000000
-      internalID: 493614280984850348
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCleaner_7
-      rect:
-        serializedVersion: 2
-        x: 433
-        y: 14
-        width: 50
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 40da5cb1eba791740800000000000000
-      internalID: 5123261008038964484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ApplianceCleaner_8
-      rect:
-        serializedVersion: 2
-        x: 497
+        x: 185
         y: 14
         width: 49
         height: 34
@@ -326,10 +216,120 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c2eb71ff12fb923c0800000000000000
-      internalID: -4383762609533895124
+      spriteID: acc50d33bae4445438c8ed5c91dd37f9
+      internalID: 207131335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCleaner_4
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 15
+        width: 50
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97b2982a13b3b304f92c85f7d421c57c
+      internalID: -371164270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCleaner_5
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 14
+        width: 49
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58a193fd6250b6a49819452400da12b8
+      internalID: 151357322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCleaner_6
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 15
+        width: 49
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b192fe4a911f9834caca073c4e057e94
+      internalID: -1248059938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCleaner_7
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 15
+        width: 48
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9fcb43a229fbc54f8a950ef5ce3ad2d
+      internalID: 1286157467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceCleaner_8
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 15
+        width: 47
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39499804176dce14ab6de60408855d61
+      internalID: -1492460188
       vertices: []
       indices: 
       edges: []
@@ -338,7 +338,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 39d1a959e1b19b34cb3e21b0549c8a61
     internalID: 0
     vertices: []
     indices: 
@@ -348,15 +348,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ApplianceCleaner_0: -5013299933229592642
-      ApplianceCleaner_1: -4511798930308581284
-      ApplianceCleaner_2: 3170406644501012394
-      ApplianceCleaner_3: 6270820074369322773
-      ApplianceCleaner_4: 178997378167295379
-      ApplianceCleaner_5: -2492689274909093245
-      ApplianceCleaner_6: 493614280984850348
-      ApplianceCleaner_7: 5123261008038964484
-      ApplianceCleaner_8: -4383762609533895124
+      ApplianceCleaner_0: 1865899424
+      ApplianceCleaner_1: -1276940158
+      ApplianceCleaner_2: -1034352438
+      ApplianceCleaner_3: 207131335
+      ApplianceCleaner_4: -371164270
+      ApplianceCleaner_5: 151357322
+      ApplianceCleaner_6: -1248059938
+      ApplianceCleaner_7: 1286157467
+      ApplianceCleaner_8: -1492460188
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

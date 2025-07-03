@@ -8,6 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Common;
 using InGame.Presenter;
 using UnityEngine;
+using System;
 
 namespace InGame.NonMVP
 {
@@ -50,7 +51,9 @@ namespace InGame.NonMVP
         /// </summary>
         [Header("母艦のアドレス")]
         [SerializeField] private string _motherShipAddress = "Enemy_MotherShip";
-        
+
+        public static event Action OnGenerateMotherShip;
+
 
         /// <summary>
         /// Prefab
@@ -78,9 +81,11 @@ namespace InGame.NonMVP
         {
             // タイマーをスポーン時間のインターバルにセット
             timer = spawnInterval;
+            // UFOをスポーンする
             SpawnUfo();
+            // 母艦をスポーンする
+            SpawnMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
             
-            GenerateMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
             _alienManager = FindObjectOfType<AlienManager>();
             SpawnAlien().Forget();
         }
@@ -101,11 +106,11 @@ namespace InGame.NonMVP
             for (var i = 0; i < numberOfSpawnElectronics; i++)
             {
                 // 家電を選択して生成する
-                var randomIndex = Random.Range(0, electronicsPrefabs.Length);
+                var randomIndex = UnityEngine.Random.Range(0, electronicsPrefabs.Length);
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
                 // UFOの座標をランダムに取得
-                var ufoRandomIndex = Random.Range(0, maxUfo);
+                var ufoRandomIndex = UnityEngine.Random.Range(0, maxUfo);
                 var ufoPosition = ufosList[ufoRandomIndex].transform.position;
             
                 // UFOがカメラ内にいるときは対象から外す
@@ -175,17 +180,18 @@ namespace InGame.NonMVP
         /// <summary>
         /// MotherShipの生成とスポーン
         /// </summary>
-        public async UniTask GenerateMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        public async UniTask SpawnMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
         {
             // Addressables経由でプレハブを非同期ロード
-            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+            var handle = Addressables.LoadAssetAsync<GameObject>(address);
 
             using (new HandleDisposable<GameObject>(handle))
             {
-                GameObject prefab = await handle;
+                var prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
                 Instantiate(prefab,position,Quaternion.identity);
             }
+            OnGenerateMotherShip?.Invoke();
         }
         
         

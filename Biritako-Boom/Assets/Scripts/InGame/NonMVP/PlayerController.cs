@@ -66,6 +66,7 @@ namespace InGame.NonMVP
                 {
                     //Debug.Log("プラグを置く");
                     Model.PutCode();
+                    
                 }
 
             }

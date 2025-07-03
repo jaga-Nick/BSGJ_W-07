@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Common;
 
 namespace InGame.NonMVP
 {
@@ -7,7 +8,7 @@ namespace InGame.NonMVP
     /// ゲームの流れを管理するクラス。
     /// UI周りもこちらで行う。
     /// </summary>
-    public class GameManager : MonoBehaviour
+    public class InGameManager : DestroyAvailable_SingletonMonoBehaviourBase<InGameManager>
     {
         /// <summary>
         /// ゲームタイムのパラメタ
@@ -20,7 +21,7 @@ namespace InGame.NonMVP
         /// uGUI
         /// </summary>
         [Header("タイマーのUI")]
-        [SerializeField] protected Image timerUI;
+        [SerializeField] private Image timerUI;
         [Header("開始の色")]
         [ColorUsage(false, false), SerializeField] private Color startColor;
         [Header("終端の色")]
@@ -54,6 +55,15 @@ namespace InGame.NonMVP
             var color = Color.Lerp(endColor, startColor, t);
             color.a = 1.0f;
             timerUI.color = color;
+        }
+
+        /// <summary>
+        /// 時間を変更する。
+        /// </summary>
+        /// <param name="time"></param>
+        public void SetTimeScale(float time)
+        {
+            Time.timeScale = time;
         }
     }
 }

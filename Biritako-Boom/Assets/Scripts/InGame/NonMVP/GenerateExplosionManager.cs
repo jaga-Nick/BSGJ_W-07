@@ -8,17 +8,30 @@ namespace InGame.NonMVP
     /// </summary>
     public class GenerateExplosionManager:DestroyAvailable_SingletonMonoBehaviourBase<GenerateExplosionManager>
     {
+        [Header("カットインに必要")]
+        [SerializeField]
+        private Canvas CutInCanvas;
+        [SerializeField]
+        private GameObject CutIn;
+
         [Header("爆発大")]
         [SerializeField]
-        private float BigExplosionCollisionSize;
-        [SerializeField]
         private float BigExplosionSize = 0.25f;
+        [SerializeField]
+        private int BigDamage = 100;
+
         [Header("爆発中")]
         [SerializeField]
         private float MiddleCollisionSize=0.25f;
+        [SerializeField]
+        private int MiddleDamage = 75;
+
         [Header("爆発小")]
         [SerializeField]
         private float SmallCollisionSize=0.25f;
+        [SerializeField]
+        private int SmallDamage = 50;
+
 
         [Header("基準値")]
         [SerializeField]
@@ -28,6 +41,11 @@ namespace InGame.NonMVP
         {
             //デバッグ用の保険。
             instance = this;
+        }
+
+        public void GenerateCutIn()
+        {
+            Instantiate(CutIn, CutInCanvas.transform);
         }
 
         /// <summary>
@@ -45,6 +63,7 @@ namespace InGame.NonMVP
                     CircleCollider2D collider_sma=gameObject.GetComponent<CircleCollider2D>();
                     collider_sma.radius=SmallCollisionSize;
 
+                    smallExplosionAttach.SetDamage(SmallDamage);
                     await smallExplosionAttach.Explosion("SmallExplosion");
                     break;
                 case 1:
@@ -53,6 +72,7 @@ namespace InGame.NonMVP
                     CircleCollider2D collider_mid = gameObject.GetComponent<CircleCollider2D>();
                     collider_mid.radius = SmallCollisionSize;
 
+                    middleExplosionAttach.SetDamage(MiddleDamage);
                     await middleExplosionAttach.Explosion("MiddiumExplosion");
                     break;
                 case 2:
@@ -61,6 +81,7 @@ namespace InGame.NonMVP
                     collider_big.radius = SmallCollisionSize;
                     ExplosionAttach bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
 
+                    bigExplosionAttach.SetDamage(BigDamage);
                     await bigExplosionAttach.Explosion("BigExplosion");
                     break;
             }

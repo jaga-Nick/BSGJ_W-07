@@ -71,7 +71,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -153,6 +153,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectMaterial: {fileID: 2100000, guid: 1c79670d0d36e7247afef2c783232c49, type: 2}
   offsetZ: -10
+  _defaultSize: 5.625
+  zoomInSize: 4
+  zoomOutSize: 7
+  zoomInTime: 0.1
+  zoomOutTime: 0.1
+  defaultTime: 0.3
+  zoomHoldTime: 0.2
   enableColorblindModeOnStart: 0
   colorblindType: 0
 --- !u!114 &6450177927000460645
