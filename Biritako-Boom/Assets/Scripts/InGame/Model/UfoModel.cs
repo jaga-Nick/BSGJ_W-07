@@ -11,6 +11,7 @@ namespace InGame.Model
     /// </summary>
     public class UfoModel : IEnemyModel
     {
+        private GameObject UfoObject=null;
         /// <summary>
         /// 移動許容距離
         /// </summary>
@@ -52,6 +53,22 @@ namespace InGame.Model
         public int CurrentScore { get; set; }
 
 
+        public void SetUfoObject(GameObject obje)
+        {
+            UfoObject = obje;
+        }
+
+        void IEnemyModel.OnDamage(int damage)
+        {
+            Debug.Log("Ufoがダメージを受けてるよ！");
+
+            ((IEnemyModel)this).CurrentHp -= damage;
+            //被弾時加算
+            ScoreModel.Instance().IncrementScore(50);
+
+            if (((IEnemyModel)this).CurrentHp <= 0) ((IEnemyModel)this).OnDead();
+        }
+
         /// <summary>
         /// UFOのHPをamountに応じて増やす。
         /// </summary>
@@ -81,6 +98,21 @@ namespace InGame.Model
         public bool IsDead()
         {
             return ((IEnemyModel)this).CurrentHp <= 0;
+        }
+
+        /// <summary>
+        /// 死亡時処理(今はやってない）
+        /// </summary>
+        /// <returns></returns>
+        async UniTask IEnemyModel.OnDead()
+        {
+            ScoreModel.Instance().IncrementScore(500);
+            
+            if (UfoObject != null)
+            {
+                //自己破壊
+                GameObject.Destroy(UfoObject);
+            }
         }
 
         /// <summary>
@@ -124,16 +156,6 @@ namespace InGame.Model
         {
             Position = newPosition;
         }
-
-        /// <summary>
-        /// 死亡時処理
-        /// </summary>
-        /// <returns></returns>
-        public async UniTask OnDead()
-        {
-            
-        }
-
         /*
         /// <summary>
         /// UFOを破壊する、

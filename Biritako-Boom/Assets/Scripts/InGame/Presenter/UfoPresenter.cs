@@ -72,6 +72,7 @@ namespace InGame.Presenter
                 //CurrentUfoHp = maxUfoHp,
                 UfoScore = ufoScore,
             };
+            _model.SetUfoObject(gameObject);
             _view = gameObject.GetComponent<UfoView>();
             
             AutoMoveUfoRoutine().Forget();

@@ -80,7 +80,7 @@ namespace InGame.NonMVP
                     //コンセントを生成する。
                     Model.GenerateSocket(Presenter.GetSocketPrefab());
                 }
-                else if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
+                else// if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
                 {
                     //Debug.Log("コンセント回収");
                     Model.DeleteSocket();
