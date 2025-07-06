@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8661942190219035742}
   - component: {fileID: 2629848578483322675}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 4579485241098840379}
   - component: {fileID: 1123496913849891493}
   - component: {fileID: 6275503577709545430}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Enemy_Alien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,8 +168,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1716994275
-  m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingLayer: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -79376298, guid: fc4bb2110acda554a93564273c799e14, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
