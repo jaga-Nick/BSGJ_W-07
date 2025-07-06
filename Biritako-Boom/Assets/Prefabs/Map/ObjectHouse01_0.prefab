@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 848282078887697764}
   - component: {fileID: 8348527094654141035}
   - component: {fileID: -2058552376179559293}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: ObjectHouse01_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.22167}
+  m_Offset: {x: 0.012844503, y: -0.21583265}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,5 +132,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.461216, y: 2.3202124}
-  m_EdgeRadius: 0
+  m_Size: {x: 1.9647356, y: 1.8510791}
+  m_EdgeRadius: 0.25

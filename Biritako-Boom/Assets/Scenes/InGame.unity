@@ -806,7 +806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5bfd7b9c5c44d8b54f76ce874abdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 5
+  spawnInterval: 3
   timer: 0
   maxElectronics: 50
   numberOfSpawnElectronics: 3
