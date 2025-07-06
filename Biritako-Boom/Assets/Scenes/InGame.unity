@@ -7546,6 +7546,14 @@ PrefabInstance:
       propertyPath: _canvasRectTransform
       value: 
       objectReference: {fileID: 2126630025}
+    - target: {fileID: 4976672744610969238, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3707672853652538639, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
+    - target: {fileID: 6808513546779934383, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8969308266730366247, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
     - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: margins.top
       value: 300
