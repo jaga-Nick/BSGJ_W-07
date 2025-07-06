@@ -222,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      GimmickDirt_0: 4291793978713855275
+      GimmickDirt_1: -1892042976621713767
+      GimmickDirt_2: -1879744772390842646
+      GimmickDirt_3: -8240557625134654664
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

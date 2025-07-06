@@ -1717,6 +1717,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: -6571966945838140521, guid: 70c3f5036fc284a4a9e37bebe00b7cf2, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6571966945838140521, guid: 70c3f5036fc284a4a9e37bebe00b7cf2, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 414247109
+      objectReference: {fileID: 0}
     - target: {fileID: -4333489030365328872, guid: 70c3f5036fc284a4a9e37bebe00b7cf2, type: 3}
       propertyPath: m_Name
       value: maplayout
@@ -1770,7 +1778,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -1303560195119586934, guid: 70c3f5036fc284a4a9e37bebe00b7cf2, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -2695619058785784247, guid: 70c3f5036fc284a4a9e37bebe00b7cf2, type: 3}
