@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: eb8824d4f3a579b46a71560fcaca59fc
+guid: f5cab20b5f320c241bd62c60109a5b4f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5425850782925689029
-    second: ObjectStone_0
-  - first:
-      213: 7496295464496665798
-    second: ObjectStone_1
+      213: 1005882923455212092
+    second: MapchipGrassAndLoad_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ObjectStone_0
+      name: MapchipGrassAndLoad_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 1
-        width: 33
-        height: 29
+        y: 0
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5c09f882a8e7c4b40800000000000000
-      internalID: 5425850782925689029
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ObjectStone_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 1
-        width: 32
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6c412b40201380860800000000000000
-      internalID: 7496295464496665798
+      spriteID: c3aed22803d95fd00800000000000000
+      internalID: 1005882923455212092
       vertices: []
       indices: 
       edges: []
@@ -172,9 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      ObjectStone_0: 5425850782925689029
-      ObjectStone_1: 7496295464496665798
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
