@@ -1,25 +1,19 @@
 fileFormatVersion: 2
-guid: 3ce709b1445666c46991617853ce3495
+guid: dcaae927c3fc80544a9875e8ce1168a4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3468991553250566233
-    second: PlayableCharacterWalkWithPlug_0
+      213: 1191852302315029846
+    second: ObjectHouse03_0
   - first:
-      213: 7800193801785316394
-    second: PlayableCharacterWalkWithPlug_1
+      213: 1603994475795621340
+    second: ObjectHouse03_1
   - first:
-      213: 5490949316790342975
-    second: PlayableCharacterWalkWithPlug_2
+      213: -3788460876815506719
+    second: ObjectHouse03_2
   - first:
-      213: -1608104463094649178
-    second: PlayableCharacterWalkWithPlug_3
-  - first:
-      213: -1262223205182690179
-    second: PlayableCharacterWalkWithPlug_4
-  - first:
-      213: -648231819213650630
-    second: PlayableCharacterWalkWithPlug_5
+      213: 5979320545890761652
+    second: ObjectHouse03_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -68,7 +62,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -90,7 +84,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -128,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_0
+      name: ObjectHouse03_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 2
         y: 0
-        width: 30
-        height: 50
+        width: 92
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7af5ba3df8aabdfc0800000000000000
-      internalID: -3468991553250566233
+      spriteID: 6550830ba5f4a8010800000000000000
+      internalID: 1191852302315029846
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_1
+      name: ObjectHouse03_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 98
         y: 0
-        width: 30
-        height: 50
+        width: 92
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -165,20 +159,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a241e9e7feadf3c60800000000000000
-      internalID: 7800193801785316394
+      spriteID: cd5ac773a78824610800000000000000
+      internalID: 1603994475795621340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_2
+      name: ObjectHouse03_2
       rect:
         serializedVersion: 2
-        x: 63
+        x: 194
         y: 0
-        width: 30
-        height: 50
+        width: 92
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f3556f2bf45c33c40800000000000000
-      internalID: 5490949316790342975
+      spriteID: 1e262f797eeac6bc0800000000000000
+      internalID: -3788460876815506719
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_3
+      name: ObjectHouse03_3
       rect:
         serializedVersion: 2
-        x: 94
+        x: 290
         y: 0
-        width: 30
-        height: 50
+        width: 92
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -209,52 +203,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6aee58bc28ddea9e0800000000000000
-      internalID: -1608104463094649178
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_4
-      rect:
-        serializedVersion: 2
-        x: 125
-        y: 0
-        width: 30
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d7ca4d3beaeab7ee0800000000000000
-      internalID: -1262223205182690179
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PlayableCharacterWalkWithPlug_5
-      rect:
-        serializedVersion: 2
-        x: 156
-        y: 0
-        width: 30
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a354aab48940107f0800000000000000
-      internalID: -648231819213650630
+      spriteID: 4bb73005b50daf250800000000000000
+      internalID: 5979320545890761652
       vertices: []
       indices: 
       edges: []
@@ -273,12 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayableCharacterWalkWithPlug_0: -3468991553250566233
-      PlayableCharacterWalkWithPlug_1: 7800193801785316394
-      PlayableCharacterWalkWithPlug_2: 5490949316790342975
-      PlayableCharacterWalkWithPlug_3: -1608104463094649178
-      PlayableCharacterWalkWithPlug_4: -1262223205182690179
-      PlayableCharacterWalkWithPlug_5: -648231819213650630
+      ObjectHouse03_0: 1191852302315029846
+      ObjectHouse03_1: 1603994475795621340
+      ObjectHouse03_2: -3788460876815506719
+      ObjectHouse03_3: 5979320545890761652
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
