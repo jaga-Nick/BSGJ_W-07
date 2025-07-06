@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Biritako-Boom/Assets/Resources/com.seanba.super-tiled2unity/CHANGELOG.md.meta
+guid: 3df7112953e613b4cb33053c0894907c
+TextScriptImporter:
+========
 guid: 1a4bd1b01e19f9c4aad7f2c8b23ab31a
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> 3cafcc103e6f50315d84da7841d2dcc4d07943d0:Biritako-Boom/Assets/UI/Title.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
