@@ -54,10 +54,12 @@ namespace InGame.NonMVP
         public async void Factory(Vector3 point,int ExplosionPower)
         {
             GameObject gameObject = null;
+
+            Vector3 vec = new Vector3(point.x, point.y,0);
             switch (ExplosionPower)
             {
                 case 0:
-                    gameObject=Instantiate(ExplosionObject, point, Quaternion.identity);
+                    gameObject=Instantiate(ExplosionObject, vec, Quaternion.identity);
 
                     ExplosionAttach smallExplosionAttach=gameObject.GetComponent<ExplosionAttach>();
                     CircleCollider2D collider_sma=gameObject.GetComponent<CircleCollider2D>();
@@ -67,7 +69,7 @@ namespace InGame.NonMVP
                     await smallExplosionAttach.Explosion("SmallExplosion");
                     break;
                 case 1:
-                    gameObject =Instantiate(ExplosionObject, point, Quaternion.identity);
+                    gameObject =Instantiate(ExplosionObject, vec, Quaternion.identity);
                     ExplosionAttach middleExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
                     CircleCollider2D collider_mid = gameObject.GetComponent<CircleCollider2D>();
                     collider_mid.radius = SmallCollisionSize;
@@ -76,7 +78,7 @@ namespace InGame.NonMVP
                     await middleExplosionAttach.Explosion("MiddiumExplosion");
                     break;
                 case 2:
-                    gameObject=Instantiate(ExplosionObject, point, Quaternion.identity);
+                    gameObject=Instantiate(ExplosionObject, vec, Quaternion.identity);
                     CircleCollider2D collider_big = gameObject.GetComponent<CircleCollider2D>();
                     collider_big.radius = SmallCollisionSize;
                     ExplosionAttach bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();

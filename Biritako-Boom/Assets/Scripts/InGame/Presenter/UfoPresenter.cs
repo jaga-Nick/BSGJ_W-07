@@ -63,16 +63,13 @@ namespace InGame.Presenter
 
         private void Start()
         {
-            _model = new UfoModel
-            {
-                Rb = gameObject.GetComponent<Rigidbody2D>(),
-                Speed = moveSpeed,
-                Position = transform.position,
-                MaxUfoHp = maxUfoHp,
-                //CurrentUfoHp = maxUfoHp,
-                UfoScore = ufoScore,
-            };
-            _model.SetUfoObject(gameObject);
+            _model = gameObject.GetComponent<UfoModel>();
+            _model.Rb = gameObject.GetComponent<Rigidbody2D>();
+            _model.Speed = moveSpeed;
+            _model.Position = transform.position;
+            _model.MaxUfoHp = maxUfoHp;
+            //CurrentUfoHp = maxUfoHp,
+            _model.UfoScore = ufoScore;
             _view = gameObject.GetComponent<UfoView>();
             
             AutoMoveUfoRoutine().Forget();
@@ -180,9 +177,6 @@ namespace InGame.Presenter
             }
         }
 
-        private void OnDestroy()
-        {
-            //_model?.DestroyUfo(gameObject);
-        }
+       
     }
 }

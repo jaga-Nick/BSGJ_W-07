@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      GimmickBreakableDebris_0: 8394109566290877852
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
