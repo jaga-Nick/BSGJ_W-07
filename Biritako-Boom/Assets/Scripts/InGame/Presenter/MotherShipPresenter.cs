@@ -2,17 +2,16 @@ using System.Threading;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
+using ShakeEffect;
 
 namespace InGame.Presenter
 {
     public class MotherShipPresenter : MonoBehaviour
     {
         
-        [Header("母艦Prefabデータ")]
-        //[SerializeField]
-        //private GameObject CharacterPrefab;
-        [SerializeField]
-        private string CharacterAddress="MotherShip";
+        [Header("Cameraシェイク")]
+        [SerializeField] private Shaker cameraShaker;
+        [SerializeField] private ShakePreset explosionShake;
         
         //MotherShip統括
         private MotherShipModel Model;
@@ -23,12 +22,18 @@ namespace InGame.Presenter
         {
             View = GetComponent<MotherShipView>();
             Model = GetComponent<MotherShipModel>();
+            
+            cameraShaker = Camera.main.GetComponent<Shaker>();
+            
             Model.Initialize();
             Model.SetRb(View.GetRb());
         }
         
         private void Start()
         {
+            Model.SetShaker(cameraShaker);
+            Model.SetShakePreset(explosionShake);
+            
             Model.FindTargets();
             Model.StartPatrol();
         }
