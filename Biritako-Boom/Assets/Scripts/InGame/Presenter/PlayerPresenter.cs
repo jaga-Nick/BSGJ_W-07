@@ -26,6 +26,9 @@ namespace InGame.Presenter
         //Player統括
         public PlayerModel Model { get; private set; }
         private GameHUDView View;
+
+        public PlayerView animationView { get; private set; }
+
         
         //システムモデル
         private TimerModel timerModel=new TimerModel();
@@ -50,6 +53,9 @@ namespace InGame.Presenter
             Model?.SetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
             View = gameObject.GetComponent<GameHUDView>();
+            View.SetModel(Model);
+            animationView=View.GetplayerView();
+
             //スコアイベントの購読(Singletonの呼び出し）
             scoreModel = ScoreModel.Instance();
             scoreModel.ScoreChanged += ScoreChanged;
@@ -59,6 +65,7 @@ namespace InGame.Presenter
         }
         private void Update()
         {
+            View?.AnimationUpdate();
             View?.UpdatePlayerView(Model.GetCodeGaugePercent());
             View?.UpdateTimerView(timerModel.GetTimePersent());
 
