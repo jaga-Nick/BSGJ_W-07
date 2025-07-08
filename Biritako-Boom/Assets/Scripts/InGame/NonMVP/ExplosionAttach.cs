@@ -33,7 +33,11 @@ namespace InGame.NonMVP
         {
             //Debug.Log("ここで一応プレイヤーかIEnemyかの処理")
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
-            if(enemies != null) { enemies.OnDamage(Damage); }
+            if(enemies != null) 
+            {
+                Debug.Log("ダメージ判定");
+                enemies.OnDamage(Damage); 
+            }
         }
     }
 }

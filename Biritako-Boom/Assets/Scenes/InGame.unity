@@ -70058,8 +70058,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d37c999b8f66994cbef7285287027ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutInCanvas: {fileID: 0}
-  CutIn: {fileID: 0}
+  CutInCanvas: {fileID: 2126630024}
+  CutIn: {fileID: 4451397332625592543, guid: 02b2da22aa0e8ca4995c7175cfed02a6, type: 3}
   BigExplosionSize: 3
   BigDamage: 100
   MiddleCollisionSize: 3
