@@ -29,7 +29,7 @@ namespace InGame.Model
 
         //--データとして保持する為に。
         public GameObject PlayerObject { get; private set; }
-        private Rigidbody2D Rb;
+        public Rigidbody2D Rb { get; private set; }
         //-----------------------
         /// <summary>
         /// 生成地点
@@ -442,6 +442,7 @@ namespace InGame.Model
             codeHaveCancellation?.Dispose();
             codeHaveCancellation = null;
 
+            presenter.animationView.SetHaveConcent(false);
 
             CurrentHaveCodeSimulater.PutCodeEvent(this);
             CurrentHaveCodeSimulater = null;
