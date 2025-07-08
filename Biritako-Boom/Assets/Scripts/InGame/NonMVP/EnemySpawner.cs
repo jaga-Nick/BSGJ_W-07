@@ -15,7 +15,7 @@ namespace InGame.NonMVP
     /// <summary>
     /// Enemyのスポナー
     /// </summary>
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : DestroyAvailable_SingletonMonoBehaviourBase<EnemySpawner>
     {
         /// <summary>
         /// スポーンのプロパティ
@@ -79,6 +79,9 @@ namespace InGame.NonMVP
 
         private void Start()
         {
+            //アタッチされているのでそのままを維持する為に格納。（一つのみを想定しているので維持しない場合も放置でもよい。
+            instance = this;
+
             // タイマーをスポーン時間のインターバルにセット
             timer = spawnInterval;
             // UFOをスポーンする
@@ -110,7 +113,7 @@ namespace InGame.NonMVP
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
                 // UFOの座標をランダムに取得
-                var ufoRandomIndex = UnityEngine.Random.Range(0, maxUfo);
+                var ufoRandomIndex = UnityEngine.Random.Range(0, ufosList.Count);
                 var ufoPosition = ufosList[ufoRandomIndex].transform.position;
             
                 // UFOがカメラ内にいるときは対象から外す
@@ -170,8 +173,9 @@ namespace InGame.NonMVP
             CurrentElectronics--;
         }
 
-        public void OnUfoDeath()
+        public void OnUfoDeath(GameObject ufo)
         {
+            ufosList.Remove(ufo);
             CurrentUfo--;
         }
 

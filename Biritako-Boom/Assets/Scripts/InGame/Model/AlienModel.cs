@@ -107,7 +107,9 @@ namespace InGame.Model
         {
             // HPを減算
             ((IEnemyModel)this).CurrentHp -= damage;
-            
+
+            Debug.Log(((IEnemyModel)this).CurrentHp);
+
             // HPがまだ残っている場合
             if (((IEnemyModel)this).CurrentHp > 0)
             {
@@ -116,6 +118,7 @@ namespace InGame.Model
             }
             else // HPが0以下になった場合
             {
+                Debug.Log("死亡した");
                 // プールに戻るべきことを外部に通知（イベント発行）
                 OnDead().Forget();
             }
