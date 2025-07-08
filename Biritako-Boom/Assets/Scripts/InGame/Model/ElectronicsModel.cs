@@ -46,15 +46,6 @@ namespace InGame.Model
             // 母艦UFOの場合3
             return 1;
         }
-        
-        /// <summary>
-        /// 家電のモーション
-        /// </summary>
-        public virtual void Move()
-        {
-           
-        }
-
         /// <summary>
         /// ランダムな方向を取得
         /// </summary>

@@ -422,7 +422,6 @@ namespace InGame.NonMVP
                 while (count < num)
                 {
                     i += rate;
-                    Debug.Log(i);
                     //爆発させる。（線の途中）
                     generater.Factory(Positions[i], 0);
                     count++;

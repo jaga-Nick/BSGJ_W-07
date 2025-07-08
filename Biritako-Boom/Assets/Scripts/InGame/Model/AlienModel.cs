@@ -119,7 +119,7 @@ namespace InGame.Model
         public void OnDamage(int damage)
         {
             ((IEnemyModel)this).CurrentHp -= damage;
-            // HPが0より大きい場合はダメージイベントを発行
+            // HPがまだ残っている場合
             if (((IEnemyModel)this).CurrentHp > 0)
             {
                 OnDamaged?.Invoke();
@@ -127,7 +127,10 @@ namespace InGame.Model
             // HPが0以下になったら死亡処理へ
             else
             {
-                OnDead().Forget(); // Forgetで非同期処理の完了を待たない
+
+                Debug.Log("死亡した");
+                // プールに戻るべきことを外部に通知（イベント発行）
+                OnDead().Forget();
             }
         }
         

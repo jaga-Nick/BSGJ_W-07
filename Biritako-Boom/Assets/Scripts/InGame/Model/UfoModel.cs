@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using InGame.NonMVP;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -9,7 +10,7 @@ namespace InGame.Model
     /// <summary>
     /// UFO（Enemy）の管理クラス
     /// </summary>
-    public class UfoModel : IEnemyModel
+    public class UfoModel : MonoBehaviour,IEnemyModel
     {
         /// <summary>
         /// 移動許容距離
@@ -52,6 +53,17 @@ namespace InGame.Model
         public int CurrentScore { get; set; }
 
 
+        void IEnemyModel.OnDamage(int damage)
+        {
+            Debug.Log("Ufoがダメージを受けてるよ！");
+
+            ((IEnemyModel)this).CurrentHp -= damage;
+            //被弾時加算
+            ScoreModel.Instance().IncrementScore(50);
+
+            if (((IEnemyModel)this).CurrentHp <= 0) ((IEnemyModel)this).OnDead();
+        }
+
         /// <summary>
         /// UFOのHPをamountに応じて増やす。
         /// </summary>
@@ -81,6 +93,21 @@ namespace InGame.Model
         public bool IsDead()
         {
             return ((IEnemyModel)this).CurrentHp <= 0;
+        }
+
+        /// <summary>
+        /// 死亡時処理
+        /// </summary>
+        /// <returns></returns>
+        async UniTask IEnemyModel.OnDead()
+        {
+            ScoreModel.Instance().IncrementScore(500);
+
+            GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 3);
+
+            EnemySpawner.Instance().OnUfoDeath(gameObject);
+            //自己破壊
+            GameObject.Destroy(gameObject);
         }
 
         /// <summary>
@@ -124,16 +151,6 @@ namespace InGame.Model
         {
             Position = newPosition;
         }
-
-        /// <summary>
-        /// 死亡時処理
-        /// </summary>
-        /// <returns></returns>
-        public async UniTask OnDead()
-        {
-            
-        }
-
         /*
         /// <summary>
         /// UFOを破壊する、
