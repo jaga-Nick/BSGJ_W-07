@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using InGame.Presenter;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using ShakeEffect;
 
 namespace InGame.Model
 {
@@ -17,6 +18,9 @@ namespace InGame.Model
         #region 定数
         // この距離までターゲットに近づいたら、目的地に到着したとみなすための閾値
         private const float DESTINATION_THRESHOLD = 0.5f;
+        
+        private const int _hitScore = 75;
+        private const int _deadScore = 5000;
 
         #endregion
 
@@ -60,9 +64,6 @@ namespace InGame.Model
         int IEnemyModel.CurrentHp { get; set;}
         
         
-        // 破壊されたときに得られるスコア
-        private int _score { get; } = 1000000;
-        
         // 母艦の移動速度
         private float _speed;
 
@@ -83,6 +84,9 @@ namespace InGame.Model
         // 巡回対象となる雑魚UFOのTransformリスト
         private List<GameObject> _ufoTargets = new List<GameObject>();
         
+        private Shaker _cameraShaker;
+        private ShakePreset _explosionShake;
+        
         // 現在の巡回ターゲットのインデックス
         private int _currentTargetIndex = 0;
 
@@ -97,9 +101,8 @@ namespace InGame.Model
         {
             IntervalTime = 0.2f;
             _speed = 5.0f;
-            ((IEnemyModel)this).CurrentHp = 5000;
+            ((IEnemyModel)this).CurrentHp = 250;
             ExplosionPower = 100;
-            //_score = 1000000;
             isEnd = false;
         }
 
@@ -116,7 +119,10 @@ namespace InGame.Model
         public void SetRandomPatrol(bool mode){ isRandomPatrol  = mode; }
         
         public void SetSpeed(float speed) { _speed = speed; }
-        
+
+        public void SetShaker(Shaker shaker) { _cameraShaker = shaker; }
+
+        public void SetShakePreset(ShakePreset shakePreset) { _explosionShake  = shakePreset; }
         
         #endregion
         
@@ -191,24 +197,6 @@ namespace InGame.Model
                     break;
             }
             
-            /*
-            
-            CurrentTime += Time.deltaTime;
-
-            if (IntervalTime >= CurrentTime)
-            {
-                // 状態に応じて処理を分岐させます
-                switch (_currentState)
-                {
-                    case State.Patrolling:
-                        Patrolling();
-                        break;
-                    case State.MovingToCenter:
-                        MoveCenter();
-                        break;
-                }
-            }
-            */
         }
 
 
@@ -229,6 +217,8 @@ namespace InGame.Model
         public void OnDamage(int damage)
         {
             ((IEnemyModel)this).CurrentHp -= damage;
+            ScoreModel.Instance().IncrementScore(_hitScore);
+            _cameraShaker.Shake(_explosionShake);
             if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
         }
 
@@ -238,6 +228,7 @@ namespace InGame.Model
         public async UniTask OnDead()
         {
             Debug.Log("第三部　完!!");
+            ScoreModel.Instance().IncrementScore(_deadScore);
 
             isEnd = true;
         }
