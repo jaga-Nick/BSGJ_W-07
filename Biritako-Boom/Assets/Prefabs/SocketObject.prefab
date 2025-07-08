@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8695536903451332708}
   - component: {fileID: 7855009787032748996}
   - component: {fileID: -325283413317879509}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SocketObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,9 +78,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: -1610494733
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: -3149372614388450417, guid: ceff5df588c600d43bdbf6ebb68a582c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
