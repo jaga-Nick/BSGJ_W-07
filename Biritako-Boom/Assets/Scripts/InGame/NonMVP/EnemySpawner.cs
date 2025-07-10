@@ -9,6 +9,7 @@ using Common;
 using InGame.Presenter;
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
 
 namespace InGame.NonMVP
 {
@@ -18,24 +19,38 @@ namespace InGame.NonMVP
     public class EnemySpawner : DestroyAvailable_SingletonMonoBehaviourBase<EnemySpawner>
     {
         /// <summary>
-        /// スポーンのプロパティ
+        /// 時間設定
         /// </summary>
-        [Header("スポーンのプロパティ")]
+        [Header("タイマー")]
         [Header("スポーン時間のインターバル")]
         [SerializeField] private float spawnInterval = 3f;
-        [Header("タイマー")]
-        [SerializeField] private float timer;
+        private float _timer;
+        
+        /// <summary>
+        /// 家電
+        /// </summary>
         [Header("生成される家電の上限数")]
         [SerializeField] private int maxElectronics = 50;
         [Header("一度に生成される家電の数")]
-        [SerializeField] private int numberOfSpawnElectronics = 3;
+        [SerializeField] private int numberOfSpawnElectronics = 5;
+        [Header("生成される家電の範囲")]
+        [SerializeField] private Rect electronicsSpawnRate = new Rect(-31f, -31f, 31f, 31f);
+        
+        /// <summary>
+        /// UFO
+        /// </summary>
         [Header("生成されるUFOの上限数")]
         [SerializeField] private int maxUfo = 14;
+        [Header("生成されるUFOの範囲")]
+        [SerializeField] private Rect ufoSpawnRate = new Rect(-32f, -32f, 32f, 32f);
         [Header("UFO周辺の半径")]
         [SerializeField] private float spawnRadius = 2.0f;
         [Header("UFO直下の除外範囲")]
         [SerializeField] private float exclusionRadius = 0.5f;
         
+        /// <summary>
+        /// 宇宙人
+        /// </summary>
         [Header("宇宙人スポーン時間のインターバル")]
         [SerializeField] private int alienSpawnInterval = 10;
         [Header("一度に生成される宇宙人の数")]
@@ -50,25 +65,23 @@ namespace InGame.NonMVP
         /// Addressableアセットのキー
         /// </summary>
         [Header("母艦のアドレス")]
-        [SerializeField] private string _motherShipAddress = "Enemy_MotherShip";
+        [SerializeField] private string motherShipAddress = "Enemy_MotherShip";
 
         public static event Action OnGenerateMotherShip;
-
 
         /// <summary>
         /// Prefab
         /// </summary>
-        [Header("Prefab")]
-        [Header("家電")]
+        [Header("家電Prefab")]
         [SerializeField] private GameObject[] electronicsPrefabs;
-        [Header("UFO")]
+        [Header("UFOPrefab")]
         [SerializeField] private GameObject ufoPrefabs;
         
         
         /// <summary>
         /// 生成されたUFOたちの管理
         /// </summary>
-        private List<GameObject> ufosList = new List<GameObject>();
+        private readonly List<GameObject> _ufoList = new List<GameObject>();
         
         
         /// <summary>
@@ -76,35 +89,44 @@ namespace InGame.NonMVP
         /// </summary>
         public int CurrentElectronics { get; set; } = 0;
         public int CurrentUfo { get; set; } = 0;
+        
+        /// <summary>
+        /// Camera
+        /// </summary>
+        private Camera _camera;
+
+        private void Awake()
+        {
+            _camera = Camera.main;
+        }
 
         private void Start()
         {
             //アタッチされているのでそのままを維持する為に格納。（一つのみを想定しているので維持しない場合も放置でもよい。
             instance = this;
-
             // タイマーをスポーン時間のインターバルにセット
-            timer = spawnInterval;
+            _timer = spawnInterval;
             // UFOをスポーンする
-            SpawnUfo();
-            // 母艦をスポーンする
-            SpawnMotherShip(_motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
-            
+            SpawnUfo().Forget();
+            // 母艦UFOをスポーンする
+            SpawnMotherShip(motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
+            // 宇宙人をスポーンする
             _alienManager = FindObjectOfType<AlienManager>();
             SpawnAlien().Forget();
         }
 
         private void Update()
         {
-            timer -= Time.deltaTime;
-            if (!(timer <= 0) || CurrentElectronics >= maxElectronics) return;
-            SpawnElectronics();
-            timer = spawnInterval;
+            _timer -= Time.deltaTime;
+            if (!(_timer <= 0) || CurrentElectronics >= maxElectronics) return;
+            SpawnElectronics().Forget();
+            _timer = spawnInterval;
         }
 
         /// <summary>
-        /// 家電の生成
+        /// 家電のスポーン
         /// </summary>
-        private void SpawnElectronics()
+        private async UniTask SpawnElectronics()
         {
             for (var i = 0; i < numberOfSpawnElectronics; i++)
             {
@@ -113,30 +135,61 @@ namespace InGame.NonMVP
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
             
                 // UFOの座標をランダムに取得
-                var ufoRandomIndex = UnityEngine.Random.Range(0, ufosList.Count);
-                var ufoPosition = ufosList[ufoRandomIndex].transform.position;
-            
-                // UFOがカメラ内にいるときは対象から外す
-                var viewportPosition = Camera.main.WorldToViewportPoint(ufoPosition);
-                var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
-                if (isInView) continue;
+                var ufoRandomIndex = UnityEngine.Random.Range(0, _ufoList.Count);
+                var ufoPosition = _ufoList[ufoRandomIndex].transform.position;
                 
-                // 家電に付与されているPresenterを取得
-                var presenter = electronics.GetComponent<ElectronicsPresenter>();
-            
                 // Presenterで決定した座標をもとに初期座標を決定
-                var spawnPosition = presenter.DetermineSpawnPoints(ufoPosition, spawnRadius, exclusionRadius);
+                var spawnPosition = DetermineElectronicsSpawnPoints(ufoPosition, spawnRadius, exclusionRadius, electronicsSpawnRate, _camera);
+                
+                // マップ内に収める
+                spawnPosition.x = Mathf.Clamp(spawnPosition.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
+                spawnPosition.y = Mathf.Clamp(spawnPosition.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
                 electronics.transform.position = spawnPosition;
             
                 // 家電の数をインクリメント
                 CurrentElectronics++;
+                
+                await UniTask.Yield();
             }
+        }
+        
+        private static Vector3 DetermineElectronicsSpawnPoints(
+            Vector3 ufoPosition, 
+            float spawnRadius, 
+            float exclusionRadius, 
+            Rect electronicsSpawnRate,
+            Camera camera)
+        {
+            // UFOの座標半径いくらかを取得してポジションを決める
+            Vector3 spawnOffset;
+            do
+            {
+                var randomCircle = UnityEngine.Random.insideUnitCircle * spawnRadius;
+                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
+            } 
+            while (spawnOffset.magnitude < exclusionRadius);
+            
+            // マップ内に収める
+            var spawnPosition = ufoPosition + spawnOffset;
+            spawnPosition.x = Mathf.Clamp(spawnPosition.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
+            spawnPosition.y = Mathf.Clamp(spawnPosition.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
+            
+            // UFOがカメラ内にいるときは対象から外す
+            var viewportPosition = camera.WorldToViewportPoint(ufoPosition);
+            var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
+            if (isInView)
+            {
+                return spawnPosition;
+            }
+            
+            // 画面外の座標に変換
+            return spawnPosition;
         }
 
         /// <summary>
         /// UFOの生成
         /// </summary>
-        private void SpawnUfo()
+        private async UniTask SpawnUfo()
         {
             for (var i = 0; i < maxUfo; i++)
             {
@@ -146,22 +199,47 @@ namespace InGame.NonMVP
                 // 名前にIndexをつける
                 ufo.name = $"UFO_{i}";
             
-                // UFOに付与されているPresenterを取得
-                var presenter = ufo.GetComponent<UfoPresenter>();
-            
                 // Presenterで決定した座標をもとに初期座標を決定
-                var spawnPosition = presenter.DetermineSpawnPoints();
+                var spawnPosition = DetermineUfoSpawnPoints();
+                
+                // マップ内に収める
+                spawnPosition.x = Mathf.Clamp(spawnPosition.x, ufoSpawnRate.xMin, ufoSpawnRate.xMax);
+                spawnPosition.y = Mathf.Clamp(spawnPosition.y, ufoSpawnRate.yMin, ufoSpawnRate.yMax);
                 ufo.transform.position = spawnPosition;
                 
-                // UFOを生成する
-                // Instantiate(ufo, spawnPosition, Quaternion.identity);
-                
                 // UFO管理リストに追加
-                ufosList.Add(ufo);
+                _ufoList.Add(ufo);
                 
                 // UFOの数をインクリメント
                 CurrentUfo++;
+                
+                await UniTask.Yield();
             }
+        }
+        
+        /// <summary>
+        /// UFOのスポーンする座標を決める
+        /// </summary>
+        private Vector3 DetermineUfoSpawnPoints()
+        {
+            // ランダムな座標を生成
+            var randomPositionX = RandomRun();
+            var randomPositionY = RandomRun();
+
+            // 画面外の座標を取得
+            var position = _camera.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
+            return position;
+        }
+        
+        /// <summary>
+        /// ランダムな値を取得
+        /// </summary>
+        /// <returns></returns>
+        private static float RandomRun()
+        {
+            float value;
+            do { value = UnityEngine.Random.Range(-1.0f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
+            return value;
         }
         
 
@@ -175,11 +253,10 @@ namespace InGame.NonMVP
 
         public void OnUfoDeath(GameObject ufo)
         {
-            ufosList.Remove(ufo);
+            _ufoList.Remove(ufo);
             CurrentUfo--;
         }
-
-
+        
 
         /// <summary>
         /// MotherShipの生成とスポーン
@@ -205,7 +282,7 @@ namespace InGame.NonMVP
         public async UniTask SpawnAlien()
         {
             // AlienManagerが設定されているか確認
-            if (_alienManager == null)
+            if (!_alienManager)
             {
                 Debug.LogError("EnemySpawnerにAlienManagerが設定されていません！");
                 return;
@@ -213,9 +290,9 @@ namespace InGame.NonMVP
 
             while (this.isActiveAndEnabled)
             {
-                for (int i = 0; i < numberOfSpawnAlien; i++)
+                for (var i = 0; i < numberOfSpawnAlien; i++)
                 {
-                    Vector3 position = _alienManager.GetRandomPosition();
+                    var position = _alienManager.GetRandomPosition();
                     var viewPosition = Camera.main.WorldToViewportPoint(position);
                     var isInView = viewPosition.z > 0 && 
                                    viewPosition.x >= 0 && viewPosition.x <= 1 && 

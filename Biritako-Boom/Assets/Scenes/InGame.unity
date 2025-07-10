@@ -19015,15 +19015,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 3
-  timer: 0
   maxElectronics: 50
-  numberOfSpawnElectronics: 3
+  numberOfSpawnElectronics: 5
+  electronicsSpawnRate:
+    serializedVersion: 2
+    x: -32
+    y: -32
+    width: 32
+    height: 32
   maxUfo: 14
+  ufoSpawnRate:
+    serializedVersion: 2
+    x: -31
+    y: -31
+    width: 31
+    height: 31
   spawnRadius: 2
   exclusionRadius: 0.5
   alienSpawnInterval: 10
   numberOfSpawnAlien: 1
-  _motherShipAddress: Enemy_MotherShip
+  motherShipAddress: Enemy_MotherShip
   electronicsPrefabs:
   - {fileID: 2689977577218633989, guid: 74162686ec438734aa88b9b787ffa0a0, type: 3}
   - {fileID: 8277500876530028816, guid: 5a233f36e1ca3004fbb063930b0834e3, type: 3}
@@ -19038,7 +19049,7 @@ Transform:
   m_GameObject: {fileID: 531447709}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.18413126, y: -0.49617377, z: -0.058609504}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

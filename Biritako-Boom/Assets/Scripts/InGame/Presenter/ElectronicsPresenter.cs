@@ -31,16 +31,6 @@ namespace InGame.Presenter
         private ElectronicsModel _model;
         private ElectronicsView _view;
         private UfoModel _ufoModel;
-        
-        /// <summary>
-        /// Camera
-        /// </summary>
-        private Camera _camera;
-
-        private void Awake()
-        {
-            _camera = Camera.main;
-        }
 
         private void Start()
         {
@@ -53,31 +43,6 @@ namespace InGame.Presenter
             _view = gameObject.GetComponent<ElectronicsView>();
 
             AutoMoveElectronicsRoutine().Forget();
-        }
-        
-        /// <summary>
-        /// 家電をスポーンする座標を決める
-        /// </summary>
-        /// <param name="ufoPosition"></param>
-        /// <param name="spawnRadius"></param>
-        /// <param name="exclusionRadius"></param>
-        /// <returns></returns>
-        public Vector3 DetermineSpawnPoints(Vector3 ufoPosition, float spawnRadius, float exclusionRadius)
-        {
-            // UFOの座標半径いくらかを取得してポジションを決める
-            Vector3 spawnOffset;
-            do
-            {
-                var randomCircle = Random.insideUnitCircle * spawnRadius;
-                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
-            } 
-            while (spawnOffset.magnitude < exclusionRadius);
-            
-            // 最終的なスポーン位置
-            var spawnPosition = ufoPosition + spawnOffset;
-            
-            // 画面外の座標に変換
-            return spawnPosition;
         }
         
         

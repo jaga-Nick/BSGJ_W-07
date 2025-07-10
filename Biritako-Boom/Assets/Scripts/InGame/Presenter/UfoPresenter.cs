@@ -47,20 +47,10 @@ namespace InGame.Presenter
         /// </summary>
         private UfoModel _model;
         private UfoView _view;
-        
-        /// <summary>
-        /// Camera
-        /// </summary>
-        private Camera _camera;
 
         private CancellationTokenSource AutoMoveCancel;
         private CancellationTokenSource MoveCancel;
         
-        private void Awake()
-        {
-            _camera = Camera.main;
-        }
-
         private void Start()
         {
             _model = gameObject.GetComponent<UfoModel>();
@@ -74,32 +64,6 @@ namespace InGame.Presenter
             
             AutoMoveUfoRoutine().Forget();
         }
-        
-        /// <summary>
-        /// UFOのスポーンする座標を決める
-        /// </summary>
-        public Vector3 DetermineSpawnPoints()
-        {
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
-
-            // 画面外の座標を取得
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
-        }
-        
-        /// <summary>
-        /// ランダムな値を取得
-        /// </summary>
-        /// <returns></returns>
-        private static float RandomRun()
-        {
-            float value;
-            do { value = Random.Range(-1.0f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
-            return value;
-        }
-
         
         /// <summary>
         /// UFOの自動運転
