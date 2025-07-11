@@ -410,13 +410,19 @@ namespace InGame.Model
         /// <summary>
         /// 一斉に爆破する
         /// </summary>
-        public void Explosion()
+        public async void Explosion()
         {
             //コードが一つ以上生成されており、保持していない時。
             if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
             {
                 //カットイン挿入
-                GenerateExplosionManager.Instance().GenerateCutIn();
+                GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
+                //止める。
+                InGameManager timeManager=InGameManager.Instance();
+                timeManager.SetTimeScale(0);
+                await CutIn.GetComponent<CutInAttach>().ActCutIn();
+                //動かす
+                timeManager.SetTimeScale(1);
 
                 foreach (var i in CodeSimulaters)
                 {

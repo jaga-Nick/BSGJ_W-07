@@ -43,9 +43,10 @@ namespace InGame.NonMVP
             instance = this;
         }
 
-        public void GenerateCutIn()
+        public GameObject GenerateCutIn()
         {
-            Instantiate(CutIn, CutInCanvas.transform);
+            GameObject cutin=Instantiate(CutIn, CutInCanvas.transform);
+            return cutin;
         }
 
         /// <summary>
