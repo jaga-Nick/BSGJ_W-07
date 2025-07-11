@@ -2,6 +2,7 @@
 using Common;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Cysharp.Threading.Tasks;
 
 namespace InGame.NonMVP
 {
@@ -25,6 +26,12 @@ namespace InGame.NonMVP
             if (!_isPaused)
             {
                 _inGameTime -= Time.deltaTime;
+            }
+            //0以下の時、ゲームを終了する
+            if (_inGameTime <= 0)
+            {
+                ISceneInfo info=new ResultSceneLoader();
+                SceneManager.Instance().LoadMainScene(info).Forget();
             }
         }
 
