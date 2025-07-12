@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using System.Collections;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
@@ -17,21 +16,12 @@ namespace InGame.Presenter
         [Header("移動パラメータ")]
         [Header("移動速度")]
         [SerializeField] private float moveSpeed = 2.0f;
-        [Header("移動範囲")]
+        [Header("UFOが一度に動く移動範囲")]
         [SerializeField] private float radius = 10f;
         [Header("停止時間")]
         [SerializeField] private float stopTime = 2.0f;
-        
-        /// <summary>
-        /// 浮遊パラメータ
-        /// </summary>
-        [Header("浮遊パラメータ")]
-        [Header("浮遊の時間")]
-        [SerializeField] private float frequencyTime = 2.0f;
-        [Header("浮遊の振幅")]
-        [SerializeField] private float frequencyAmplitude = 0.01f;
-        [Header("浮遊の速さ")]
-        [SerializeField] private float frequencySpeed = 0.5f;
+        [Header("UFO全員の可動範囲")]
+        [SerializeField] private Rect ufoSpawnRate = new Rect(-32f, -32f, 64f, 64f);
         
         /// <summary>
         /// UFOのステータス
@@ -47,20 +37,10 @@ namespace InGame.Presenter
         /// </summary>
         private UfoModel _model;
         private UfoView _view;
-        
-        /// <summary>
-        /// Camera
-        /// </summary>
-        private Camera _camera;
 
-        private CancellationTokenSource AutoMoveCancel;
-        private CancellationTokenSource MoveCancel;
+        private CancellationTokenSource _autoMoveCancel;
+        private CancellationTokenSource _moveCancel;
         
-        private void Awake()
-        {
-            _camera = Camera.main;
-        }
-
         private void Start()
         {
             _model = gameObject.GetComponent<UfoModel>();
@@ -76,41 +56,15 @@ namespace InGame.Presenter
         }
         
         /// <summary>
-        /// UFOのスポーンする座標を決める
-        /// </summary>
-        public Vector3 DetermineSpawnPoints()
-        {
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
-
-            // 画面外の座標を取得
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
-        }
-        
-        /// <summary>
-        /// ランダムな値を取得
-        /// </summary>
-        /// <returns></returns>
-        private static float RandomRun()
-        {
-            float value;
-            do { value = Random.Range(-1.0f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
-            return value;
-        }
-
-        
-        /// <summary>
         /// UFOの自動運転
         /// </summary>
         /// <returns></returns>
         private async UniTask AutoMoveUfoRoutine()
         {
-            AutoMoveCancel?.Cancel();
-            AutoMoveCancel?.Dispose();
-            AutoMoveCancel = new CancellationTokenSource();
-            var linked = CancellationTokenSource.CreateLinkedTokenSource(AutoMoveCancel.Token, destroyCancellationToken);
+            _autoMoveCancel?.Cancel();
+            _autoMoveCancel?.Dispose();
+            _autoMoveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(_autoMoveCancel.Token, destroyCancellationToken);
             var linkedToken = linked.Token;
             try
             {
@@ -125,6 +79,10 @@ namespace InGame.Presenter
                         transform.position.y + randomCircle.y,
                         transform.position.z
                     );
+                    
+                    // マップ外に出そうになったら止まる
+                    target.x = Mathf.Clamp(target.x, ufoSpawnRate.xMin, ufoSpawnRate.xMax);
+                    target.y = Mathf.Clamp(target.y, ufoSpawnRate.yMin, ufoSpawnRate.yMax);
 
                     // 移動アニメーションの開始
                     _view.PlayMoveAnimation(true);
@@ -136,11 +94,11 @@ namespace InGame.Presenter
             }
             catch (OperationCanceledException)
             {
-
+                // キャンセルされたときの処理
             }
             finally
             {
-                AutoMoveCancel = null;
+                _autoMoveCancel = null;
             }
         }
 
@@ -150,10 +108,10 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask MoveUfoRoutine(Vector2 target)
         {
-            MoveCancel?.Cancel();
-            MoveCancel?.Dispose();
-            MoveCancel = new CancellationTokenSource();
-            var linked = CancellationTokenSource.CreateLinkedTokenSource(MoveCancel.Token, destroyCancellationToken);
+            _moveCancel?.Cancel();
+            _moveCancel?.Dispose();
+            _moveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(_moveCancel.Token, destroyCancellationToken);
             var linkedToken = linked.Token;
             try
             {
@@ -169,11 +127,11 @@ namespace InGame.Presenter
             }
             catch (OperationCanceledException)
             {
-
+                // キャンセルされた時の処理
             }
             finally
             {
-                MoveCancel = null;
+                _moveCancel = null;
             }
         }
 
