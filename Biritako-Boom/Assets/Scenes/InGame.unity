@@ -19015,8 +19015,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 3
-  maxElectronics: 50
-  numberOfSpawnElectronics: 5
+  maxElectronics: 28
+  numberOfSpawnElectronics: 3
   electronicsSpawnRate:
     serializedVersion: 2
     x: -32
@@ -19039,6 +19039,7 @@ MonoBehaviour:
   - {fileID: 2689977577218633989, guid: 74162686ec438734aa88b9b787ffa0a0, type: 3}
   - {fileID: 8277500876530028816, guid: 5a233f36e1ca3004fbb063930b0834e3, type: 3}
   - {fileID: 3302240598328390801, guid: 9f4cab842a6642449b87905856215feb, type: 3}
+  - {fileID: 2689977577218633989, guid: 35782de7450be884a8f7075fc4e8d00b, type: 3}
   ufoPrefabs: {fileID: 6858216646905114242, guid: d00407b17b12eac49946bbc1a95d416c, type: 3}
 --- !u!4 &531447711
 Transform:

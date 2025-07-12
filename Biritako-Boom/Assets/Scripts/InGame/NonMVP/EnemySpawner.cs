@@ -33,8 +33,6 @@ namespace InGame.NonMVP
         [SerializeField] private int maxElectronics = 50;
         [Header("一度に生成される家電の数")]
         [SerializeField] private int numberOfSpawnElectronics = 5;
-        [Header("生成される家電の範囲")]
-        [SerializeField] private Rect electronicsSpawnRate = new Rect(-31f, -31f, 31f, 31f);
         
         /// <summary>
         /// UFO
@@ -81,7 +79,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// 生成されたUFOたちの管理
         /// </summary>
-        private readonly List<GameObject> _ufoList = new List<GameObject>();
+        private List<GameObject> _ufoList = new List<GameObject>();
         
         
         /// <summary>
@@ -95,6 +93,9 @@ namespace InGame.NonMVP
         /// </summary>
         private Camera _camera;
 
+        /// <summary>
+        /// Cameraの設定
+        /// </summary>
         private void Awake()
         {
             _camera = Camera.main;
@@ -133,18 +134,9 @@ namespace InGame.NonMVP
                 // 家電を選択して生成する
                 var randomIndex = UnityEngine.Random.Range(0, electronicsPrefabs.Length);
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
-            
-                // UFOの座標をランダムに取得
-                var ufoRandomIndex = UnityEngine.Random.Range(0, _ufoList.Count);
-                var ufoPosition = _ufoList[ufoRandomIndex].transform.position;
                 
                 // Presenterで決定した座標をもとに初期座標を決定
-                var spawnPosition = DetermineElectronicsSpawnPoints(ufoPosition, spawnRadius, exclusionRadius, electronicsSpawnRate, _camera);
-                
-                // マップ内に収める
-                spawnPosition.x = Mathf.Clamp(spawnPosition.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
-                spawnPosition.y = Mathf.Clamp(spawnPosition.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
-                electronics.transform.position = spawnPosition;
+                electronics.transform.position = DetermineElectronicsSpawnPoints(spawnRadius, exclusionRadius, _camera);
             
                 // 家電の数をインクリメント
                 CurrentElectronics++;
@@ -152,14 +144,30 @@ namespace InGame.NonMVP
                 await UniTask.Yield();
             }
         }
-        
-        private static Vector3 DetermineElectronicsSpawnPoints(
-            Vector3 ufoPosition, 
-            float spawnRadius, 
-            float exclusionRadius, 
-            Rect electronicsSpawnRate,
-            Camera camera)
+
+        /// <summary>
+        /// 家電のスポーンされる座標を決定する
+        /// </summary>
+        /// <param name="spawnRadius"></param>
+        /// <param name="exclusionRadius"></param>
+        /// <param name="camera"></param>
+        /// <returns></returns>
+        private Vector3 DetermineElectronicsSpawnPoints(float spawnRadius, float exclusionRadius, Camera camera)
         {
+            
+            // カメラ外にいるUFOをランダムで決定する
+            var offScreenUfo = new List<Transform>();
+            foreach (var ufo in _ufoList)
+            {
+                var viewportPosition = camera.WorldToViewportPoint(ufo.transform.position);
+                var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
+                if (!isInView) { offScreenUfo.Add(ufo.transform); }
+            }
+            
+            // カメラ外からUFOをランダムで選択
+            var ufoRandomIndex = UnityEngine.Random.Range(0, offScreenUfo.Count);
+            var ufoPosition = offScreenUfo[ufoRandomIndex].position;
+            
             // UFOの座標半径いくらかを取得してポジションを決める
             Vector3 spawnOffset;
             do
@@ -169,25 +177,13 @@ namespace InGame.NonMVP
             } 
             while (spawnOffset.magnitude < exclusionRadius);
             
-            // マップ内に収める
             var spawnPosition = ufoPosition + spawnOffset;
-            spawnPosition.x = Mathf.Clamp(spawnPosition.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
-            spawnPosition.y = Mathf.Clamp(spawnPosition.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
             
-            // UFOがカメラ内にいるときは対象から外す
-            var viewportPosition = camera.WorldToViewportPoint(ufoPosition);
-            var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
-            if (isInView)
-            {
-                return spawnPosition;
-            }
-            
-            // 画面外の座標に変換
             return spawnPosition;
         }
 
         /// <summary>
-        /// UFOの生成
+        /// UFOのスポーン
         /// </summary>
         private async UniTask SpawnUfo()
         {
@@ -200,12 +196,7 @@ namespace InGame.NonMVP
                 ufo.name = $"UFO_{i}";
             
                 // Presenterで決定した座標をもとに初期座標を決定
-                var spawnPosition = DetermineUfoSpawnPoints();
-                
-                // マップ内に収める
-                spawnPosition.x = Mathf.Clamp(spawnPosition.x, ufoSpawnRate.xMin, ufoSpawnRate.xMax);
-                spawnPosition.y = Mathf.Clamp(spawnPosition.y, ufoSpawnRate.yMin, ufoSpawnRate.yMax);
-                ufo.transform.position = spawnPosition;
+                ufo.transform.position = DetermineUfoSpawnPoints();
                 
                 // UFO管理リストに追加
                 _ufoList.Add(ufo);
@@ -218,14 +209,14 @@ namespace InGame.NonMVP
         }
         
         /// <summary>
-        /// UFOのスポーンする座標を決める
+        /// UFOのスポーンされる座標を決定する
         /// </summary>
         private Vector3 DetermineUfoSpawnPoints()
         {
             // ランダムな座標を生成
             var randomPositionX = RandomRun();
             var randomPositionY = RandomRun();
-
+            
             // 画面外の座標を取得
             var position = _camera.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
             return position;
@@ -259,7 +250,7 @@ namespace InGame.NonMVP
         
 
         /// <summary>
-        /// MotherShipの生成とスポーン
+        /// MotherShipのスポーン
         /// </summary>
         public async UniTask SpawnMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
         {

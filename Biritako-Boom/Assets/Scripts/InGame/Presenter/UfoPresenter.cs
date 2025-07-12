@@ -23,17 +23,6 @@ namespace InGame.Presenter
         [SerializeField] private float stopTime = 2.0f;
         
         /// <summary>
-        /// 浮遊パラメータ
-        /// </summary>
-        [Header("浮遊パラメータ")]
-        [Header("浮遊の時間")]
-        [SerializeField] private float frequencyTime = 2.0f;
-        [Header("浮遊の振幅")]
-        [SerializeField] private float frequencyAmplitude = 0.01f;
-        [Header("浮遊の速さ")]
-        [SerializeField] private float frequencySpeed = 0.5f;
-        
-        /// <summary>
         /// UFOのステータス
         /// </summary>
         [Header("UFOのステータス")]

@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1931349267
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -470237417, guid: 986f74471e41d8e4283d5bed791b1273, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
@@ -185,7 +185,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1931349267
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: -1958619285, guid: 7fbafaee7f9e5364183fe56c6d9a79fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -402,10 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   radius: 10
-  stopTime: 2
-  frequencyTime: 1
-  frequencyAmplitude: 0.1
-  frequencySpeed: 0.5
+  stopTime: 5
   maxUfoHp: 100
   ufoScore: 100
 --- !u!114 &6897444087228015109
