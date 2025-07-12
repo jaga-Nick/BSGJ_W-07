@@ -24,6 +24,8 @@ namespace InGame.Presenter
         [SerializeField] private float radius = 10f;
         [Header("停止時間")]
         [SerializeField] private float stopTime = 1.0f;
+        [Header("家電全員の可動範囲")]
+        [SerializeField] private Rect electronicsSpawnRate = new Rect(-32f, -32f, 64f, 64f);
         
         /// <summary>
         /// modelとview
@@ -52,7 +54,7 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask AutoMoveElectronicsRoutine()
         {
-            CancellationTokenSource cts=new CancellationTokenSource();
+            var cts = new CancellationTokenSource();
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
             var linkedToken = linkedCts.Token;
             try
@@ -62,7 +64,6 @@ namespace InGame.Presenter
                     // キャンセル要求があったら、例外を投げて処理を中断
                     linkedToken.ThrowIfCancellationRequested();
 
-
                     // 目的座標をランダムに決める
                     var randomCircle = Random.insideUnitCircle * radius;
                     var target = new Vector3(
@@ -70,6 +71,10 @@ namespace InGame.Presenter
                         transform.position.y + randomCircle.y,
                         transform.position.z
                     );
+                    
+                    // マップ外に出そうになったら止まる
+                    target.x = Mathf.Clamp(target.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
+                    target.y = Mathf.Clamp(target.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
 
                     // 移動アニメーションの開始
                     _view.PlayMoveAnimation(true);
@@ -81,7 +86,7 @@ namespace InGame.Presenter
             }
             catch (OperationCanceledException)
             {
-
+                // キャンセルされた時の処理
             }
         }
 
@@ -91,7 +96,7 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask MoveElectronicsRoutine(Vector2 target)
         {
-            CancellationTokenSource cts = new CancellationTokenSource();
+            var cts = new CancellationTokenSource();
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
             var linkedToken = linkedCts.Token;
             try
@@ -101,8 +106,7 @@ namespace InGame.Presenter
                 {
                     // キャンセル要求があったら、例外を投げて処理を中断
                     linkedToken.ThrowIfCancellationRequested();
-
-
+                    
                     transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
                     _model.Position = transform.position;
                     await UniTask.Yield(linkedToken);
@@ -110,7 +114,7 @@ namespace InGame.Presenter
             }
             catch (OperationCanceledException)
             {
-
+                // キャンセルされた時の処理
             }
         }
     }

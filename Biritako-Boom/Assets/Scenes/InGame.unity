@@ -19017,19 +19017,7 @@ MonoBehaviour:
   spawnInterval: 3
   maxElectronics: 28
   numberOfSpawnElectronics: 3
-  electronicsSpawnRate:
-    serializedVersion: 2
-    x: -32
-    y: -32
-    width: 32
-    height: 32
   maxUfo: 14
-  ufoSpawnRate:
-    serializedVersion: 2
-    x: -31
-    y: -31
-    width: 31
-    height: 31
   spawnRadius: 2
   exclusionRadius: 0.5
   alienSpawnInterval: 10

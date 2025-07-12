@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2089813632586841082}
   - component: {fileID: 7367588968373633134}
   - component: {fileID: 4032318390883046809}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UFOPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1931349267
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -1958619285, guid: 7fbafaee7f9e5364183fe56c6d9a79fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

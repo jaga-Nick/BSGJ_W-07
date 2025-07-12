@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Common;
-using InGame.Presenter;
 using UnityEngine;
 using System;
-using UnityEngine.Serialization;
 
 namespace InGame.NonMVP
 {
@@ -39,8 +35,6 @@ namespace InGame.NonMVP
         /// </summary>
         [Header("生成されるUFOの上限数")]
         [SerializeField] private int maxUfo = 14;
-        [Header("生成されるUFOの範囲")]
-        [SerializeField] private Rect ufoSpawnRate = new Rect(-32f, -32f, 32f, 32f);
         [Header("UFO周辺の半径")]
         [SerializeField] private float spawnRadius = 2.0f;
         [Header("UFO直下の除外範囲")]
@@ -79,7 +73,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// 生成されたUFOたちの管理
         /// </summary>
-        private List<GameObject> _ufoList = new List<GameObject>();
+        private readonly List<GameObject> _ufoList = new List<GameObject>();
         
         
         /// <summary>
