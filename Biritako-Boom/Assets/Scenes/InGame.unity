@@ -70058,15 +70058,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d37c999b8f66994cbef7285287027ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutInCanvas: {fileID: 2126630024}
-  CutIn: {fileID: 4451397332625592543, guid: 02b2da22aa0e8ca4995c7175cfed02a6, type: 3}
-  BigExplosionSize: 3
-  BigDamage: 100
-  MiddleCollisionSize: 3
-  MiddleDamage: 75
-  SmallCollisionSize: 3
-  SmallDamage: 50
-  ExplosionObject: {fileID: 8683190912016376835, guid: efb667954b7dc904f9b8e4204ee21a6f, type: 3}
+  cutInCanvas: {fileID: 2126630024}
+  cutIn: {fileID: 4451397332625592543, guid: 02b2da22aa0e8ca4995c7175cfed02a6, type: 3}
+  bigExplosionSize: 0.25
+  bigDamage: 50
+  middleCollisionSize: 0.25
+  middleDamage: 20
+  smallCollisionSize: 0.25
+  smallDamage: 5
+  explosionObject: {fileID: 8683190912016376835, guid: efb667954b7dc904f9b8e4204ee21a6f, type: 3}
 --- !u!1001 &1931218781
 PrefabInstance:
   m_ObjectHideFlags: 0

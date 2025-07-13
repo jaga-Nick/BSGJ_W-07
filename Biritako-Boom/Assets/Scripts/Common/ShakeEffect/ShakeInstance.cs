@@ -1,4 +1,5 @@
 ﻿using System;
+using Common.ShakeEffect;
 using UnityEngine;
 
 namespace ShakeEffect
