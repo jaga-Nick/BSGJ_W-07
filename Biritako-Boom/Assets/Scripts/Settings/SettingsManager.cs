@@ -1,6 +1,11 @@
+// 旧版のコードです。一応残してあります
+
+/*
+
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+
 
 // このクラスは、ゲーム内の音量設定（マスター・BGM・効果音）を管理します。
 // ユーザーがスライダーを使って音量を調整できるようにします。
@@ -36,8 +41,8 @@ public class SettingManager : MonoBehaviour
 
     public void PlayEffectSound()
     {
-       if (effectSource != null)
-          effectSource.Play();
+        if (effectSource != null)
+            effectSource.Play();
     }
 
 
@@ -116,3 +121,5 @@ public class SettingManager : MonoBehaviour
         audioMixer.SetFloat(parameterName, dB); // AudioMixerに設定
     }
 }
+
+*/
