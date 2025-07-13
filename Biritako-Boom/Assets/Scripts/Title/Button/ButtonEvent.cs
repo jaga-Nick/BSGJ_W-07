@@ -1,18 +1,22 @@
 ﻿using Common;
 using Title.Loader;
-using Title.View;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Title.Button
 {
+    /// <summary>
+    /// ボタンを押した時の処理
+    /// </summary>
     public class ButtonEvent : MonoBehaviour
     {
         /// <summary>
         /// Loader
         /// </summary>
         private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
-        private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
+        // private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
+        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
+        
 
         /// <summary>
         /// Panel
@@ -35,7 +39,7 @@ namespace Title.Button
         }
 
         /// <summary>
-        /// Settingボタンを押してSettingシーンに遷移する
+        /// Settingボタンを押してSettingシーンに遷移する。
         /// </summary>
         public async void OnClickSettingButton()
         {
@@ -45,12 +49,13 @@ namespace Title.Button
         }
 
         /// <summary>
-        /// Playボタンを押してInGameシーンに遷移する。一旦Introシーンはさむ。
+        /// Playボタンを押してInGameシーンに遷移する。
         /// </summary>
         public async void OnClickPlayButton()
         {
             await _sceneFadeManager.End();
-            await SceneManager.Instance().LoadMainScene(_introSceneLoader);
+            // await SceneManager.Instance().LoadMainScene(_introSceneLoader);
+            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
             await _panelFadeManager.Init();
         }
 

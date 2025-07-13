@@ -10,6 +10,9 @@ namespace InGame.Presenter
         [Header("キャラクターPrefabデータ")]
         [SerializeField]
         private GameObject CharacterPrefab;
+
+        public GameObject characterPrefab { get; private set; }
+
         [SerializeField]
         private string CharacterAddress="PlayerCharacter";
 
@@ -21,8 +24,11 @@ namespace InGame.Presenter
         //----------------------------------------------
 
         //Player統括
-        private PlayerModel Model;
+        public PlayerModel Model { get; private set; }
         private GameHUDView View;
+
+        public PlayerView animationView { get; private set; }
+
         
         //システムモデル
         private TimerModel timerModel=new TimerModel();
@@ -32,18 +38,34 @@ namespace InGame.Presenter
 
         private void Awake()
         {
+            characterPrefab = CharacterPrefab;
+
             Model = new PlayerModel();
+            Model.Initialize(this);
+
+            //-------------------------------------------
+            //デバッグ用生成。（Initializeを用意したほうがいいと思う。）
+            Model.SetInstancePosition(new Vector3(0, 0, 0));
+            Model.GeneratePlayerCharacter();
+            //------------------------------------
+
+            //コード生成に必要なクラスを取得。
+            Model?.SetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
             View = gameObject.GetComponent<GameHUDView>();
+            View.SetModel(Model);
+            animationView=View.GetplayerView();
+
             //スコアイベントの購読(Singletonの呼び出し）
             scoreModel = ScoreModel.Instance();
             scoreModel.ScoreChanged += ScoreChanged;
 
-            playerController = new PlayerController(Model);
-
+            playerController = new PlayerController(Model,this);
+            playerController.Init();
         }
         private void Update()
         {
+            View?.AnimationUpdate();
             View?.UpdatePlayerView(Model.GetCodeGaugePercent());
             View?.UpdateTimerView(timerModel.GetTimePersent());
 
@@ -60,11 +82,16 @@ namespace InGame.Presenter
         {
             View.UpdateScoreView(scoreModel.Score);
         } 
-
+        public GameObject GetSocketPrefab()
+        {
+            return SocketPrefab;
+        }
         private void OnDestroy()
         {
             //購読解除
             scoreModel.ScoreChanged -= ScoreChanged;
         }
+
+
     }
 }

@@ -1,16 +1,31 @@
 fileFormatVersion: 2
-guid: d76b519bbc337954da10e72c4331c2a0
+guid: 4d33ec1426114d34f87edbbc02ceda7a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8456747548459407333
-    second: ApplianceToaster_0
+      213: 1668832483480181846
+    second: ApplianceToaster 1_0
   - first:
-      213: -896580894198193730
-    second: ApplianceToaster_1
+      213: -6078768322377541096
+    second: ApplianceToaster 1_1
   - first:
-      213: -3678499210243488273
-    second: ApplianceToaster_2
+      213: -6002071630895116615
+    second: ApplianceToaster 1_2
+  - first:
+      213: 8388777694686729551
+    second: ApplianceToaster 1_3
+  - first:
+      213: -830692601680689029
+    second: ApplianceToaster 1_4
+  - first:
+      213: 3369308497310645139
+    second: ApplianceToaster 1_5
+  - first:
+      213: -6305481555266421652
+    second: ApplianceToaster 1_6
+  - first:
+      213: 220029156875717647
+    second: ApplianceToaster 1_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -54,10 +69,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,7 +96,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -119,13 +134,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ApplianceToaster_0
+      name: ApplianceToaster 1_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 0
-        width: 55
-        height: 44
+        x: 0
+        y: 11
+        width: 40
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +149,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b18ebe219e893aa80800000000000000
-      internalID: -8456747548459407333
+      spriteID: 65c18774d42e82710800000000000000
+      internalID: 1668832483480181846
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ApplianceToaster_1
+      name: ApplianceToaster 1_1
       rect:
         serializedVersion: 2
-        x: 66
-        y: 0
-        width: 59
-        height: 46
+        x: 56
+        y: 10
+        width: 41
+        height: 39
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eb12ae05d64be83f0800000000000000
-      internalID: -896580894198193730
+      spriteID: 81a1ac0ea60e3aba0800000000000000
+      internalID: -6078768322377541096
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ApplianceToaster_2
+      name: ApplianceToaster 1_2
       rect:
         serializedVersion: 2
-        x: 130
-        y: 0
-        width: 55
-        height: 44
+        x: 106
+        y: 10
+        width: 42
+        height: 35
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,8 +193,118 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fe5c1e2357853fcc0800000000000000
-      internalID: -3678499210243488273
+      spriteID: 9be0c0ce6ab54bca0800000000000000
+      internalID: -6002071630895116615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceToaster 1_3
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 10
+        width: 43
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f45d58f1edcea6470800000000000000
+      internalID: 8388777694686729551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceToaster 1_4
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 11
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b78074fda79c874f0800000000000000
+      internalID: -830692601680689029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceToaster 1_5
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 10
+        width: 46
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39bf7e81a3032ce20800000000000000
+      internalID: 3369308497310645139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceToaster 1_6
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 11
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6c3190feed6e78a0800000000000000
+      internalID: -6305481555266421652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ApplianceToaster 1_7
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 10
+        width: 47
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0c4ec73a53bd0300800000000000000
+      internalID: 220029156875717647
       vertices: []
       indices: 
       edges: []
@@ -198,9 +323,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ApplianceToaster_0: -8456747548459407333
-      ApplianceToaster_1: -896580894198193730
-      ApplianceToaster_2: -3678499210243488273
+      ApplianceToaster 1_0: 1668832483480181846
+      ApplianceToaster 1_1: -6078768322377541096
+      ApplianceToaster 1_2: -6002071630895116615
+      ApplianceToaster 1_3: 8388777694686729551
+      ApplianceToaster 1_4: -830692601680689029
+      ApplianceToaster 1_5: 3369308497310645139
+      ApplianceToaster 1_6: -6305481555266421652
+      ApplianceToaster 1_7: 220029156875717647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

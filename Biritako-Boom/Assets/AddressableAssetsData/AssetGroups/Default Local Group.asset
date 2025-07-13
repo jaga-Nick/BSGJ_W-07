@@ -20,13 +20,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32578d12da57e1f429fc8560532e0128
+    m_Address: Enemy_Alien
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3797fbd8633120d40ac0c98243466f72
     m_Address: InGame
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 52ac4f2a6b1073444a285bd27c9ed96b
+  - m_GUID: 4cf8e22ca6a7347489e934142d7add4a
     m_Address: Enemy_MotherShip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52ac4f2a6b1073444a285bd27c9ed96b
+    m_Address: MotherShipPrefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -40,33 +50,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ffc5daacd3153c45ac8054f4d124b58
-    m_Address: IntroExample03
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8d7da9cfdf7b3204691fd6b3235dc8a0
-    m_Address: IntroExample01
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a01a9afdd1cead444babf9e8004146fb
     m_Address: Setting
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a67c34b97a3861e4798ee5fed754d93f
-    m_Address: IntroExample04
+  - m_GUID: d00407b17b12eac49946bbc1a95d416c
+    m_Address: UFO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1d1dcec89f917b418f68497f9725066
     m_Address: Result
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ee4cc2269e9e403469cf07ee5120b30c
-    m_Address: IntroExample02
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

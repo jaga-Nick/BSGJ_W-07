@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -11,12 +11,12 @@ TagManager:
   - 
   - Water
   - UI
+  - Wall
+  - Player
+  - UFO
+  - Appliance
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Alien
   - 
   - 
   - 
@@ -38,6 +38,20 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ground
+    uniqueID: 414247109
+    locked: 0
+  - name: Socket
+    uniqueID: 2684472563
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Characters
+    uniqueID: 2577973021
+    locked: 0
+  - name: UFO
+    uniqueID: 1931349267
+    locked: 0
+  m_RenderingLayers:
+  - Default

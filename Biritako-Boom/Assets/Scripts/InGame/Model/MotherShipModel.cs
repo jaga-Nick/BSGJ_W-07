@@ -1,21 +1,26 @@
-using Common;
+﻿using Common;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using InGame.Presenter;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using ShakeEffect;
 
 namespace InGame.Model
 {
     /// <summary>
     /// 母艦UFOのモデル管理。
     /// </summary>
-    public class MotherShipModel : IEnemyModel
+    public class MotherShipModel : MonoBehaviour, IEnemyModel
     {
         #region 定数
         // この距離までターゲットに近づいたら、目的地に到着したとみなすための閾値
         private const float DESTINATION_THRESHOLD = 0.5f;
+        
+        private const int _hitScore = 75;
+        private const int _deadScore = 5000;
 
         #endregion
 
@@ -53,12 +58,11 @@ namespace InGame.Model
         /// 母艦固有プロパティ
         /// </summary>
         private GameObject motherShipObject;
-        
+
         // 母艦のHP
-        private int _hp;
+
+        int IEnemyModel.CurrentHp { get; set;}
         
-        // 破壊されたときに得られるスコア
-        private int _score { get; } = 1000000;
         
         // 母艦の移動速度
         private float _speed;
@@ -80,25 +84,25 @@ namespace InGame.Model
         // 巡回対象となる雑魚UFOのTransformリスト
         private List<GameObject> _ufoTargets = new List<GameObject>();
         
+        private Shaker _cameraShaker;
+        private ShakePreset _explosionShake;
+        
         // 現在の巡回ターゲットのインデックス
         private int _currentTargetIndex = 0;
 
         #endregion
 
-        #region 
+        #region 初期化・コンストラクタ
 
         /// <summary>
-        /// MotherShipUfoModelのコンストラクタ
+        /// 初期化
         /// </summary>
-        public MotherShipModel(Rigidbody2D rb)
+        public void Initialize()
         {
-            // --- ステータスを初期化 ---
             IntervalTime = 0.2f;
-            
             _speed = 5.0f;
-            _hp = 5000;
+            ((IEnemyModel)this).CurrentHp = 250;
             ExplosionPower = 100;
-            _score = 1000000;
             isEnd = false;
         }
 
@@ -115,21 +119,10 @@ namespace InGame.Model
         public void SetRandomPatrol(bool mode){ isRandomPatrol  = mode; }
         
         public void SetSpeed(float speed) { _speed = speed; }
-        
-        
-        
-        
-        
-        
-        /// <summary>
-        /// 撃破状態から呼び出され、isEndフラグを立てます。
-        /// </summary>
-        public void DefeatNotification()
-        {
-            Debug.Log("第三部　完!!");
-            
-            isEnd = true;
-        }
+
+        public void SetShaker(Shaker shaker) { _cameraShaker = shaker; }
+
+        public void SetShakePreset(ShakePreset shakePreset) { _explosionShake  = shakePreset; }
         
         #endregion
         
@@ -148,8 +141,7 @@ namespace InGame.Model
                 GameObject prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
                 GameObject instance = UnityEngine.Object.Instantiate(prefab,position,Quaternion.identity);
-                // 生成したインスタンスからコンポーネントを取得し、自身のフィールドに保持
-                Rb = instance.GetComponent<Rigidbody2D>();
+                // 生成したインスタンス保持
                 return instance;
             }
         }
@@ -157,27 +149,14 @@ namespace InGame.Model
         #endregion
         
         
-        
         #region 公開メソッド
-
-        /// <summary>
-        /// ダメージを与える
-        /// </summary>
-        public async UniTask TakeDamage(int damage)
-        {
-            _hp -= damage;
-            if (_hp <= 0)
-            {
-                DefeatNotification();
-            }
-        }
 
         /// <summary>
         /// シーン内に存在する全てのモブUFOを探し出し、巡回ターゲットのリストとして設定します。
         /// </summary>
         public void FindTargets()
         {
-            test[] ufo = Object.FindObjectsOfType<test>();
+            UfoPresenter[] ufo = Object.FindObjectsOfType<UfoPresenter>();
             
             _ufoTargets.Clear(); 
     
@@ -204,7 +183,7 @@ namespace InGame.Model
         /// <summary>
         /// PresenterのUpdateから毎フレーム呼び出される更新処理です。
         /// </summary>
-        public void Move()
+        public virtual void Move()
         {
             
             // 状態に応じて処理を分岐させます
@@ -218,26 +197,44 @@ namespace InGame.Model
                     break;
             }
             
-            /*
-            
-            CurrentTime += Time.deltaTime;
-
-            if (IntervalTime >= CurrentTime)
-            {
-                // 状態に応じて処理を分岐させます
-                switch (_currentState)
-                {
-                    case State.Patrolling:
-                        Patrolling();
-                        break;
-                    case State.MovingToCenter:
-                        MoveCenter();
-                        break;
-                }
-            }
-            */
         }
-        
+
+
+        /// <summary>
+        /// 何の家電かを数字で判別する
+        /// </summary>
+        public virtual int GetEnemyType()
+        {
+            // 家電の場合1
+            // UFOの場合2
+            // 母艦UFOの場合3
+            return 3;
+        }
+
+        /// <summary>
+        /// ダメージを与える
+        /// </summary>
+        public void OnDamage(int damage)
+        {
+            ((IEnemyModel)this).CurrentHp -= damage;
+            ScoreModel.Instance().IncrementScore(_hitScore);
+            _cameraShaker.Shake(_explosionShake);
+            if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
+        }
+
+        /// <summary>
+        /// 撃破状態から呼び出され、isEndフラグを立てます。
+        /// </summary>
+        public async UniTask OnDead()
+        {
+            Debug.Log("第三部　完!!");
+            ScoreModel.Instance().IncrementScore(_deadScore);
+
+            isEnd = true;
+        }
+
+
+
         /// <summary>
         /// 母艦を破壊する、
         /// </summary>
@@ -318,7 +315,7 @@ namespace InGame.Model
         /// </summary>
         private void MoveTowards(Vector2 targetPosition)
         {
-            if (Rb == null || _transform == null) return;
+            if (Rb == null || _transform == null || Time.timeScale == 0f) return;
             
             Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
 

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using InGame.Model;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +11,34 @@ namespace InGame.View
 
     public class GameHUDView : MonoBehaviour
     {
+        private PlayerModel model;
+
         [Header("ゲージとPlayerCharacterAnimation")]
         [SerializeField]
-        private PlayerView playerView = new PlayerView();
+        private PlayerView playerView;
         [Header("ScoreとTimer")]
         [SerializeField]
-        private ScoreView scoreView = new ScoreView();
+        private ScoreView scoreView;
         [SerializeField]
-        private TimerView timerView=new TimerView();
+        private TimerView timerView;
 
+        public void Start()
+        {
+            playerView.SetPlayerModel(model);
+            playerView.Init();
+        }
+
+        public void SetModel(PlayerModel _model)
+        {
+            model = _model;
+        }
+
+        public PlayerView GetplayerView()
+        {
+            return playerView;
+        }
+
+        public void AnimationUpdate() => playerView?.AnimmationUpdate();
         public void UpdatePlayerView(float gauge)=>playerView?.DisplayCodeGauge(gauge);
         public void UpdateScoreView(int score)=>scoreView?.DisplayScore(score);
         public void UpdateTimerView(float time) => timerView?.DisplayTimer(time);

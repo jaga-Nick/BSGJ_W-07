@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.NonMVP;
 using InGame.View;
@@ -10,70 +13,109 @@ namespace InGame.Presenter
     public class ElectronicsPresenter : MonoBehaviour
     {
         /// <summary>
+        /// 移動パラメータ
+        /// </summary>
+        [Header("移動パラメータ")]
+        [Header("移動速度")]
+        [SerializeField] private float moveSpeed = 3.0f;
+        [Header("前進する秒数")]
+        [SerializeField] private float moveDuration = 2.0f;
+        [Header("移動範囲")]
+        [SerializeField] private float radius = 10f;
+        [Header("停止時間")]
+        [SerializeField] private float stopTime = 1.0f;
+        [Header("家電全員の可動範囲")]
+        [SerializeField] private Rect electronicsSpawnRate = new Rect(-32f, -32f, 64f, 64f);
+        
+        /// <summary>
         /// modelとview
         /// </summary>
         private ElectronicsModel _model;
         private ElectronicsView _view;
         private UfoModel _ufoModel;
-        
-        private Camera _camera;
 
-        private void Awake()
+        private void Start()
         {
-            _camera = Camera.main;
-        }
-
-        public void Start()
-        {
-            _model = new ElectronicsModel
-            {
-                Rb = gameObject.GetComponent<Rigidbody2D>()
-            };
-            _view = gameObject.GetComponent<ElectronicsView>();
-        }
-
-        /// <summary>
-        /// Enemyをスポーンする座標を決める
-        /// </summary>
-        public Vector3 DetermineSpawnPoints()
-        {
-            // UFOのmodelを取得して座標を確認
-            // _ufoModel = new UfoModel();
+            // modelにセット
+            _model = gameObject.GetComponent<ElectronicsModel>();
+            _model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
+            _model.Speed = moveSpeed;
             
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
+            // viewにセット
+            _view = gameObject.GetComponent<ElectronicsView>();
 
-            // 画面外の座標を取得
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
+            AutoMoveElectronicsRoutine().Forget();
         }
-
+        
+        
         /// <summary>
-        /// ランダムな値を取得
+        /// 家電の自動運転
         /// </summary>
         /// <returns></returns>
-        private static float RandomRun()
+        private async UniTask AutoMoveElectronicsRoutine()
         {
-            var value = Random.Range(-0.5f, 1.5f);
-            if (value is >= 0.0f and <= 1.0f)
+            var cts = new CancellationTokenSource();
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
+            var linkedToken = linkedCts.Token;
+            try
             {
-                RandomRun();
+                while (true)
+                {
+                    // キャンセル要求があったら、例外を投げて処理を中断
+                    linkedToken.ThrowIfCancellationRequested();
+
+                    // 目的座標をランダムに決める
+                    var randomCircle = Random.insideUnitCircle * radius;
+                    var target = new Vector3(
+                        transform.position.x + randomCircle.x,
+                        transform.position.y + randomCircle.y,
+                        transform.position.z
+                    );
+                    
+                    // マップ外に出そうになったら止まる
+                    target.x = Mathf.Clamp(target.x, electronicsSpawnRate.xMin, electronicsSpawnRate.xMax);
+                    target.y = Mathf.Clamp(target.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
+
+                    // 移動アニメーションの開始
+                    _view.PlayMoveAnimation(true);
+                    // 移動コルーチン
+                    await MoveElectronicsRoutine(target);
+                    // 一定時間待機
+                    await UniTask.Delay(TimeSpan.FromSeconds(stopTime), cancellationToken: linkedToken);
+                }
             }
-            return value;
+            catch (OperationCanceledException)
+            {
+                // キャンセルされた時の処理
+            }
         }
 
-        private void Update()
+        /// <summary>
+        /// 家電の移動コルーチン
+        /// </summary>
+        /// <returns></returns>
+        private async UniTask MoveElectronicsRoutine(Vector2 target)
         {
-            // 移動ロジックを実装
-            var newPosition = _model.Position + transform.position * (_model.Speed * Time.deltaTime);
-            _model.SetPositon(newPosition);
-            _model.Move();
-            
-            // 移動アニメーションの制御
-            _view.PlayMoveAnimation(_model.Speed > 0);
-            
-            // 死んだ場合
+            var cts = new CancellationTokenSource();
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, this.GetCancellationTokenOnDestroy());
+            var linkedToken = linkedCts.Token;
+            try
+            {
+                // 家電の移動処理
+                while (Vector2.Distance(transform.position, target) > 0.1f)
+                {
+                    // キャンセル要求があったら、例外を投げて処理を中断
+                    linkedToken.ThrowIfCancellationRequested();
+                    
+                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
+                    _model.Position = transform.position;
+                    await UniTask.Yield(linkedToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // キャンセルされた時の処理
+            }
         }
     }
 }

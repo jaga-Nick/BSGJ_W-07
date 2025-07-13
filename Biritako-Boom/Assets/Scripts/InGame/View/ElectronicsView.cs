@@ -22,13 +22,5 @@ namespace InGame.View
                 _animator.SetBool(IsMoving, isMoving);
             }
         }
-
-        /// <summary>
-        /// 死んだらオブジェクトを破壊する
-        /// </summary>
-        public void OnDestroy()
-        {
-            Destroy(gameObject);
-        }
     }
 }
