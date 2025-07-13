@@ -48,8 +48,13 @@ namespace InGame.NonMVP
             //コードを保持する
             if (ActionMap.Player.Have.WasPressedThisFrame())
             {
+                Presenter.animationView.SetHaveConcent(true);
                 //コードを生成-保持する為の処理
                 Model.OnHave();
+            }
+            if (ActionMap.Player.Have.WasReleasedThisFrame())
+            {
+                Presenter.animationView.SetHaveConcent(false);
             }
 
             //ーーー
@@ -57,6 +62,8 @@ namespace InGame.NonMVP
             {
                 if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 1f) != null)
                 {
+
+                    Presenter.animationView.SetHaveConcent(true);
                     //Debug.Log("プラグを刺す");
                     Model.ConnectSocketCode();
 
@@ -64,9 +71,11 @@ namespace InGame.NonMVP
                 //範囲内にコードがない場合(それで保持している時。)
                 else if (Model.CurrentHaveCodeSimulater != null)
                 {
+
+                    Presenter.animationView.SetHaveConcent(false);
                     //Debug.Log("プラグを置く");
                     Model.PutCode();
-                    
+
                 }
 
             }
