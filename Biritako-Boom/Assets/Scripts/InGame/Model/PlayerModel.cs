@@ -418,8 +418,8 @@ namespace InGame.Model
                 //カットイン挿入
                 GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
                 //止める。
-                InGameManager timeManager=InGameManager.Instance();
-                timeManager.SetTimeScale(0);
+                TimeManager timeManager=TimeManager.Instance();
+                //timeManager.SetTimeScale(0);
                 await CutIn.GetComponent<CutInAttach>().ActCutIn();
                 //動かす
                 timeManager.SetTimeScale(1);
