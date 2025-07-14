@@ -19,12 +19,12 @@ namespace InGame.NonMVP
         /// 爆発パラメタ
         /// </summary>
         [Header("爆発大")]
-        [SerializeField] private float bigExplosionSize = 0.25f;
+        [SerializeField] private float bigCollisionSize = 0.25f;
         [SerializeField] private int bigDamage = 1;
         
         [Header("爆発中")]
-        [SerializeField] private float middleCollisionSize = 0.25f;
-        [SerializeField] private int middleDamage = 1;
+        [SerializeField] private float mediumCollisionSize = 0.25f;
+        [SerializeField] private int mediumDamage = 1;
         
         [Header("爆発小")]
         [SerializeField] private float smallCollisionSize = 0.25f;
@@ -64,28 +64,13 @@ namespace InGame.NonMVP
                 switch (explosionPower)
                 {
                     case 0:
-                        gameObject = Instantiate(explosionObject, vec, Quaternion.identity);
-                        var smallExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
-                        var smallCollider = gameObject.GetComponent<CircleCollider2D>();
-                        smallCollider.radius = smallCollisionSize;
-                        smallExplosionAttach.SetDamage(smallDamage);
-                        await smallExplosionAttach.Explosion("SmallExplosion");
+                        PlayExplosionAnimation(vec, smallCollisionSize, smallDamage, "SmallExplosion");
                         break;
                     case 1:
-                        gameObject = Instantiate(explosionObject, vec, Quaternion.identity);
-                        var mediumExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
-                        var mediumCollider = gameObject.GetComponent<CircleCollider2D>();
-                        mediumCollider.radius = smallCollisionSize;
-                        mediumExplosionAttach.SetDamage(middleDamage);
-                        await mediumExplosionAttach.Explosion("MediumExplosion");
+                        PlayExplosionAnimation(vec, mediumCollisionSize, mediumDamage, "MediumExplosion");
                         break;
                     case 2:
-                        gameObject = Instantiate(explosionObject, vec, Quaternion.identity);
-                        var bigCollider = gameObject.GetComponent<CircleCollider2D>();
-                        bigCollider.radius = smallCollisionSize;
-                        var bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
-                        bigExplosionAttach.SetDamage(bigDamage);
-                        await bigExplosionAttach.Explosion("BigExplosion");
+                        PlayExplosionAnimation(vec, bigCollisionSize, bigDamage, "BigExplosion");
                         break;
                 }
             }
@@ -93,6 +78,27 @@ namespace InGame.NonMVP
             {
                 // キャンセル処理
             }
+        }
+
+        /// <summary>
+        /// 爆発のアニメーション再生
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="collisionSize"></param>
+        /// <param name="damage"></param>
+        /// <param name="animationName"></param>
+        private async void PlayExplosionAnimation(
+            Vector3 vector, 
+            float collisionSize, 
+            int damage,
+            string animationName)
+        {
+            var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
+            var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
+            var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
+            explosionCollider.radius = collisionSize;
+            explosionAttach.SetDamage(damage);
+            await explosionAttach.Explosion(animationName);
         }
     }
 }
