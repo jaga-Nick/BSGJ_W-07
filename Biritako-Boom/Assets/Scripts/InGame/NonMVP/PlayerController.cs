@@ -29,7 +29,7 @@ namespace InGame.NonMVP
 
         public void Init()
         {
-            InputSystemActionsManager manager = new InputSystemActionsManager();
+            InputSystemActionsManager manager = InputSystemActionsManager.Instance();
             ActionMap=manager.GetInputSystem_Actions();
             manager.PlayerEnable();
         }
