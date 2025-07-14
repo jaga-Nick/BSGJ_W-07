@@ -9,7 +9,7 @@ namespace InGame.NonMVP
         public async UniTask ActCutIn()
         {
             animator = gameObject.GetComponent<Animator>();
-
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             animator.Play("CutInBumb");
             await UniTask.WaitUntil(() => {
                 var stateInfo = animator.GetCurrentAnimatorStateInfo(0);

@@ -45,22 +45,18 @@ namespace InGame.NonMVP
 
             InitializeEdgeCollider();
 
-
-            // 1. プロジェクトに登録されている"Wall"レイヤーの番号を取得します。
             int wallLayerNumber = LayerMask.NameToLayer("Wall");
-
-            // 2. レイヤーが正しく登録されているか確認します。
             if (wallLayerNumber == -1)
             {
-                // もし"Wall"レイヤーが存在しない場合、エラーログを出して処理を中断します。
                 Debug.LogError("「Wall」という名前のレイヤーがプロジェクトに登録されていません！ Edit > Project Settings > Tags and Layers から設定してください。");
             }
             else
             {
-                // 3. 取得したレイヤー番号を使って、そのレイヤーだけを有効にするマスクを作成し、設定します。
+                //取得したレイヤー番号を使って、そのレイヤーだけを有効にするマスクを作成し、設定します。
                 this.collisionMask = 1 << wallLayerNumber;
             }
         }
+ 
         /// <summary>
         /// 始点（家電）→ここは基本変わらない想定。
         /// </summary>
@@ -123,12 +119,6 @@ namespace InGame.NonMVP
         public float shrinkDuration = 4.0f;
 
         /// <summary>
-        /// コストの算出量
-        /// </summary>
-        public float? beforeCost { get; private set; } = null;
-        public float? AlreadyTotalCost { get; private set; }
-
-        /// <summary>
         /// コードの返却キャンセルに使用する
         /// </summary>
         private CancellationTokenSource cts;
@@ -148,31 +138,16 @@ namespace InGame.NonMVP
                 Destroy(gameObject);
             }
         }
-
-        public float? BeforeCostGauge { get; private set; } = null;
         //ゲージを増減させるという処理の基準値
-        private float GaugeDistance=0.5f;
+        private float GaugeDistance=0.003f;
 
-
-        public float DecideCostistance()
-        {
-            float num =  (float)BeforeCostGauge - DecideCost() ;
-
-            float ret= (float)BeforeCostGauge - (float)AlreadyTotalCost;
-
-            BeforeCostGauge = null;
-
-            Debug.Log(num +"テスト");
-            Debug.Log(AlreadyTotalCost+"足した");
-            return (float)AlreadyTotalCost;
-        }
 
         /// <summary>
         /// コストの決定方法
         /// </summary>
         public float DecideCost()
         {
-            float num=TotalDistance() / GaugeDistance;
+            float num=TotalDistance() * GaugeDistance;
 
             return num;
         }
@@ -227,10 +202,6 @@ namespace InGame.NonMVP
             //判定の為、Rigidbodyを作成。
             Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0;
-
-            //ここで以前のコスト量を代入。
-            BeforeCostGauge = DecideCost();
-            Debug.Log("決定");
             cts?.Cancel();
             cts?.Dispose();
             cts = new CancellationTokenSource();
@@ -300,15 +271,6 @@ namespace InGame.NonMVP
 
                 float elapsedTime = 0f;
 
-                // 回収できるコストの総量
-                float maxCost = DecideCost();
-                //  1秒あたりのコスト加算量
-                float costPerSecond = (maxCost > 0 && shrinkDuration > 0) ? maxCost / shrinkDuration : 0;
-
-                //Debug.Log(DecideCost()+"コスト決定");
-
-                AlreadyTotalCost = 0;
-
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
                 {
@@ -317,26 +279,6 @@ namespace InGame.NonMVP
 
                     // 時間の進捗率 (0.0 から 1.0 へ)
                     float t = elapsedTime / shrinkDuration;
-
-                    //---------------------------------------
-
-                    if (costPerSecond > 0)
-                    {
-                        //算出
-                        float costToAdd = costPerSecond * Time.deltaTime;
-
-
-                        AlreadyTotalCost += costToAdd;
-                        
-                        // 計算したコストを加算
-                        model.IncrementCodeGauge(costToAdd);
-
-                        //Debug.Log($"コスト加算中...: {maxnum.ToString("F2")} / {maxCost.ToString("F2")}");
-                    }
-
-
-                    ///--------------------------------
-
 
                     // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
                     // Mathf.CeilToInt を使うことで、最後のパーティクルが残るように調整
@@ -369,7 +311,6 @@ namespace InGame.NonMVP
             }
             catch (OperationCanceledException)
             { 
-                Debug.Log("算出終了");
             }
             finally
             {
@@ -379,20 +320,13 @@ namespace InGame.NonMVP
         /// <summary>
         /// 爆破を呼び出す
         /// </summary>
-        public void Explosion()
+        public async UniTask Explosion()
         {
             //ここでどれだけ離れているかを設定する
             GenerateExplosionManager generater = GenerateExplosionManager.Instance();
             //紐の総長さを計算し、基準に地点を
             float totalDistance = TotalDistance();
             int num = (int)totalDistance / ExplosionTriggerDistance;
-
-            //-----------------------------------------
-
-            //ここに家電の爆発を書く（まだ書かない）
-
-
-            //---------------------------------
 
             //最大４以上の爆発
             if (num >= MaxExplosion)
