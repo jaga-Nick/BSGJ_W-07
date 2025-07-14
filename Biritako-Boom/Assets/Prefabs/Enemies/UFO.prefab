@@ -409,8 +409,9 @@ MonoBehaviour:
     y: -32
     width: 64
     height: 64
-  maxUfoHp: 100
-  ufoScore: 100
+  maxUfoHp: 30
+  ufoScore: 50
+  ufoDeadScore: 500
 --- !u!114 &6897444087228015109
 MonoBehaviour:
   m_ObjectHideFlags: 0
