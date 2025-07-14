@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7352237500688632261}
   - component: {fileID: 2109749296528190801}
   - component: {fileID: 987507985110855957}
-  - component: {fileID: 7938197778861266851}
   - component: {fileID: 5287630916009880575}
   - component: {fileID: 8087117981055910558}
   m_Layer: 5
@@ -78,23 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!111 &7938197778861266851
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4451397332625592543}
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: 7400000, guid: 96442e392e586fd40baebccb0dfb48e4, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 96442e392e586fd40baebccb0dfb48e4, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_UpdateMode: 0
-  m_CullingType: 0
 --- !u!95 &5287630916009880575
 Animator:
   serializedVersion: 7
