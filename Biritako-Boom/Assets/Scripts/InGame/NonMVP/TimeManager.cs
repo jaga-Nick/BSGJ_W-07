@@ -3,14 +3,14 @@ using Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Cysharp.Threading.Tasks;
-
+using Ending.Loader;
 namespace InGame.NonMVP
 {
     /// <summary>
     /// TimeManager
     /// ゲーム内の時間を管理するクラス。
     /// </summary>
-    public class TimeManager : SingletonMonoBehaviourBase<TimeManager>
+    public class TimeManager : DestroyAvailable_SingletonMonoBehaviourBase<TimeManager>
     {
         /// <summary>
         /// ゲーム状態のパラメタ
@@ -30,9 +30,18 @@ namespace InGame.NonMVP
             //0以下の時、ゲームを終了する
             if (_inGameTime <= 0)
             {
-                ISceneInfo info=new ResultSceneLoader();
-                SceneManager.Instance().LoadMainScene(info).Forget();
+                ISceneInfo info = new ResultSceneLoader();
+                //SceneManager.Instance().LoadMainScene(info).Forget();
             }
+        }
+
+        /// <summary>
+        /// 時間を変更する。
+        /// </summary>
+        /// <param name="time"></param>
+        public void SetTimeScale(float time)
+        {
+            Time.timeScale = time;
         }
 
         /// <summary>

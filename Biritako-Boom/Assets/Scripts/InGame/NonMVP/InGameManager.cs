@@ -40,6 +40,7 @@ namespace InGame.NonMVP
         private void Update()
         {
             var time = TimeManager.Instance().GetInGameTime();
+            
             UpdateTimerUI(time);
         }
 
@@ -55,15 +56,6 @@ namespace InGame.NonMVP
             var color = Color.Lerp(endColor, startColor, t);
             color.a = 1.0f;
             timerUI.color = color;
-        }
-
-        /// <summary>
-        /// 時間を変更する。
-        /// </summary>
-        /// <param name="time"></param>
-        public void SetTimeScale(float time)
-        {
-            Time.timeScale = time;
         }
     }
 }
