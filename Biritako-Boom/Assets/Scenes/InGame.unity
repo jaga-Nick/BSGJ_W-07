@@ -70039,13 +70039,13 @@ MonoBehaviour:
   LineWidth: 1
   LineMaterial: {fileID: 2100000, guid: c8626408f57ba5546b3b8a2d214a7208, type: 2}
   OrderInLayer: 3
-  ParticleCount: 86
+  ParticleCount: 180
   TimeStep: 0.02
   Gravity: {x: 0, y: 0, z: 0}
   Damping: 2
   Stiffness: 0.8
   ExplosionTriggerDistance: 1
-  MaxExplosion: 4
+  MaxExplosion: 25
 --- !u!114 &1927360535
 MonoBehaviour:
   m_ObjectHideFlags: 0
