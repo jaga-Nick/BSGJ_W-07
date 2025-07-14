@@ -22,6 +22,8 @@ namespace InGame.Model
         public void Initialize(PlayerPresenter playerPresenter)
         {
             this.presenter = playerPresenter;
+
+            
         }
         
         private PlayerPresenter presenter;
@@ -39,14 +41,12 @@ namespace InGame.Model
         //---ステータス部分-----------
         public float Speed { get; private set; } = 10.0f;
 
-
-        //最大値
+        //コードゲージ
         private const float MaxCodeGauge = 30.0f;
-        //現在の値
-        public float CurrentCodeGauge { get; private set; } = 30.0f;
-        //線を伸ばし始めた時
-        public float? BeforeCodeGauge { get; private set; }
+        private float CurrentCodeGauge= 30.0f;
 
+        private float RegenCodeGauge =0.003f;
+        
         //探索範囲
         private float SearchScale =1f;
 
@@ -86,6 +86,8 @@ namespace InGame.Model
             {
                 PlayerObject = UnityEngine.Object.Instantiate( presenter.characterPrefab , InstancePosition, Quaternion.identity);
                 Rb = PlayerObject?.GetComponent<Rigidbody2D>();
+
+                HealGauge().Forget();
             }     
         }
         /// <summary>
@@ -189,15 +191,28 @@ namespace InGame.Model
             CurrentCodeGauge = Mathf.Min(CurrentCodeGauge, MaxCodeGauge);
         }
 
-        //テスト減算処理(Beforeから減算で疑似的に計算している。
-        public void TestDecrementCodeGauge(float num)
+
+        public async UniTask HealGauge()
         {
-            if (BeforeCodeGauge != null)
+            try{
+                CancellationToken token=PlayerObject.GetCancellationTokenOnDestroy();
+                while (true)
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (CurrentHaveCodeSimulater == null)
+                    {
+                        IncrementCodeGauge(RegenCodeGauge);
+                    }
+                    Debug.Log("毎秒処理");
+                    //await UniTask.WaitForSeconds(1, cancellationToken :token);
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+            }
+            catch (OperationCanceledException)
             {
-                CurrentCodeGauge = (float)BeforeCodeGauge - num;
+
             }
         }
-
 
         //ゲージの割合
         public float GetCodeGaugePercent()
@@ -219,9 +234,6 @@ namespace InGame.Model
                 CurrentHaveCodeSimulater?.InjectionSocketCode(socket);
                 //CodeSimulatorsに今持っているコードを入れてハブを無くす。
                 CodeSimulaters.Add(CurrentHaveCodeSimulater);
-
-                //数値を決める。
-                BeforeCodeGauge = CurrentCodeGauge;
             }
             CurrentHaveCodeSimulater = null;
         }
@@ -245,23 +257,10 @@ namespace InGame.Model
 
             try
             {
-                if (CurrentHaveCodeSimulater.BeforeCostGauge != null)
-                {
-                    //Beforeが登録されている時、新コストを旧コストで引いてその分足せば問題ないはず。
-                    CurrentCodeGauge += CurrentHaveCodeSimulater.DecideCostistance();
-                }
-                //最初の
-                BeforeCodeGauge = CurrentCodeGauge;
-
                 while (true) {
                     codeHaveCancellation.Token.ThrowIfCancellationRequested();
 
-                    //
-                    if (CurrentHaveCodeSimulater != null)
-                    {
-
-                        TestDecrementCodeGauge(CurrentHaveCodeSimulater.DecideCost());
-                    }
+                    
 
                     //0になった時。自動的にプラグを落とす。
                     if(CurrentCodeGauge <= 0)
@@ -270,6 +269,10 @@ namespace InGame.Model
                         break;
                     }
 
+                    if (CurrentHaveCodeSimulater)
+                    {
+                        DecreaseCodeGauge(CurrentHaveCodeSimulater.DecideCost());
+                    }
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
                 }
@@ -280,14 +283,8 @@ namespace InGame.Model
             }
             finally
             {
-                Debug.Log("終了");
-                //初期化
-                BeforeCodeGauge = null;
             }
         }
-
-        
-        //---------------TakeCommand-------------------------
 
         /// <summary>
         /// 持つ処理の大枠。
@@ -368,7 +365,6 @@ namespace InGame.Model
                 //近くに家電が存在し、家電に既にコードが繋がれていない場合。
                 if (electro && obje == null)
                 {
-                    //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
                     var code = generateCodeSystem.GenerateCode(electro, PlayerObject);
                     SetCurrentHaveCode(code);
 
@@ -376,7 +372,6 @@ namespace InGame.Model
                     HavingCode().Forget();
                 }
 
-                
             }
         }
 
@@ -387,36 +382,31 @@ namespace InGame.Model
         {
             CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
             
-            //何も拾っていない時。
             if (endpoint != null && CurrentHaveCodeSimulater == null)
             {
                 SetCurrentHaveCode(endpoint.CodeSimulater);
-
-                //拾った時、線を再起動し、プレイヤー情報を入れる。
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
-
-                //CurrentCodeGauge += endpoint.CodeSimulater.DecideCost();
-
-
-                //完了待機はしない（寧ろ待つとバグが発生する）
                 HavingCode().Forget();
             }
         }
         
         //---------------------TakeCommand終了---------------------------------------------
-
-
-
         /// <summary>
         /// 一斉に爆破する
         /// </summary>
-        public void Explosion()
+        public async void Explosion()
         {
             //コードが一つ以上生成されており、保持していない時。
             if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
             {
                 //カットイン挿入
-                GenerateExplosionManager.Instance().GenerateCutIn();
+                GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
+                //止める。
+                TimeManager timeManager=TimeManager.Instance();
+                timeManager.SetTimeScale(0);
+                await CutIn.GetComponent<CutInAttach>().ActCutIn();
+                //動かす
+                timeManager.SetTimeScale(1);
 
                 foreach (var i in CodeSimulaters)
                 {
@@ -447,7 +437,5 @@ namespace InGame.Model
             CurrentHaveCodeSimulater.PutCodeEvent(this);
             CurrentHaveCodeSimulater = null;
         }
-
-
     }
 }

@@ -29,8 +29,10 @@ namespace InGame.Presenter
         [Header("UFOのステータス")]
         [Header("UFOの最大HP")]
         [SerializeField] private int maxUfoHp = 100;
-        [Header("UFOのスコア")]
+        [Header("UFOにダメージを与えた時のスコア")]
         [SerializeField] private int ufoScore = 100;
+        [Header("UFOが倒された時のスコア")]
+        [SerializeField] private int ufoDeadScore = 100;
         
         /// <summary>
         /// modelとview
@@ -43,15 +45,17 @@ namespace InGame.Presenter
         
         private void Start()
         {
+            // パラメタのセット
             _model = gameObject.GetComponent<UfoModel>();
             _model.Rb = gameObject.GetComponent<Rigidbody2D>();
             _model.Speed = moveSpeed;
             _model.Position = transform.position;
             _model.MaxUfoHp = maxUfoHp;
-            //CurrentUfoHp = maxUfoHp,
             _model.UfoScore = ufoScore;
+            _model.UfoDeadScore = ufoDeadScore;
             _view = gameObject.GetComponent<UfoView>();
             
+            // UFOの自動運転スタート
             AutoMoveUfoRoutine().Forget();
         }
         

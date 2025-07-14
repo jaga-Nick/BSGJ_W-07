@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 985170cb00a4a08438c0df51d86875ae
+guid: 37cf2f3ca7a1f7d41aad3e8c2cc2e514
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6416704506416456542
-    second: setting_0
+      213: -5117078065908357792
+    second: UiSettingButton_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -53,7 +53,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: setting_0
+      name: UiSettingButton_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
+        x: 3
+        y: 2
+        width: 253
+        height: 252
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2ac1662af3943f6a0800000000000000
-      internalID: -6416704506416456542
+      spriteID: 065e6994c9c7cf8b0800000000000000
+      internalID: -5117078065908357792
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      setting_0: -6416704506416456542
+      UiSettingButton_0: -5117078065908357792
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

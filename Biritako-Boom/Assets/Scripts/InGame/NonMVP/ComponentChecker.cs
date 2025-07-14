@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
 namespace InGame.NonMVP{
+    /// <summary>
+    /// ComponentのCheckerクラス
+    /// </summary>
     public class ComponentChecker
     {
         /// <summary>
         /// 周囲最短距離のComponentを取得する。
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="transformPosition"></param>
         /// <param name="scanRadius"></param>
         /// <returns></returns>
-        public T CharacterCheck<T>(Vector3 TransformPosition,float scanRadius) where T :Component
+        public T CharacterCheck<T>(Vector3 transformPosition,float scanRadius) where T :Component
         {
             //2D用のオーバーラップサーチ
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TransformPosition, scanRadius);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transformPosition, scanRadius);
 
             //
             GameObject closestObject = null;
@@ -32,7 +33,7 @@ namespace InGame.NonMVP{
                 T component=obj.GetComponent<T>();
                 if (component == null) continue;
 
-                float distance = Vector2.Distance(TransformPosition, obj.transform.position);
+                float distance = Vector2.Distance(transformPosition, obj.transform.position);
 
                 //一番近いオブジェクトを探索
                 if (distance < closestDistance)

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -8,34 +8,33 @@ namespace InGame.NonMVP
     /// </summary>
     public class GenerateExplosionManager:DestroyAvailable_SingletonMonoBehaviourBase<GenerateExplosionManager>
     {
+        /// <summary>
+        /// カットインパラメタ
+        /// </summary>
         [Header("カットインに必要")]
-        [SerializeField]
-        private Canvas CutInCanvas;
-        [SerializeField]
-        private GameObject CutIn;
-
+        [SerializeField] private Canvas cutInCanvas;
+        [SerializeField] private GameObject cutIn;
+        
+        /// <summary>
+        /// 爆発パラメタ
+        /// </summary>
         [Header("爆発大")]
-        [SerializeField]
-        private float BigExplosionSize = 0.25f;
-        [SerializeField]
-        private int BigDamage = 100;
-
+        [SerializeField] private float bigCollisionSize = 0.25f;
+        [SerializeField] private int bigDamage = 1;
+        
         [Header("爆発中")]
-        [SerializeField]
-        private float MiddleCollisionSize=0.25f;
-        [SerializeField]
-        private int MiddleDamage = 75;
-
+        [SerializeField] private float mediumCollisionSize = 0.25f;
+        [SerializeField] private int mediumDamage = 1;
+        
         [Header("爆発小")]
-        [SerializeField]
-        private float SmallCollisionSize=0.25f;
-        [SerializeField]
-        private int SmallDamage = 50;
+        [SerializeField] private float smallCollisionSize = 0.25f;
+        [SerializeField] private int smallDamage = 1;
 
-
-        [Header("基準値")]
-        [SerializeField]
-        private GameObject ExplosionObject;
+        /// <summary>
+        /// 爆発エフェクトのPrefab
+        /// </summary>
+        [Header("爆発Prefab")]
+        [SerializeField] private GameObject explosionObject;
 
         public void Awake()
         {
@@ -43,50 +42,63 @@ namespace InGame.NonMVP
             instance = this;
         }
 
-        public void GenerateCutIn()
+        /// <summary>
+        /// カットインの呼び出し
+        /// </summary>
+        public GameObject GenerateCutIn()
         {
-            Instantiate(CutIn, CutInCanvas.transform);
+            var catIn = Instantiate(cutIn, cutInCanvas.transform);
+            return catIn;
         }
 
         /// <summary>
         /// 爆発生成(InterfaceでSwitch変わりしたほうがいいけどプランナーに調節させたらでええわ。）
         /// </summary>
-        public async void Factory(Vector3 point,int ExplosionPower)
+        public async void Factory(Vector3 point, int explosionPower)
         {
-            GameObject gameObject = null;
-
-            Vector3 vec = new Vector3(point.x, point.y,0);
-            switch (ExplosionPower)
+            try
             {
-                case 0:
-                    gameObject=Instantiate(ExplosionObject, vec, Quaternion.identity);
+                GameObject gameObject = null;
 
-                    ExplosionAttach smallExplosionAttach=gameObject.GetComponent<ExplosionAttach>();
-                    CircleCollider2D collider_sma=gameObject.GetComponent<CircleCollider2D>();
-                    collider_sma.radius=SmallCollisionSize;
-
-                    smallExplosionAttach.SetDamage(SmallDamage);
-                    await smallExplosionAttach.Explosion("SmallExplosion");
-                    break;
-                case 1:
-                    gameObject =Instantiate(ExplosionObject, vec, Quaternion.identity);
-                    ExplosionAttach middleExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
-                    CircleCollider2D collider_mid = gameObject.GetComponent<CircleCollider2D>();
-                    collider_mid.radius = SmallCollisionSize;
-
-                    middleExplosionAttach.SetDamage(MiddleDamage);
-                    await middleExplosionAttach.Explosion("MiddiumExplosion");
-                    break;
-                case 2:
-                    gameObject=Instantiate(ExplosionObject, vec, Quaternion.identity);
-                    CircleCollider2D collider_big = gameObject.GetComponent<CircleCollider2D>();
-                    collider_big.radius = SmallCollisionSize;
-                    ExplosionAttach bigExplosionAttach = gameObject.GetComponent<ExplosionAttach>();
-
-                    bigExplosionAttach.SetDamage(BigDamage);
-                    await bigExplosionAttach.Explosion("BigExplosion");
-                    break;
+                var vec = new Vector3(point.x, point.y, 0);
+                switch (explosionPower)
+                {
+                    case 0:
+                        PlayExplosionAnimation(vec, smallCollisionSize, smallDamage, "SmallExplosion");
+                        break;
+                    case 1:
+                        PlayExplosionAnimation(vec, mediumCollisionSize, mediumDamage, "MediumExplosion");
+                        break;
+                    case 2:
+                        PlayExplosionAnimation(vec, bigCollisionSize, bigDamage, "BigExplosion");
+                        break;
+                }
             }
+            catch (Exception e)
+            {
+                // キャンセル処理
+            }
+        }
+
+        /// <summary>
+        /// 爆発のアニメーション再生
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="collisionSize"></param>
+        /// <param name="damage"></param>
+        /// <param name="animationName"></param>
+        private async void PlayExplosionAnimation(
+            Vector3 vector, 
+            float collisionSize, 
+            int damage,
+            string animationName)
+        {
+            var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
+            var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
+            var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
+            explosionCollider.radius = collisionSize;
+            explosionAttach.SetDamage(damage);
+            await explosionAttach.Explosion(animationName);
         }
     }
 }
