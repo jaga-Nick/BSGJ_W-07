@@ -1,5 +1,6 @@
 ﻿using System;
 using Common;
+using Setting;
 //
 namespace InGame.Model
 {
@@ -14,6 +15,7 @@ namespace InGame.Model
         private void UpdateScoreInfo()
         {
             ScoreChanged?.Invoke();
+            AudioManager.Instance().LoadSoundEffect("Scored");
         }
         //加算
         public void IncrementScore(int Num) { 
