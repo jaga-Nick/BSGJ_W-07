@@ -237,17 +237,17 @@ namespace InGame.Model
             {
                 CurrentHaveCodeSimulator?.InjectionSocketCode(socket);
                 //CodeSimulatorsに今持っているコードを入れてハブを無くす。
-                CodeSimulaters.Add(CurrentHaveCodeSimulater);
+                codeSimulators.Add(CurrentHaveCodeSimulator);
 
-                if (CodeSimulaters.Count <= 2)
+                if (codeSimulators.Count <= 2)
                 {
                     AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionSmall");
                 }
-                else if (CodeSimulaters.Count <= 4)
+                else if (codeSimulators.Count <= 4)
                 {
                     AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionMiddle");
                 }
-                else if(CodeSimulaters.Count >= 5)
+                else if(codeSimulators.Count >= 5)
                 {
                     AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionLarge");
                 }
