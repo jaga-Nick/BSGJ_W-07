@@ -19,11 +19,13 @@ namespace InGame.Model
     [Serializable]
     public class PlayerModel
     {
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="playerPresenter"></param>
         public void Initialize(PlayerPresenter playerPresenter)
         {
             this.presenter = playerPresenter;
-
-            
         }
         
         private PlayerPresenter presenter;
@@ -60,9 +62,9 @@ namespace InGame.Model
         public GenerateCodeSystem generateCodeSystem { get; private set; }
         
         //現在持っているコード
-        public CodeSimulater CurrentHaveCodeSimulater { get; private set; }
+        public CodeSimulater CurrentHaveCodeSimulator { get; private set; }
         //コードをシミュレートしている。
-        public List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
+        public List<CodeSimulater> codeSimulators = new List<CodeSimulater>();
         //-------------------------------
 
         /// <summary>
@@ -73,8 +75,6 @@ namespace InGame.Model
         {
             generateCodeSystem = _generateCodeSystem;
         }
-
-
 
         #region キャラクター生成
         /// <summary>
@@ -142,7 +142,7 @@ namespace InGame.Model
         /// ソケットを回収する
         /// </summary>
         public void DeleteSocket() {
-            if (Socket!=null && CodeSimulaters.Count == 0)
+            if (Socket!=null && codeSimulators.Count == 0)
             {
                 UnityEngine.Object.Destroy(Socket);
             }
@@ -163,7 +163,7 @@ namespace InGame.Model
 
         public void SetCurrentHaveCode(CodeSimulater code)
         {
-            CurrentHaveCodeSimulater = code;
+            CurrentHaveCodeSimulator = code;
         }
 
         #endregion
@@ -199,7 +199,7 @@ namespace InGame.Model
                 while (true)
                 {
                     token.ThrowIfCancellationRequested();
-                    if (CurrentHaveCodeSimulater == null)
+                    if (CurrentHaveCodeSimulator == null)
                     {
                         IncrementCodeGauge(RegenCodeGauge);
                     }
@@ -229,13 +229,13 @@ namespace InGame.Model
             GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, SearchScale);
 
             //Null処理
-            if (CurrentHaveCodeSimulater != null)
+            if (CurrentHaveCodeSimulator != null)
             {
-                CurrentHaveCodeSimulater?.InjectionSocketCode(socket);
+                CurrentHaveCodeSimulator?.InjectionSocketCode(socket);
                 //CodeSimulatorsに今持っているコードを入れてハブを無くす。
-                CodeSimulaters.Add(CurrentHaveCodeSimulater);
+                codeSimulators.Add(CurrentHaveCodeSimulator);
             }
-            CurrentHaveCodeSimulater = null;
+            CurrentHaveCodeSimulator = null;
         }
 
         //ここで特例的にコード『接続中』の処理を態と書いていく
@@ -269,9 +269,9 @@ namespace InGame.Model
                         break;
                     }
 
-                    if (CurrentHaveCodeSimulater)
+                    if (CurrentHaveCodeSimulator)
                     {
-                        DecreaseCodeGauge(CurrentHaveCodeSimulater.DecideCost());
+                        DecreaseCodeGauge(CurrentHaveCodeSimulator.DecideCost());
                     }
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
@@ -360,7 +360,7 @@ namespace InGame.Model
                 GameObject electro = checker.FindClosestEnemyOfTypeOneGameObject(PlayerObject.transform.position, SearchScale);
 
                 //複数のコードを繋げないようにする
-                var obje = CodeSimulaters.Where(code => code.StartObject == electro).FirstOrDefault();
+                var obje = codeSimulators.Where(code => code.StartObject == electro).FirstOrDefault();
 
                 //近くに家電が存在し、家電に既にコードが繋がれていない場合。
                 if (electro && obje == null)
@@ -382,7 +382,7 @@ namespace InGame.Model
         {
             CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
             
-            if (endpoint != null && CurrentHaveCodeSimulater == null)
+            if (endpoint != null && CurrentHaveCodeSimulator == null)
             {
                 SetCurrentHaveCode(endpoint.CodeSimulater);
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
@@ -397,7 +397,7 @@ namespace InGame.Model
         public async void Explosion()
         {
             //コードが一つ以上生成されており、保持していない時。
-            if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
+            if (codeSimulators.Count > 0 && CurrentHaveCodeSimulator ==null)
             {
                 //カットイン挿入
                 GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
@@ -408,12 +408,12 @@ namespace InGame.Model
                 //動かす
                 timeManager.SetTimeScale(1);
 
-                foreach (var i in CodeSimulaters)
+                foreach (var i in codeSimulators)
                 {
                     i.Explosion();
                 }
                 //リセット。
-                CodeSimulaters = new List<CodeSimulater>();
+                codeSimulators = new List<CodeSimulater>();
 
                 CurrentCodeGauge = MaxCodeGauge;
             }
@@ -434,8 +434,8 @@ namespace InGame.Model
 
             presenter.animationView.SetHaveConcent(false);
 
-            CurrentHaveCodeSimulater.PutCodeEvent(this);
-            CurrentHaveCodeSimulater = null;
+            CurrentHaveCodeSimulator.PutCodeEvent(this);
+            CurrentHaveCodeSimulator = null;
         }
     }
 }

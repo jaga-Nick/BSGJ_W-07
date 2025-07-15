@@ -68,10 +68,17 @@ namespace InGame.NonMVP
             CodeSimulater codeSimulater = CodeObject.AddComponent<CodeSimulater>();
             //この時点ではUpdateは発生しない為問題ない
             //設定
-            codeSimulater.Initialize(lineRenderer, ParticleCount, TimeStep, 
-                                     Gravity, Damping, Stiffness, 
-                                     Start , End, 
-                                     ExplosionTriggerDistance,MaxExplosion);
+            codeSimulater.Initialize(
+                lineRenderer,
+                ParticleCount, 
+                TimeStep, 
+                Gravity, 
+                Damping, 
+                Stiffness, 
+                Start , 
+                End, 
+                ExplosionTriggerDistance,
+                MaxExplosion);
 
             //オブジェクト設定
             return codeSimulater;

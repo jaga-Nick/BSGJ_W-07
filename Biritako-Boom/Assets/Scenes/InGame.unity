@@ -19014,7 +19014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5bfd7b9c5c44d8b54f76ce874abdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 3
+  spawnInterval: 1
   maxElectronics: 28
   numberOfSpawnElectronics: 3
   maxUfo: 14
@@ -32802,8 +32802,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectTreeGreen
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8154229121518256972, guid: a968c3d0812c5fa4d928f75bf5cc5b0f, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -70060,10 +70059,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cutInCanvas: {fileID: 2126630024}
   cutIn: {fileID: 4451397332625592543, guid: 02b2da22aa0e8ca4995c7175cfed02a6, type: 3}
-  bigExplosionSize: 0.25
+  bigCollisionSize: 0.25
   bigDamage: 1
-  middleCollisionSize: 0.25
-  middleDamage: 1
+  mediumCollisionSize: 0.25
+  mediumDamage: 1
   smallCollisionSize: 0.25
   smallDamage: 1
   explosionObject: {fileID: 8683190912016376835, guid: efb667954b7dc904f9b8e4204ee21a6f, type: 3}
