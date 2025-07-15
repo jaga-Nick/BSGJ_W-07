@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Linq;
+using Setting;
 
 
 namespace InGame.Model
@@ -120,6 +121,8 @@ namespace InGame.Model
             instance = UnityEngine.Object.Instantiate(SocketPrefab, PlayerObject.transform.position, Quaternion.identity);
             
             Socket = instance;
+
+            AudioManager.Instance().LoadSoundEffect("SocketPutOn");
         }
 
         /// <summary>
@@ -129,6 +132,7 @@ namespace InGame.Model
         /// <returns></returns>
         public async UniTask AddressGenerateSocket(string Address)
         {
+            AudioManager.Instance().LoadSoundEffect("SocketPutOn");
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(Address);
 
             using (new HandleDisposable<GameObject>(handle))
@@ -144,6 +148,7 @@ namespace InGame.Model
         public void DeleteSocket() {
             if (Socket!=null && CodeSimulaters.Count == 0)
             {
+                AudioManager.Instance().LoadSoundEffect("PlayerableCharacterPickUpSocket");
                 UnityEngine.Object.Destroy(Socket);
             }
          }
@@ -203,7 +208,6 @@ namespace InGame.Model
                     {
                         IncrementCodeGauge(RegenCodeGauge);
                     }
-                    Debug.Log("毎秒処理");
                     //await UniTask.WaitForSeconds(1, cancellationToken :token);
                     await UniTask.Yield(PlayerLoopTiming.Update, token);
                 }
@@ -234,6 +238,19 @@ namespace InGame.Model
                 CurrentHaveCodeSimulater?.InjectionSocketCode(socket);
                 //CodeSimulatorsに今持っているコードを入れてハブを無くす。
                 CodeSimulaters.Add(CurrentHaveCodeSimulater);
+
+                if (CodeSimulaters.Count <= 2)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionSmall");
+                }
+                else if (CodeSimulaters.Count <= 4)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionMiddle");
+                }
+                else if(CodeSimulaters.Count >= 5)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionLarge");
+                }
             }
             CurrentHaveCodeSimulater = null;
         }
@@ -370,6 +387,8 @@ namespace InGame.Model
 
                     //完了待機はしない（寧ろ待つとバグが発生する）
                     HavingCode().Forget();
+
+                    AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
                 }
 
             }
@@ -384,6 +403,8 @@ namespace InGame.Model
             
             if (endpoint != null && CurrentHaveCodeSimulater == null)
             {
+                AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
+
                 SetCurrentHaveCode(endpoint.CodeSimulater);
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
                 HavingCode().Forget();
@@ -399,6 +420,7 @@ namespace InGame.Model
             //コードが一つ以上生成されており、保持していない時。
             if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
             {
+                AudioManager.Instance().LoadSoundEffect("CutInBomb");
                 //カットイン挿入
                 GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
                 //止める。
@@ -427,6 +449,8 @@ namespace InGame.Model
         /// </summary>
         public void PutCode()
         {
+            AudioManager.Instance().LoadSoundEffect("PlugUnpluged");
+
             //持っている処理をWhileを強制終了させる。
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
