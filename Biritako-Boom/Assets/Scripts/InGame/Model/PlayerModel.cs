@@ -430,10 +430,16 @@ namespace InGame.Model
                 //動かす
                 timeManager.SetTimeScale(1);
 
-                foreach (var i in codeSimulators)
-                {
-                    i.Explosion();
-                }
+                int explosionSize = 0;
+                if (codeSimulators.Count == 1) explosionSize = 0;
+                else if ((codeSimulators.Count <= 4)) explosionSize = 1;
+                else if ((codeSimulators.Count >= 5)) explosionSize = 2;
+
+                Debug.Log(explosionSize);
+                    foreach (var i in codeSimulators)
+                    {
+                        i.Explosion(explosionSize);
+                    }
                 //リセット。
                 codeSimulators = new List<CodeSimulater>();
 

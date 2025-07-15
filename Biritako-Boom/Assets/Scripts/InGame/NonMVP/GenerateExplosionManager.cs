@@ -1,3 +1,4 @@
+﻿using Setting;
 using System;
 using UnityEngine;
 
@@ -64,12 +65,15 @@ namespace InGame.NonMVP
                 switch (explosionPower)
                 {
                     case 0:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionSmall");
                         PlayExplosionAnimation(vec, smallCollisionSize, smallDamage, "SmallExplosion");
                         break;
                     case 1:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionMiddle");
                         PlayExplosionAnimation(vec, mediumCollisionSize, mediumDamage, "MediumExplosion");
                         break;
                     case 2:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionLarge");
                         PlayExplosionAnimation(vec, bigCollisionSize, bigDamage, "BigExplosion");
                         break;
                 }

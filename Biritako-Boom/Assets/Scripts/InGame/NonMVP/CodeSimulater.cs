@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 using InGame.Model;
-using Unity.VisualScripting;
 
 namespace InGame.NonMVP
 {
@@ -362,7 +361,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// 爆破を呼び出す
         /// </summary>
-        public async UniTask Explosion()
+        public async UniTask Explosion(int explosionSize)
         {
             //ここでどれだけ離れているかを設定する
             var generater = GenerateExplosionManager.Instance();
@@ -389,7 +388,7 @@ namespace InGame.NonMVP
             {
                 //等分で爆発させる。
                 i = (Positions.Length - 1) / 2;
-                generater.Factory(Positions[i], 0);
+                generater.Factory(Positions[i], explosionSize);
             }
             else
             {
@@ -399,12 +398,12 @@ namespace InGame.NonMVP
                 {
                     i += rate;
                     //爆発させる。（線の途中）
-                    generater.Factory(Positions[i], 0);
+                    generater.Factory(Positions[i], explosionSize);
                     count++;
                 }
 
                 // 家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）
-                generater.Factory(StartObject.transform.position, 1);
+                generater.Factory(StartObject.transform.position, explosionSize);
                 // 家電の死亡処理を呼び出す
                 // EnemySpawner.Instance().OnElectronicsDead(playerModel.codeSimulators.Count);
                 Destroy(this.StartObject);

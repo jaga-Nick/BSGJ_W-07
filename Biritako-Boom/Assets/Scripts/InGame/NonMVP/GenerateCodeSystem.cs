@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using InGame.Model;
+using UnityEngine;
+using InGame.Presenter;
 
 namespace InGame.NonMVP
 {
@@ -66,6 +68,7 @@ namespace InGame.NonMVP
 
             //ここでコードを生成する
             CodeSimulater codeSimulater = CodeObject.AddComponent<CodeSimulater>();
+
             //この時点ではUpdateは発生しない為問題ない
             //設定
             codeSimulater.Initialize(
@@ -79,6 +82,8 @@ namespace InGame.NonMVP
                 End, 
                 ExplosionTriggerDistance,
                 MaxExplosion);
+
+            
 
             //オブジェクト設定
             return codeSimulater;
