@@ -1,10 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
+using InGame.NonMVP;
 using UnityEngine;
 
 namespace InGame.Model
 {
 
-    public class ElectronicsModel : MonoBehaviour,IEnemyModel
+    public class ElectronicsModel : MonoBehaviour, IEnemyModel
     {
         public void Initialize(Rigidbody2D rb,Vector3 trans)
         {
@@ -58,9 +59,12 @@ namespace InGame.Model
         }
        
 
-        public async UniTask OnDead()
+        /// <summary>
+        /// 家電の死亡時処理
+        /// </summary>
+        async UniTask IEnemyModel.OnDead()
         {
-            
+            // 
         }
     }
 }
