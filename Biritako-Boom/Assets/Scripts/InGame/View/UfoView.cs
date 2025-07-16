@@ -11,7 +11,7 @@ namespace InGame.View
         private Animator _animator;
         
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
-
+        
         /// <summary>
         /// 動くときのアニメーションの再生
         /// </summary>
@@ -22,14 +22,6 @@ namespace InGame.View
             {
                 _animator.SetBool(IsMoving, isMoving);
             }
-        }
-
-        /// <summary>
-        /// 死んだらオブジェクトを破壊する
-        /// </summary>
-        public void OnDestroy()
-        {
-            Destroy(gameObject);
         }
     }
 }

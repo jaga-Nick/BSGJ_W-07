@@ -25,6 +25,10 @@ namespace InGame.Model
         /// </summary>
         public float ExplosionPower { get;}
 
+        /// <summary>
+        /// ダメージを食らうときの処理
+        /// </summary>
+        /// <param name="damage"></param>
         public void OnDamage(int damage) 
         {
             CurrentHp -= damage;

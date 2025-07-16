@@ -139,6 +139,26 @@ namespace InGame.Presenter
             }
         }
 
-       
+        // TODO: ダメージを受けた時はPresenterを介す
+        /// <summary>
+        /// Ufoがダメージを受けた時の処理
+        /// ModelとViewに反映させる
+        /// </summary>
+        public void StopAllTasks()
+        {
+            // キャンセル処理
+            _autoMoveCancel?.Cancel();
+            _autoMoveCancel?.Dispose();
+            _autoMoveCancel = null;
+            
+            _moveCancel?.Cancel();
+            _moveCancel?.Dispose();
+            _moveCancel = null;
+
+            // 移動アニメーションの開始
+            // _view.PlayMoveAnimation(false);
+            // 死亡アニメーションの開始
+            // _view.PlayDeadAnimation();
+        }
     }
 }
