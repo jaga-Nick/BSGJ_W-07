@@ -11,7 +11,7 @@ namespace InGame.NonMVP
     /// </summary>
     public class ExplosionAttach : MonoBehaviour
     {
-        private int Damage=0;
+        private int Damage;
         private Animator animator;
         public async UniTask Explosion(string AnimationName)
         {
@@ -35,7 +35,6 @@ namespace InGame.NonMVP
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
             if(enemies != null) 
             {
-                Debug.Log("ダメージ判定");
                 enemies.OnDamage(Damage); 
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Setting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -137,7 +138,9 @@ namespace Common
         [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
-
+            SceneManager.Instance()._mainSceneInfo = new TitleSceneLoader();
+            SceneManager.Instance()._mainSceneInfo.Init();
+            SceneManager.Instance()._mainSceneInfo.InputStart();
         }
     }
 }

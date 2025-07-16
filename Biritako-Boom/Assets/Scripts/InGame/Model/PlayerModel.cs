@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Linq;
+using Setting;
 
 
 namespace InGame.Model
@@ -19,6 +20,10 @@ namespace InGame.Model
     [Serializable]
     public class PlayerModel
     {
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="playerPresenter"></param>
         public void Initialize(PlayerPresenter playerPresenter)
         {
             this.presenter = playerPresenter;
@@ -39,14 +44,12 @@ namespace InGame.Model
         //---ステータス部分-----------
         public float Speed { get; private set; } = 10.0f;
 
-
-        //最大値
+        //コードゲージ
         private const float MaxCodeGauge = 30.0f;
-        //現在の値
-        public float CurrentCodeGauge { get; private set; } = 30.0f;
-        //線を伸ばし始めた時
-        public float? BeforeCodeGauge { get; private set; }
+        private float CurrentCodeGauge= 30.0f;
 
+        private float RegenCodeGauge =0.005f;
+        
         //探索範囲
         private float SearchScale =1f;
 
@@ -60,9 +63,11 @@ namespace InGame.Model
         public GenerateCodeSystem generateCodeSystem { get; private set; }
         
         //現在持っているコード
-        public CodeSimulater CurrentHaveCodeSimulater { get; private set; }
+        public CodeSimulater CurrentHaveCodeSimulator { get; private set; }
         //コードをシミュレートしている。
-        public List<CodeSimulater> CodeSimulaters = new List<CodeSimulater>();
+        public List<CodeSimulater> codeSimulators = new List<CodeSimulater>();
+
+        public bool DoExplosion=false;
         //-------------------------------
 
         /// <summary>
@@ -74,8 +79,6 @@ namespace InGame.Model
             generateCodeSystem = _generateCodeSystem;
         }
 
-
-
         #region キャラクター生成
         /// <summary>
         /// キャラクター生成。
@@ -86,6 +89,8 @@ namespace InGame.Model
             {
                 PlayerObject = UnityEngine.Object.Instantiate( presenter.characterPrefab , InstancePosition, Quaternion.identity);
                 Rb = PlayerObject?.GetComponent<Rigidbody2D>();
+
+                HealGauge().Forget();
             }     
         }
         /// <summary>
@@ -118,6 +123,8 @@ namespace InGame.Model
             instance = UnityEngine.Object.Instantiate(SocketPrefab, PlayerObject.transform.position, Quaternion.identity);
             
             Socket = instance;
+
+            AudioManager.Instance().LoadSoundEffect("SocketPutOn");
         }
 
         /// <summary>
@@ -127,6 +134,7 @@ namespace InGame.Model
         /// <returns></returns>
         public async UniTask AddressGenerateSocket(string Address)
         {
+            AudioManager.Instance().LoadSoundEffect("SocketPutOn");
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(Address);
 
             using (new HandleDisposable<GameObject>(handle))
@@ -140,8 +148,9 @@ namespace InGame.Model
         /// ソケットを回収する
         /// </summary>
         public void DeleteSocket() {
-            if (Socket!=null && CodeSimulaters.Count == 0)
+            if (Socket!=null && codeSimulators.Count == 0)
             {
+                AudioManager.Instance().LoadSoundEffect("PlayerableCharacterPickUpSocket");
                 UnityEngine.Object.Destroy(Socket);
             }
          }
@@ -161,7 +170,7 @@ namespace InGame.Model
 
         public void SetCurrentHaveCode(CodeSimulater code)
         {
-            CurrentHaveCodeSimulater = code;
+            CurrentHaveCodeSimulator = code;
         }
 
         #endregion
@@ -181,23 +190,45 @@ namespace InGame.Model
         #endregion
 
         
-        public void DecreaseCodeGauge(float Num)
-        { CurrentCodeGauge -= Num;}
+        public async UniTask DecreaseCodeGauge(float Num)
+        { CurrentCodeGauge -= Num;
+            CurrentCodeGauge = Mathf.Max (CurrentCodeGauge, 0);
+            if (CurrentCodeGauge == 0)
+            {
+                Explosion();
+            }
+        }
         public void IncrementCodeGauge(float Num)
         {
             CurrentCodeGauge += Num;
             CurrentCodeGauge = Mathf.Min(CurrentCodeGauge, MaxCodeGauge);
         }
 
-        //テスト減算処理(Beforeから減算で疑似的に計算している。
-        public void TestDecrementCodeGauge(float num)
+
+        public async UniTask HealGauge()
         {
-            if (BeforeCodeGauge != null)
+            try{
+                CancellationToken token=PlayerObject.GetCancellationTokenOnDestroy();
+                while (true)
+                {
+                    token.ThrowIfCancellationRequested();
+                    if (codeSimulators.Count > 0)
+                    {
+                        Debug.Log(RegenCodeGauge * (1 + codeSimulators.Count-1));
+                        DecreaseCodeGauge(RegenCodeGauge * (1+codeSimulators.Count-1));
+                    }
+                    else if (CurrentHaveCodeSimulator == null) {
+                        IncrementCodeGauge(RegenCodeGauge);
+                    }
+                        //await UniTask.WaitForSeconds(1, cancellationToken :token);
+                        await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+            }
+            catch (OperationCanceledException)
             {
-                CurrentCodeGauge = (float)BeforeCodeGauge - num;
+
             }
         }
-
 
         //ゲージの割合
         public float GetCodeGaugePercent()
@@ -214,16 +245,26 @@ namespace InGame.Model
             GameObject socket = checker.CharacterCheckGameObject<SocketPresenter>(PlayerObject.transform.position, SearchScale);
 
             //Null処理
-            if (CurrentHaveCodeSimulater != null)
+            if (CurrentHaveCodeSimulator != null)
             {
-                CurrentHaveCodeSimulater?.InjectionSocketCode(socket);
+                CurrentHaveCodeSimulator?.InjectionSocketCode(socket);
                 //CodeSimulatorsに今持っているコードを入れてハブを無くす。
-                CodeSimulaters.Add(CurrentHaveCodeSimulater);
+                codeSimulators.Add(CurrentHaveCodeSimulator);
 
-                //数値を決める。
-                BeforeCodeGauge = CurrentCodeGauge;
+                if (codeSimulators.Count <= 2)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionSmall");
+                }
+                else if (codeSimulators.Count <= 4)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionMiddle");
+                }
+                else if(codeSimulators.Count >= 5)
+                {
+                    AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionLarge");
+                }
             }
-            CurrentHaveCodeSimulater = null;
+            CurrentHaveCodeSimulator = null;
         }
 
         //ここで特例的にコード『接続中』の処理を態と書いていく
@@ -245,23 +286,10 @@ namespace InGame.Model
 
             try
             {
-                if (CurrentHaveCodeSimulater.BeforeCostGauge != null)
-                {
-                    //Beforeが登録されている時、新コストを旧コストで引いてその分足せば問題ないはず。
-                    CurrentCodeGauge += CurrentHaveCodeSimulater.DecideCostistance();
-                }
-                //最初の
-                BeforeCodeGauge = CurrentCodeGauge;
-
                 while (true) {
                     codeHaveCancellation.Token.ThrowIfCancellationRequested();
 
-                    //
-                    if (CurrentHaveCodeSimulater != null)
-                    {
-
-                        TestDecrementCodeGauge(CurrentHaveCodeSimulater.DecideCost());
-                    }
+                    
 
                     //0になった時。自動的にプラグを落とす。
                     if(CurrentCodeGauge <= 0)
@@ -270,6 +298,10 @@ namespace InGame.Model
                         break;
                     }
 
+                    if (CurrentHaveCodeSimulator)
+                    {
+                        DecreaseCodeGauge(CurrentHaveCodeSimulator.DecideCost());
+                    }
                     //毎秒待機で軽くする。
                     await UniTask.Yield(PlayerLoopTiming.Update,codeHaveCancellation.Token);
                 }
@@ -280,14 +312,8 @@ namespace InGame.Model
             }
             finally
             {
-                Debug.Log("終了");
-                //初期化
-                BeforeCodeGauge = null;
             }
         }
-
-        
-        //---------------TakeCommand-------------------------
 
         /// <summary>
         /// 持つ処理の大枠。
@@ -363,20 +389,20 @@ namespace InGame.Model
                 GameObject electro = checker.FindClosestEnemyOfTypeOneGameObject(PlayerObject.transform.position, SearchScale);
 
                 //複数のコードを繋げないようにする
-                var obje = CodeSimulaters.Where(code => code.StartObject == electro).FirstOrDefault();
+                var obje = codeSimulators.Where(code => code.StartObject == electro).FirstOrDefault();
 
                 //近くに家電が存在し、家電に既にコードが繋がれていない場合。
                 if (electro && obje == null)
                 {
-                    //ジェネレート(始点:家電と終点:プレイヤーキャラクター）
                     var code = generateCodeSystem.GenerateCode(electro, PlayerObject);
                     SetCurrentHaveCode(code);
 
                     //完了待機はしない（寧ろ待つとバグが発生する）
                     HavingCode().Forget();
+
+                    AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
                 }
 
-                
             }
         }
 
@@ -387,45 +413,51 @@ namespace InGame.Model
         {
             CodeEndPointAttach endpoint=checker.CharacterCheck<CodeEndPointAttach>(PlayerObject.transform.position, SearchScale);
             
-            //何も拾っていない時。
-            if (endpoint != null && CurrentHaveCodeSimulater == null)
+            if (endpoint != null && CurrentHaveCodeSimulator == null)
             {
+                AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
+
                 SetCurrentHaveCode(endpoint.CodeSimulater);
-
-                //拾った時、線を再起動し、プレイヤー情報を入れる。
                 endpoint.CodeSimulater.TakeCodeEvent(PlayerObject);
-
-                //CurrentCodeGauge += endpoint.CodeSimulater.DecideCost();
-
-
-                //完了待機はしない（寧ろ待つとバグが発生する）
                 HavingCode().Forget();
             }
         }
         
         //---------------------TakeCommand終了---------------------------------------------
-
-
-
         /// <summary>
         /// 一斉に爆破する
         /// </summary>
-        public void Explosion()
+        public async UniTask Explosion()
         {
             //コードが一つ以上生成されており、保持していない時。
-            if (CodeSimulaters.Count > 0 && CurrentHaveCodeSimulater==null)
+            if (codeSimulators.Count > 0 && CurrentHaveCodeSimulator ==null && DoExplosion ==false)
             {
+                DoExplosion = true;
+                AudioManager.Instance().LoadSoundEffect("CutInBomb");
                 //カットイン挿入
-                GenerateExplosionManager.Instance().GenerateCutIn();
+                GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
+                //止める。
+                TimeManager timeManager=TimeManager.Instance();
+                timeManager.SetTimeScale(0);
+                await CutIn.GetComponent<CutInAttach>().ActCutIn();
+                //動かす
+                timeManager.SetTimeScale(1);
 
-                foreach (var i in CodeSimulaters)
-                {
-                    i.Explosion();
-                }
+                int explosionSize = 0;
+                if (codeSimulators.Count == 1) explosionSize = 0;
+                else if ((codeSimulators.Count <= 4)) explosionSize = 1;
+                else if ((codeSimulators.Count >= 5)) explosionSize = 2;
+
+                    foreach (var i in codeSimulators)
+                    {
+                        i.Explosion(explosionSize).Forget();
+                    }
                 //リセット。
-                CodeSimulaters = new List<CodeSimulater>();
+                codeSimulators = new List<CodeSimulater>();
 
                 CurrentCodeGauge = MaxCodeGauge;
+
+                DoExplosion = false;
             }
         }
 
@@ -437,6 +469,8 @@ namespace InGame.Model
         /// </summary>
         public void PutCode()
         {
+            AudioManager.Instance().LoadSoundEffect("PlugUnpluged");
+
             //持っている処理をWhileを強制終了させる。
             codeHaveCancellation?.Cancel();
             codeHaveCancellation?.Dispose();
@@ -444,10 +478,8 @@ namespace InGame.Model
 
             presenter.animationView.SetHaveConcent(false);
 
-            CurrentHaveCodeSimulater.PutCodeEvent(this);
-            CurrentHaveCodeSimulater = null;
+            CurrentHaveCodeSimulator?.PutCodeEvent(this);
+            CurrentHaveCodeSimulator = null;
         }
-
-
     }
 }

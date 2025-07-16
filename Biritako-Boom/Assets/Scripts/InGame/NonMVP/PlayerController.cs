@@ -12,7 +12,6 @@ namespace InGame.NonMVP
     /// </summary>
     public class PlayerController
     {
-        //
         public PlayerController(PlayerModel playerModel,PlayerPresenter playerPresenter)
         {
             Model = playerModel;
@@ -29,7 +28,7 @@ namespace InGame.NonMVP
 
         public void Init()
         {
-            InputSystemActionsManager manager = new InputSystemActionsManager();
+            InputSystemActionsManager manager = InputSystemActionsManager.Instance();
             ActionMap=manager.GetInputSystem_Actions();
             manager.PlayerEnable();
         }
@@ -69,7 +68,7 @@ namespace InGame.NonMVP
 
                 }
                 //範囲内にコードがない場合(それで保持している時。)
-                else if (Model.CurrentHaveCodeSimulater != null)
+                else if (Model.CurrentHaveCodeSimulator != null)
                 {
 
                     Presenter.animationView.SetHaveConcent(false);

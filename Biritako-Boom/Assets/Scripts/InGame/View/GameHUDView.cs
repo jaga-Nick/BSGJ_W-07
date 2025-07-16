@@ -38,7 +38,7 @@ namespace InGame.View
             return playerView;
         }
 
-        public void AnimationUpdate() => playerView?.AnimmationUpdate();
+        public void AnimationUpdate() => playerView?.AnimationUpdate();
         public void UpdatePlayerView(float gauge)=>playerView?.DisplayCodeGauge(gauge);
         public void UpdateScoreView(int score)=>scoreView?.DisplayScore(score);
         public void UpdateTimerView(float time) => timerView?.DisplayTimer(time);

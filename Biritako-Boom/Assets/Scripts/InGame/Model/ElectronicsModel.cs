@@ -1,10 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
+using InGame.NonMVP;
 using UnityEngine;
 
 namespace InGame.Model
 {
 
-    public class ElectronicsModel : MonoBehaviour,IEnemyModel
+    public class ElectronicsModel : MonoBehaviour, IEnemyModel
     {
         public void Initialize(Rigidbody2D rb,Vector3 trans)
         {
@@ -46,22 +47,6 @@ namespace InGame.Model
             // 母艦UFOの場合3
             return 1;
         }
-        /// <summary>
-        /// ランダムな方向を取得
-        /// </summary>
-        /// <returns></returns>
-        public Vector2 GetRandomDirection()
-        {
-            var randomIndex = Random.Range(0, 4);
-            return randomIndex switch
-            {
-                0 => Vector2.up,
-                1 => Vector2.down,
-                2 => Vector2.left,
-                3 => Vector2.right,
-                _ => Vector2.down
-            };
-        }
         
 
         /// <summary>
@@ -74,9 +59,12 @@ namespace InGame.Model
         }
        
 
-        public async UniTask OnDead()
+        /// <summary>
+        /// 家電の死亡時処理
+        /// </summary>
+        async UniTask IEnemyModel.OnDead()
         {
-            
+            // 
         }
     }
 }

@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 using InGame.Model;
-using Unity.VisualScripting;
 
 namespace InGame.NonMVP
 {
@@ -14,25 +13,41 @@ namespace InGame.NonMVP
     public class CodeSimulater : MonoBehaviour
     {
         /// <summary>
-        /// 初期化データ
+        /// 初期化
         /// </summary>
-        public void Initialize(LineRenderer lineRenderer, int particleCount, float timeStep,
-            Vector3 gravity, float damping, float stiffness,
-            GameObject startObject, GameObject endObject,
-            int explosionTriggerDistance, int maxExplosion
+        /// <param name="lineRenderer"></param>
+        /// <param name="particleCount"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="gravity"></param>
+        /// <param name="damping"></param>
+        /// <param name="stiffness"></param>
+        /// <param name="startObject"></param>
+        /// <param name="endObject"></param>
+        /// <param name="explosionTriggerDistance"></param>
+        /// <param name="maxExplosion"></param>
+        /// <param name="playerModel"></param>
+        public void Initialize(
+            LineRenderer lineRenderer, 
+            int particleCount, 
+            float timeStep,
+            Vector3 gravity, 
+            float damping, 
+            float stiffness,
+            GameObject startObject, 
+            GameObject endObject,
+            int explosionTriggerDistance,
+            int maxExplosion
             )
         {
+            // フィールドにセット
             this.CodeLineRenderer = lineRenderer;
-
             this.ParticleCount = particleCount;
             this.TimeStep = timeStep;
             this.Gravity = gravity;
             this.Damping = damping;
             this.Stiffness = stiffness;
-
             this.StartObject = startObject;
             this.EndObject = endObject;
-
             this.ExplosionTriggerDistance = explosionTriggerDistance;
             this.MaxExplosion = maxExplosion;
 
@@ -45,22 +60,18 @@ namespace InGame.NonMVP
 
             InitializeEdgeCollider();
 
-
-            // 1. プロジェクトに登録されている"Wall"レイヤーの番号を取得します。
-            int wallLayerNumber = LayerMask.NameToLayer("Wall");
-
-            // 2. レイヤーが正しく登録されているか確認します。
+            var wallLayerNumber = LayerMask.NameToLayer("Wall");
             if (wallLayerNumber == -1)
             {
-                // もし"Wall"レイヤーが存在しない場合、エラーログを出して処理を中断します。
                 Debug.LogError("「Wall」という名前のレイヤーがプロジェクトに登録されていません！ Edit > Project Settings > Tags and Layers から設定してください。");
             }
             else
             {
-                // 3. 取得したレイヤー番号を使って、そのレイヤーだけを有効にするマスクを作成し、設定します。
+                //取得したレイヤー番号を使って、そのレイヤーだけを有効にするマスクを作成し、設定します。
                 this.collisionMask = 1 << wallLayerNumber;
             }
         }
+ 
         /// <summary>
         /// 始点（家電）→ここは基本変わらない想定。
         /// </summary>
@@ -70,26 +81,38 @@ namespace InGame.NonMVP
         /// </summary>
         private GameObject EndObject;
 
-        //爆発関係
+        /// <summary>
+        /// 爆発関係
+        /// </summary>
         private int ExplosionTriggerDistance = 3;
         private int MaxExplosion;
 
         #region データの実装（外部から設定される。Initializeで設定)
-        // 紐の最大粒子数
+        /// <summary>
+        /// 紐の最大粒子数
+        /// </summary>
         private int ParticleCount = 20;
-        //実際の紐の粒子数
+        /// <summary>
+        /// 実際の紐の粒子数
+        /// </summary>
         private int _activeParticleCount;
-        //紐を置いているかどうか
+        /// <summary>
+        /// 紐を置いているかどうか
+        /// </summary>
         private bool _isReturning = false;
 
 
-        // シミュレーションパラメータ
+        /// <summary>
+        /// シミュレーションパラメータ
+        /// </summary>
         private float TimeStep = 0.02f;
         private Vector3 Gravity = new Vector3(0, 0, 0);
         private float Damping = 2f;
         private float Stiffness = 2f;
 
-        // 質点の状態
+        /// <summary>
+        /// 質点の状態
+        /// </summary>
         private Vector3[] Positions;
         private Vector3[] Velocities;
         private float[] Masses;
@@ -123,18 +146,16 @@ namespace InGame.NonMVP
         public float shrinkDuration = 4.0f;
 
         /// <summary>
-        /// コストの算出量
-        /// </summary>
-        public float? beforeCost { get; private set; } = null;
-        public float? AlreadyTotalCost { get; private set; }
-
-        /// <summary>
         /// コードの返却キャンセルに使用する
         /// </summary>
         private CancellationTokenSource cts;
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-
+        
+        private void Awake()
+        {
+            EnemySpawner enemySpawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None)[0];
+        }
 
         public void Update()
         {
@@ -148,35 +169,25 @@ namespace InGame.NonMVP
                 Destroy(gameObject);
             }
         }
-
-        public float? BeforeCostGauge { get; private set; } = null;
         //ゲージを増減させるという処理の基準値
-        private float GaugeDistance=0.5f;
+        private float GaugeDistance=0.003f;
 
-
-        public float DecideCostistance()
-        {
-            float num =  (float)BeforeCostGauge - DecideCost() ;
-
-            float ret= (float)BeforeCostGauge - (float)AlreadyTotalCost;
-
-            BeforeCostGauge = null;
-
-            Debug.Log(num +"テスト");
-            Debug.Log(AlreadyTotalCost+"足した");
-            return (float)AlreadyTotalCost;
-        }
 
         /// <summary>
         /// コストの決定方法
         /// </summary>
         public float DecideCost()
         {
-            float num=TotalDistance() / GaugeDistance;
+            float num=TotalDistance() * GaugeDistance;
 
             return num;
         }
+        
+        
+        /// <summary>
         /// 紐の長さ
+        /// </summary>
+        /// <returns></returns>
         public float TotalDistance()
         {
             float totalDistance = 0f;
@@ -199,6 +210,7 @@ namespace InGame.NonMVP
             _isReturning = false;
         }
 
+        
         /// <summary>
         /// Codeを置いた時のイベント。
         /// </summary>
@@ -227,10 +239,6 @@ namespace InGame.NonMVP
             //判定の為、Rigidbodyを作成。
             Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0;
-
-            //ここで以前のコスト量を代入。
-            BeforeCostGauge = DecideCost();
-            Debug.Log("決定");
             cts?.Cancel();
             cts?.Dispose();
             cts = new CancellationTokenSource();
@@ -239,6 +247,8 @@ namespace InGame.NonMVP
             //最終地点に進める。その後消える。
             ReturnEndPoint(cts.Token,model).Forget();
         }
+        
+        
         /// <summary>
         /// 拾うイベント
         /// </summary>
@@ -300,15 +310,6 @@ namespace InGame.NonMVP
 
                 float elapsedTime = 0f;
 
-                // 回収できるコストの総量
-                float maxCost = DecideCost();
-                //  1秒あたりのコスト加算量
-                float costPerSecond = (maxCost > 0 && shrinkDuration > 0) ? maxCost / shrinkDuration : 0;
-
-                //Debug.Log(DecideCost()+"コスト決定");
-
-                AlreadyTotalCost = 0;
-
                 // 経過時間が指定したアニメーション時間に達するまでループ
                 while (elapsedTime < shrinkDuration)
                 {
@@ -317,26 +318,6 @@ namespace InGame.NonMVP
 
                     // 時間の進捗率 (0.0 から 1.0 へ)
                     float t = elapsedTime / shrinkDuration;
-
-                    //---------------------------------------
-
-                    if (costPerSecond > 0)
-                    {
-                        //算出
-                        float costToAdd = costPerSecond * Time.deltaTime;
-
-
-                        AlreadyTotalCost += costToAdd;
-                        
-                        // 計算したコストを加算
-                        model.IncrementCodeGauge(costToAdd);
-
-                        //Debug.Log($"コスト加算中...: {maxnum.ToString("F2")} / {maxCost.ToString("F2")}");
-                    }
-
-
-                    ///--------------------------------
-
 
                     // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
                     // Mathf.CeilToInt を使うことで、最後のパーティクルが残るように調整
@@ -369,30 +350,24 @@ namespace InGame.NonMVP
             }
             catch (OperationCanceledException)
             { 
-                Debug.Log("算出終了");
+                // キャンセル処理
             }
             finally
             {
+                // キャンセル処理
             }
         }
 
         /// <summary>
         /// 爆破を呼び出す
         /// </summary>
-        public void Explosion()
+        public async UniTask Explosion(int explosionSize)
         {
             //ここでどれだけ離れているかを設定する
-            GenerateExplosionManager generater = GenerateExplosionManager.Instance();
+            var generater = GenerateExplosionManager.Instance();
             //紐の総長さを計算し、基準に地点を
             float totalDistance = TotalDistance();
             int num = (int)totalDistance / ExplosionTriggerDistance;
-
-            //-----------------------------------------
-
-            //ここに家電の爆発を書く（まだ書かない）
-
-
-            //---------------------------------
 
             //最大４以上の爆発
             if (num >= MaxExplosion)
@@ -413,23 +388,29 @@ namespace InGame.NonMVP
             {
                 //等分で爆発させる。
                 i = (Positions.Length - 1) / 2;
-                generater.Factory(Positions[i], 0);
+                generater.Factory(Positions[i], explosionSize);
+                
             }
             else
             {
+
+                i = Positions.Length;
                 //爆発参照
                 int rate = Positions.Length / (num + 1);
                 while (count < num)
                 {
-                    i += rate;
+                    i -= rate;
                     //爆発させる。（線の途中）
-                    generater.Factory(Positions[i], 0);
+                    generater.Factory(Positions[i], explosionSize);
                     count++;
+                    await UniTask.WaitForSeconds(0.02f);
                 }
 
-                //家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）
-                generater.Factory(StartObject.transform.position, 1);
-                Destroy(StartObject);
+                // 家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）
+                generater.Factory(StartObject.transform.position, explosionSize);
+                // 家電の死亡処理を呼び出す
+                // EnemySpawner.Instance().OnElectronicsDead(playerModel.codeSimulators.Count);
+                Destroy(this.StartObject);
             }
 
             //このアタッチしているオブジェクトを全てスクリプトごと削除する。
