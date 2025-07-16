@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 9adde4b35eab111449cc53aacfbcccf2
   m_SerializeEntries:
+  - m_GUID: 055828d486a4fed42b2214e2257e9f21
+    m_Address: BigExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 05eb60783ae18d44e9d387d7906b45c8
     m_Address: BgmTitle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f57ef6d86ad1d24b99855da1d8f3a7f
+    m_Address: Explosion
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -52,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2c80ae099a7ae4dcba54460a7cea785e
     m_Address: SocketPutOnSub
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 301c472dd702d4d4999e97b87735363e
+    m_Address: SmallExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -152,6 +167,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dde354dd700eb984ba8271a52e3c6223
     m_Address: PlugPluged_ExplosionLarge
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e16baaee058eb984cbf279b2f8819b8c
+    m_Address: MediumExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
