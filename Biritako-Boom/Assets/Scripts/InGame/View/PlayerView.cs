@@ -37,7 +37,7 @@ namespace InGame.View
         }
 
         // Update is called once per frame
-        public void AnimmationUpdate()
+        public void AnimationUpdate()
         {
             // velocityを取得して移動しているかどうか
             var move = _rb.linearVelocity;

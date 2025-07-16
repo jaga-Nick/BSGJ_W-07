@@ -389,17 +389,21 @@ namespace InGame.NonMVP
                 //等分で爆発させる。
                 i = (Positions.Length - 1) / 2;
                 generater.Factory(Positions[i], explosionSize);
+                
             }
             else
             {
+
+                i = Positions.Length;
                 //爆発参照
                 int rate = Positions.Length / (num + 1);
                 while (count < num)
                 {
-                    i += rate;
+                    i -= rate;
                     //爆発させる。（線の途中）
                     generater.Factory(Positions[i], explosionSize);
                     count++;
+                    await UniTask.WaitForSeconds(0.02f);
                 }
 
                 // 家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）

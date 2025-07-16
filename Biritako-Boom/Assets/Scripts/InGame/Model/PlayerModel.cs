@@ -48,7 +48,7 @@ namespace InGame.Model
         private const float MaxCodeGauge = 30.0f;
         private float CurrentCodeGauge= 30.0f;
 
-        private float RegenCodeGauge =0.003f;
+        private float RegenCodeGauge =0.005f;
         
         //探索範囲
         private float SearchScale =1f;
@@ -66,6 +66,8 @@ namespace InGame.Model
         public CodeSimulater CurrentHaveCodeSimulator { get; private set; }
         //コードをシミュレートしている。
         public List<CodeSimulater> codeSimulators = new List<CodeSimulater>();
+
+        public bool DoExplosion=false;
         //-------------------------------
 
         /// <summary>
@@ -188,8 +190,14 @@ namespace InGame.Model
         #endregion
 
         
-        public void DecreaseCodeGauge(float Num)
-        { CurrentCodeGauge -= Num;}
+        public async UniTask DecreaseCodeGauge(float Num)
+        { CurrentCodeGauge -= Num;
+            CurrentCodeGauge = Mathf.Max (CurrentCodeGauge, 0);
+            if (CurrentCodeGauge == 0)
+            {
+                Explosion();
+            }
+        }
         public void IncrementCodeGauge(float Num)
         {
             CurrentCodeGauge += Num;
@@ -204,12 +212,16 @@ namespace InGame.Model
                 while (true)
                 {
                     token.ThrowIfCancellationRequested();
-                    if (CurrentHaveCodeSimulator == null)
+                    if (codeSimulators.Count > 0)
                     {
+                        Debug.Log(RegenCodeGauge * (1 + codeSimulators.Count-1));
+                        DecreaseCodeGauge(RegenCodeGauge * (1+codeSimulators.Count-1));
+                    }
+                    else if (CurrentHaveCodeSimulator == null) {
                         IncrementCodeGauge(RegenCodeGauge);
                     }
-                    //await UniTask.WaitForSeconds(1, cancellationToken :token);
-                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                        //await UniTask.WaitForSeconds(1, cancellationToken :token);
+                        await UniTask.Yield(PlayerLoopTiming.Update, token);
                 }
             }
             catch (OperationCanceledException)
@@ -415,11 +427,12 @@ namespace InGame.Model
         /// <summary>
         /// 一斉に爆破する
         /// </summary>
-        public async void Explosion()
+        public async UniTask Explosion()
         {
             //コードが一つ以上生成されており、保持していない時。
-            if (codeSimulators.Count > 0 && CurrentHaveCodeSimulator ==null)
+            if (codeSimulators.Count > 0 && CurrentHaveCodeSimulator ==null && DoExplosion ==false)
             {
+                DoExplosion = true;
                 AudioManager.Instance().LoadSoundEffect("CutInBomb");
                 //カットイン挿入
                 GameObject CutIn=GenerateExplosionManager.Instance().GenerateCutIn();
@@ -435,15 +448,16 @@ namespace InGame.Model
                 else if ((codeSimulators.Count <= 4)) explosionSize = 1;
                 else if ((codeSimulators.Count >= 5)) explosionSize = 2;
 
-                Debug.Log(explosionSize);
                     foreach (var i in codeSimulators)
                     {
-                        i.Explosion(explosionSize);
+                        i.Explosion(explosionSize).Forget();
                     }
                 //リセット。
                 codeSimulators = new List<CodeSimulater>();
 
                 CurrentCodeGauge = MaxCodeGauge;
+
+                DoExplosion = false;
             }
         }
 
@@ -464,7 +478,7 @@ namespace InGame.Model
 
             presenter.animationView.SetHaveConcent(false);
 
-            CurrentHaveCodeSimulator.PutCodeEvent(this);
+            CurrentHaveCodeSimulator?.PutCodeEvent(this);
             CurrentHaveCodeSimulator = null;
         }
     }

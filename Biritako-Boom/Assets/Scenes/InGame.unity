@@ -70044,7 +70044,7 @@ MonoBehaviour:
   Damping: 2
   Stiffness: 0.8
   ExplosionTriggerDistance: 1
-  MaxExplosion: 25
+  MaxExplosion: 20
 --- !u!114 &1927360535
 MonoBehaviour:
   m_ObjectHideFlags: 0
