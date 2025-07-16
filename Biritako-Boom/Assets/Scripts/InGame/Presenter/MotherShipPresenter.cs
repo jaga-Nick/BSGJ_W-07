@@ -13,6 +13,11 @@ namespace InGame.Presenter
         [SerializeField] private Shaker cameraShaker;
         [SerializeField] private ShakePreset explosionShake;
         
+        [Header("HP"), SerializeField]
+        private int _hp = 250;
+        [Header("スピード"), SerializeField]
+        private float _speed = 2.5f;
+        
         //MotherShip統括
         private MotherShipModel Model;
         private MotherShipView View;
@@ -25,7 +30,7 @@ namespace InGame.Presenter
             
             cameraShaker = Camera.main.GetComponent<Shaker>();
             
-            Model.Initialize();
+            Model.Initialize(_hp, _speed);
             Model.SetRb(View.GetRb());
         }
         
