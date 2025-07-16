@@ -1,7 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
 using InGame.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -13,15 +15,29 @@ namespace InGame.NonMVP
     {
         private int Damage;
         private Animator animator;
+
+        private CancellationTokenSource token;
         public async UniTask Explosion(string AnimationName)
         {
-            animator = gameObject.GetComponent<Animator>();
-            animator.Play(AnimationName);
-            await UniTask.WaitUntil(() => {
-                var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                return stateInfo.IsName(AnimationName) && stateInfo.normalizedTime >= 1f;
-            });
-            Destroy(gameObject);
+            try
+            {
+                CancellationToken t=token.Token;
+                var linked =CancellationTokenSource.CreateLinkedTokenSource(t, this.GetCancellationTokenOnDestroy());
+                var linkedtoken = linked.Token;
+
+                animator = gameObject.GetComponent<Animator>();
+                animator.Play(AnimationName);
+                await UniTask.WaitUntil(() => {
+                    var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                    return stateInfo.IsName(AnimationName) && stateInfo.normalizedTime >= 1f;
+                },cancellationToken:linkedtoken);
+                Destroy(gameObject);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            
         }
 
         public void SetDamage(int num)
