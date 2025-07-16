@@ -115,7 +115,7 @@ namespace InGame.NonMVP
         private void Update()
         {
             _timer -= Time.deltaTime;
-            Debug.Log(CurrentElectronics);
+            // Debug.Log(CurrentElectronics);
             if (!(_timer <= 0) || CurrentElectronics >= maxElectronics) return;
             SpawnElectronics().Forget();
             _timer = spawnInterval;
