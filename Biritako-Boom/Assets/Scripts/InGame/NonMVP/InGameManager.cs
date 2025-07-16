@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Common;
+using InGame.Model;
 
 namespace InGame.NonMVP
 {
@@ -17,6 +18,8 @@ namespace InGame.NonMVP
         [Header("ゲームの全体時間（秒）")]
         [SerializeField] private float inGameSecond;
         
+        private float _time;
+        
         /// <summary>
         /// uGUI
         /// </summary>
@@ -28,10 +31,22 @@ namespace InGame.NonMVP
         [ColorUsage(false, false), SerializeField] private Color endColor;
         // [SerializeField] private Button pauseButton;
         
+        InGameSceneEvent _sceneEvent =  new InGameSceneEvent();
+        
         private void Start()
         {
             // ゲーム開始時はゲームタイムを0にする。
             TimeManager.Instance().ResetInGameTime(inGameSecond);
+        }
+        
+        private void OnEnable()
+        {
+            MotherShipModel.OnGameClear += HandleGameClear;
+        }
+
+        private void OnDisable()
+        {
+            MotherShipModel.OnGameClear -= HandleGameClear;
         }
 
         /// <summary>
@@ -39,9 +54,26 @@ namespace InGame.NonMVP
         /// </summary>
         private void Update()
         {
-            var time = TimeManager.Instance().GetInGameTime();
+            _time = TimeManager.Instance().GetInGameTime();
             
-            UpdateTimerUI(time);
+            UpdateTimerUI(_time);
+            
+            if (0f >= _time) // 時間切れ
+            {
+                _sceneEvent.OnGameOverLoder();
+            }
+        }
+        
+        /// <summary>
+        /// イベントによって呼び出される処理
+        /// </summary>
+        private void HandleGameClear(bool clearFlag)
+        {
+            if (0f < _time && clearFlag)
+            {
+                this.enabled = false; // 自分自身のUpdateを止め、OnDisableを呼び出してイベントを解除する
+                _sceneEvent.OnGameClearLoder();
+            }
         }
 
         /// <summary>

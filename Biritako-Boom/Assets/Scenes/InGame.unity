@@ -8557,34 +8557,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4170222949461605391, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: _canvasRectTransform
-      value: 
-      objectReference: {fileID: 2126630025}
-    - target: {fileID: 4976672744610969238, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 4142367117331641809, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
-    - target: {fileID: 6808513546779934383, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -8969308266730366247, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.top
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.left
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.right
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.bottom
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 8583346181685917207, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_Name
       value: MotherShipMarker
@@ -19057,7 +19029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterAddress: Enemy_Alien
-  _initialPoolSize: 10
+  _initialPoolSize: 28
   _spawnAreaMin: {x: -20, y: -20}
   _spawnAreaMax: {x: 20, y: 20}
 --- !u!4 &533625919 stripped
