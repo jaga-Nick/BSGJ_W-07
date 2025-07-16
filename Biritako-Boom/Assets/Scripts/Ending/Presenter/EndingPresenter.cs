@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Ending.Model;
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.UI;
 
 namespace Ending.Presenter
 {
@@ -10,15 +11,21 @@ namespace Ending.Presenter
         [SerializeField]
         private VideoPlayer _vp;
 
+        [Header("リザルトのUI"), SerializeField]
+        private GameObject resultUI;
+
 
         EndingEvent _endingEvent =  new EndingEvent();
         [SerializeField, Header("待機時間")] private float delayTime = 10f;
         async　void Start()
         {
+            
+            resultUI.SetActive(false);
             if(_vp == null)
             {
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delayTime));
-                _endingEvent.OnResultLoder();
+                resultUI.SetActive(true);
+                //_endingEvent.OnResultLoder();
             }
             else
             {
@@ -29,7 +36,7 @@ namespace Ending.Presenter
 
         public void LoopPointReached(VideoPlayer vp)
         {
-            _endingEvent.OnResultLoder();
+            //_endingEvent.OnResultLoder();
         }
     }
 }
