@@ -18987,7 +18987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 1
-  maxElectronics: 28
+  maxElectronics: 40
   numberOfSpawnElectronics: 3
   maxUfo: 14
   spawnRadius: 2
