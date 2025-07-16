@@ -1,12 +1,13 @@
-using Common;
+﻿using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Result.Loader
+
+namespace InGame.Loader
 {
-    public class InGameSceneLoader : ISceneInfo
+    public class GameOverSceneLoader : ISceneInfo
     {
-        public string SceneName => "InGame";
+        public string SceneName => "GameOver";
 
         public bool IsDefault => throw new System.NotImplementedException();
 
@@ -34,5 +35,5 @@ namespace Result.Loader
         {
         } 
     }
-}
 
+}

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1195856719382912113}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.151, z: 0}
+  m_LocalPosition: {x: 0, y: 0.096, z: 0}
   m_LocalScale: {x: 1.0566806, y: 0.20250002, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 4579485241098840379}
   - component: {fileID: 1123496913849891493}
   - component: {fileID: 6275503577709545430}
+  - component: {fileID: 3950431282728798115}
   m_Layer: 11
   m_Name: Enemy_Alien
   m_TagString: Untagged
@@ -242,7 +243,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.6}
+  m_Offset: {x: 0, y: 0.75}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -312,3 +313,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3950431282728798115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4894678526528209877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc38cc7ac38dbc4eb39826664517471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectGenPos: {fileID: 1195856719382912113}
+  _effectObj: {fileID: 2259653569815184652, guid: fd0b344ad72c7414bbb755283fffaeba, type: 3}

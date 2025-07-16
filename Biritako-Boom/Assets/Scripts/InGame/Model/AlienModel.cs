@@ -288,6 +288,8 @@ namespace InGame.Model
                     if (playerModel.CurrentHaveCodeSimulater != null)
                     {
                         playerModel.PutCode();
+                        var effect = GetComponent<EnemyEffect>();
+                        effect.GenerateEffect();
                     }
                 }
             }

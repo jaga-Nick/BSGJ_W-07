@@ -1,8 +1,7 @@
 using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
-using Result.Loader;
+using Ending.Loader;
 
 namespace Result.Model
 {
@@ -10,11 +9,12 @@ namespace Result.Model
     {
         private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
         private readonly ISceneInfo _titleSceneLoader = new TitleSceneLoader();
+        private readonly ISceneInfo _resultSceneLoader = new ResultSceneLoader();
         
         /// <summary>
         /// ReTryボタンを押したらInGameシーンに遷移する
         /// </summary>
-        public async UniTask OnClickReTryButton()
+        public async void OnClickRePlayButton()
         {
             await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
         }
@@ -22,7 +22,7 @@ namespace Result.Model
         /// <summary>
         /// Titleボタンを押したらTitleシーンに遷移する
         /// </summary>
-        public async UniTask OnClickTitleButton()
+        public async void OnClickTitleButton()
         {
             await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
         }
@@ -30,7 +30,7 @@ namespace Result.Model
         /// <summary>
         /// Exitボタンを押したらゲームを終了する
         /// </summary>
-        public async UniTask OnClickExitButton()
+        public void OnClickExitButton()
         {
             #if UNITY_EDITOR                                        // Unityエディタ上で実行中の場合
                 UnityEditor.EditorApplication.isPlaying = false;    // エディタの再生を停止

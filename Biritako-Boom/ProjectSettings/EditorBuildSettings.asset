@@ -17,10 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InGame.unity
     guid: 3797fbd8633120d40ac0c98243466f72
-  - enabled: 1
-    path: Assets/Scenes/GoodEnd.unity
+  - enabled: 0
+    path: Assets/Scenes/GameClear.unity
     guid: 17c948f47a813264dbbf9e0e4d99ac2b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameOver.unity
     guid: bc38c5dff6c7a354c8c856df9a53f837
   - enabled: 1

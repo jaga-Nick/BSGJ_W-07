@@ -2,11 +2,11 @@ using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Result.Loader
+namespace Ending.Loader
 {
-    public class TitleSceneLoader : ISceneInfo
+    public class InGameSceneLoader : ISceneInfo
     {
-        public string SceneName => "Title";
+        public string SceneName => "InGame";
 
         public bool IsDefault => throw new System.NotImplementedException();
 
