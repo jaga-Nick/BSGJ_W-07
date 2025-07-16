@@ -106,11 +106,11 @@ namespace InGame.Model
         /// <summary>
         /// 初期化
         /// </summary>
-        public void Initialize()
+        public void Initialize(int _hp, float speed)
         {
             IntervalTime = 0.2f;
-            _speed = 2.5f;
-            ((IEnemyModel)this).CurrentHp = 1;
+            _speed = speed;
+            ((IEnemyModel)this).CurrentHp = _hp;
             ExplosionPower = 100;
             isEnd = false;
         }
