@@ -81,15 +81,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1507075229319319441, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5954468433284679147}
+      addedObject: {fileID: 9114599820450016968}
   m_SourcePrefab: {fileID: 100100000, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
 --- !u!1 &190341685999612727 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1507075229319319441, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
   m_PrefabInstance: {fileID: 1607237711753313446}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &5954468433284679147
-BoxCollider2D:
+--- !u!70 &9114599820450016968
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -122,18 +122,9 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.015850067, y: -2.015314}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.75, y: 5.65625}
-    newSize: {x: 5.75, y: 5.65625}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 5.5716352, y: 5.5105104}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0, y: -2.2}
+  m_Size: {x: 5, y: 7}
+  m_Direction: 0
 --- !u!4 &6979648196072135824 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8544101600501276726, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
