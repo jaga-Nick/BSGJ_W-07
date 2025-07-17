@@ -285,9 +285,11 @@ namespace InGame.Model
                 {
                     var playerModel = playerPresenter.Model;
                     // プレイヤーがコードを持っている（妨害できる）場合のみPutCodeを実行
-                    if (playerModel.CurrentHaveCodeSimulater != null)
+                    if (playerModel.CurrentHaveCodeSimulator != null)
                     {
                         playerModel.PutCode();
+                        var effect = GetComponent<EnemyEffect>();
+                        effect.GenerateEffect();
                     }
                 }
             }

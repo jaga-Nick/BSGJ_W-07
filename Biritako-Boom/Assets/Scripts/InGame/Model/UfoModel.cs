@@ -1,9 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using InGame.NonMVP;
 using System;
+using InGame.Presenter;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Random = UnityEngine.Random;
 
 namespace InGame.Model
 {
@@ -43,6 +42,9 @@ namespace InGame.Model
         public int MinUfoHp { get; set; } = 0;
         public int MaxUfoHp { get; set; } = 100;
 
+        /// <summary>
+        /// IEnemyModelの現在のHP
+        /// </summary>
         int IEnemyModel.CurrentHp { get; set; } = 1;
         
 
@@ -61,23 +63,14 @@ namespace InGame.Model
         void IEnemyModel.OnDamage(int damage)
         {
             // UFOのHPを減らす
-            // ((IEnemyModel)this).CurrentHp -= damage;
             DecrementUfoHp(damage);
             // スコアを増やす
             ScoreModel.Instance().IncrementScore(UfoDeadScore);
             // HPが0になったら殺す
-            if (((IEnemyModel)this).CurrentHp <= 0) ((IEnemyModel)this).OnDead();
-        }
-
-        /// <summary>
-        /// UFOのHPをamountに応じて増やす。
-        /// </summary>
-        /// <param name="amount"></param>
-        public void IncrementUfoHp(int amount)
-        {
-            ((IEnemyModel)this).CurrentHp += amount;
-            ((IEnemyModel)this).CurrentHp = Mathf.Clamp(((IEnemyModel)this).CurrentHp, MinUfoHp, MaxUfoHp);
-            UpdateUfoHp();
+            if (((IEnemyModel)this).CurrentHp <= 0)
+            {
+                ((IEnemyModel)this).OnDead();
+            }
         }
 
         /// <summary>
@@ -90,22 +83,7 @@ namespace InGame.Model
             ((IEnemyModel)this).CurrentHp = Mathf.Clamp(((IEnemyModel)this).CurrentHp, MinUfoHp, MaxUfoHp);
             UpdateUfoHp();
         }
-
-        /// <summary>
-        /// 死亡時処理
-        /// </summary>
-        /// <returns></returns>
-        async UniTask IEnemyModel.OnDead()
-        {
-            // スコアを加算する
-            ScoreModel.Instance().IncrementScore(UfoScore);
-            // 爆発エフェクトを表示
-            GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 3);
-            // SpawnerのUFOカウントを減らす
-            EnemySpawner.Instance().OnUfoDeath(gameObject);
-            // 自己破壊
-            GameObject.Destroy(gameObject);
-        }
+        
 
         /// <summary>
         /// UFOのHPをもとに戻す。全回復。
@@ -124,12 +102,19 @@ namespace InGame.Model
         }
         
         /// <summary>
-        /// UFOの座標をセットする
+        /// UFOの死亡時処理
         /// </summary>
-        /// <param name="newPosition"></param>
-        public void SetPositon(Vector3 newPosition)
+        /// <returns></returns>
+        async UniTask IEnemyModel.OnDead()
         {
-            Position = newPosition;
+            // スコアを加算する
+            ScoreModel.Instance().IncrementScore(UfoScore);
+            // 死んだときの爆発エフェクトを表示
+            GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 2);
+            // SpawnerのUFOカウントを減らしたことを通知
+            EnemySpawner.Instance().OnUfoDead(gameObject);
+            // UFOを破棄
+            GameObject.Destroy(gameObject);
         }
     }
 }

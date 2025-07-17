@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using Common;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace InGame.NonMVP
 {
@@ -26,27 +27,27 @@ namespace InGame.NonMVP
         /// 家電
         /// </summary>
         [Header("生成される家電の上限数")]
-        [SerializeField] private int maxElectronics = 50;
+        [SerializeField] private int maxElectronics;
         [Header("一度に生成される家電の数")]
-        [SerializeField] private int numberOfSpawnElectronics = 5;
+        [SerializeField] private int numberOfSpawnElectronics;
         
         /// <summary>
         /// UFO
         /// </summary>
         [Header("生成されるUFOの上限数")]
-        [SerializeField] private int maxUfo = 14;
+        [SerializeField] private int maxUfo;
         [Header("UFO周辺の半径")]
-        [SerializeField] private float spawnRadius = 2.0f;
+        [SerializeField] private float spawnRadius;
         [Header("UFO直下の除外範囲")]
-        [SerializeField] private float exclusionRadius = 0.5f;
+        [SerializeField] private float exclusionRadius;
         
         /// <summary>
         /// 宇宙人
         /// </summary>
         [Header("宇宙人スポーン時間のインターバル")]
-        [SerializeField] private int alienSpawnInterval = 10;
+        [SerializeField] private int alienSpawnInterval;
         [Header("一度に生成される宇宙人の数")]
-        [SerializeField] private int numberOfSpawnAlien = 5;
+        [SerializeField] private int numberOfSpawnAlien;
         
         /// <summary>
         /// 外部マネージャーへの参照
@@ -82,6 +83,7 @@ namespace InGame.NonMVP
         public int CurrentElectronics { get; set; } = 0;
         public int CurrentUfo { get; set; } = 0;
         
+        
         /// <summary>
         /// Camera
         /// </summary>
@@ -113,6 +115,7 @@ namespace InGame.NonMVP
         private void Update()
         {
             _timer -= Time.deltaTime;
+            // Debug.Log(CurrentElectronics);
             if (!(_timer <= 0) || CurrentElectronics >= maxElectronics) return;
             SpawnElectronics().Forget();
             _timer = spawnInterval;
@@ -226,17 +229,19 @@ namespace InGame.NonMVP
             do { value = UnityEngine.Random.Range(-1.0f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
             return value;
         }
-        
+
 
         /// <summary>
-        /// 家電が死んだら家電カウントを1減らす
+        /// 家電が死んだら家電カウントを減らす
         /// </summary>
-        public void OnElectronicsDeath()
+        /// <param name="electronics"></param>
+        /// <param name="deadCount"></param>
+        public void OnElectronicsDead(int deadCount)
         {
-            CurrentElectronics--;
+            CurrentElectronics -= deadCount;
         }
 
-        public void OnUfoDeath(GameObject ufo)
+        public void OnUfoDead(GameObject ufo)
         {
             _ufoList.Remove(ufo);
             CurrentUfo--;

@@ -1,3 +1,4 @@
+﻿using Setting;
 using System;
 using UnityEngine;
 
@@ -64,12 +65,15 @@ namespace InGame.NonMVP
                 switch (explosionPower)
                 {
                     case 0:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionSmall");
                         PlayExplosionAnimation(vec, smallCollisionSize, smallDamage, "SmallExplosion");
                         break;
                     case 1:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionMiddle");
                         PlayExplosionAnimation(vec, mediumCollisionSize, mediumDamage, "MediumExplosion");
                         break;
                     case 2:
+                        AudioManager.Instance().LoadSoundEffect("ExplosionLarge");
                         PlayExplosionAnimation(vec, bigCollisionSize, bigDamage, "BigExplosion");
                         break;
                 }
@@ -93,12 +97,19 @@ namespace InGame.NonMVP
             int damage,
             string animationName)
         {
-            var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
-            var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
-            var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
-            explosionCollider.radius = collisionSize;
-            explosionAttach.SetDamage(damage);
-            await explosionAttach.Explosion(animationName);
+            try
+            {
+                var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
+                var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
+                var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
+                explosionCollider.radius = collisionSize;
+                explosionAttach.SetDamage(damage);
+                await explosionAttach.Explosion(animationName);
+            }
+            catch (Exception e)
+            {
+                // キャンセル処理
+            }
         }
     }
 }

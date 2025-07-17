@@ -1,7 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using InGame.Model;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -11,22 +12,44 @@ namespace InGame.NonMVP
     /// </summary>
     public class ExplosionAttach : MonoBehaviour
     {
-        private int Damage=0;
-        private Animator animator;
-        public async UniTask Explosion(string AnimationName)
+        private int _damage;
+        private Animator _animator;
+
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        
+        /// <summary>
+        /// ゲームオブジェクトを爆発させる
+        /// </summary>
+        /// <param name="animationName"></param>
+        public async UniTask Explosion(string animationName)
         {
-            animator = gameObject.GetComponent<Animator>();
-            animator.Play(AnimationName);
-            await UniTask.WaitUntil(() => {
-                var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                return stateInfo.IsName(AnimationName) && stateInfo.normalizedTime >= 1f;
-            });
-            Destroy(gameObject);
+            try
+            {
+                var token = _cancellationTokenSource.Token;
+                var linked = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
+                var linkedToken = linked.Token;
+
+                // Animatorの取得
+                _animator = gameObject.GetComponent<Animator>();
+                // アニメーションの再生
+                _animator.Play(animationName);
+                // アニメーションが終わるまで待機
+                await UniTask.WaitUntil(() => {
+                    var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+                    return stateInfo.IsName(animationName) && stateInfo.normalizedTime >= 1f;
+                }, cancellationToken: linkedToken);
+                // アニメーションが終わったら爆発のオブジェクトを破棄
+                Destroy(gameObject);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
         }
 
         public void SetDamage(int num)
         {
-            Damage = num;
+            _damage = num;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -35,8 +58,7 @@ namespace InGame.NonMVP
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
             if(enemies != null) 
             {
-                Debug.Log("ダメージ判定");
-                enemies.OnDamage(Damage); 
+                enemies.OnDamage(_damage); 
             }
         }
     }

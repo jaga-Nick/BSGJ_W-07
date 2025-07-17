@@ -8557,34 +8557,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4170222949461605391, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: _canvasRectTransform
-      value: 
-      objectReference: {fileID: 2126630025}
-    - target: {fileID: 4976672744610969238, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 4142367117331641809, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
-    - target: {fileID: 6808513546779934383, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -8969308266730366247, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.top
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.left
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.right
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
-      propertyPath: margins.bottom
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 8583346181685917207, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_Name
       value: MotherShipMarker
@@ -19014,14 +18986,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5bfd7b9c5c44d8b54f76ce874abdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 3
-  maxElectronics: 28
-  numberOfSpawnElectronics: 3
+  spawnInterval: 1
+  maxElectronics: 40
+  numberOfSpawnElectronics: 6
   maxUfo: 14
   spawnRadius: 2
   exclusionRadius: 0.5
   alienSpawnInterval: 10
-  numberOfSpawnAlien: 1
+  numberOfSpawnAlien: 3
   motherShipAddress: Enemy_MotherShip
   electronicsPrefabs:
   - {fileID: 2689977577218633989, guid: 74162686ec438734aa88b9b787ffa0a0, type: 3}
@@ -19057,7 +19029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterAddress: Enemy_Alien
-  _initialPoolSize: 10
+  _initialPoolSize: 28
   _spawnAreaMin: {x: -20, y: -20}
   _spawnAreaMax: {x: 20, y: 20}
 --- !u!4 &533625919 stripped
@@ -32802,8 +32774,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectTreeGreen
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8154229121518256972, guid: a968c3d0812c5fa4d928f75bf5cc5b0f, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -50421,9 +50392,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e671b263a17344f8ae8f98c192beb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGameSecond: 180
+  inGameSecond: 300
   timerUI: {fileID: 649037241}
-  startColor: {r: 1, g: 1, b: 1, a: 1}
+  startColor: {r: 1, g: 0.71461165, b: 0.2924527, a: 1}
   endColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!4 &1374796245
 Transform:
@@ -70044,8 +70015,8 @@ MonoBehaviour:
   Gravity: {x: 0, y: 0, z: 0}
   Damping: 2
   Stiffness: 0.8
-  ExplosionTriggerDistance: 1
-  MaxExplosion: 25
+  ExplosionTriggerDistance: 2
+  MaxExplosion: 20
 --- !u!114 &1927360535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70060,12 +70031,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cutInCanvas: {fileID: 2126630024}
   cutIn: {fileID: 4451397332625592543, guid: 02b2da22aa0e8ca4995c7175cfed02a6, type: 3}
-  bigExplosionSize: 0.25
-  bigDamage: 1
-  middleCollisionSize: 0.25
-  middleDamage: 1
-  smallCollisionSize: 0.25
-  smallDamage: 1
+  bigCollisionSize: 4
+  bigDamage: 50
+  mediumCollisionSize: 2
+  mediumDamage: 20
+  smallCollisionSize: 1
+  smallDamage: 10
   explosionObject: {fileID: 8683190912016376835, guid: efb667954b7dc904f9b8e4204ee21a6f, type: 3}
 --- !u!1001 &1931218781
 PrefabInstance:

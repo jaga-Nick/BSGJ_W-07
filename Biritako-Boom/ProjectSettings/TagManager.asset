@@ -50,8 +50,17 @@ TagManager:
   - name: Characters
     uniqueID: 2577973021
     locked: 0
+  - name: UFOShadow
+    uniqueID: 2140121061
+    locked: 0
   - name: UFO
     uniqueID: 1931349267
+    locked: 0
+  - name: MotherShipShadow
+    uniqueID: 4266149807
+    locked: 0
+  - name: MotherShip
+    uniqueID: 2984888581
     locked: 0
   m_RenderingLayers:
   - Default

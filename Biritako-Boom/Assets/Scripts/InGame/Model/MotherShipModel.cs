@@ -7,6 +7,9 @@ using InGame.Presenter;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using ShakeEffect;
+using System;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace InGame.Model
 {
@@ -92,16 +95,22 @@ namespace InGame.Model
 
         #endregion
 
+        #region イベント
+
+        public static event Action<bool> OnGameClear;
+
+        #endregion
+
         #region 初期化・コンストラクタ
 
         /// <summary>
         /// 初期化
         /// </summary>
-        public void Initialize()
+        public void Initialize(int _hp, float speed)
         {
             IntervalTime = 0.2f;
-            _speed = 5.0f;
-            ((IEnemyModel)this).CurrentHp = 250;
+            _speed = speed;
+            ((IEnemyModel)this).CurrentHp = _hp;
             ExplosionPower = 100;
             isEnd = false;
         }
@@ -231,6 +240,7 @@ namespace InGame.Model
             ScoreModel.Instance().IncrementScore(_deadScore);
 
             isEnd = true;
+            OnGameClear?.Invoke(true);
         }
 
 

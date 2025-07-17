@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8969308266730366247, guid: ec5ca77aa88fa1f47849f358cd3f8596, type: 3}
+  m_Sprite: {fileID: -8969308266730366247, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3707672853652538639, guid: ec5ca77aa88fa1f47849f358cd3f8596, type: 3}
+  m_Sprite: {fileID: -3707672853652538639, guid: 2342c43a55b4bae439674ab46b799a5e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -205,6 +205,12 @@ MonoBehaviour:
   arrowRectTransform: {fileID: 6228203004088253446}
   iconImage: {fileID: 6808513546779934383}
   arrowImage: {fileID: 4976672744610969238}
+  margins:
+    top: 300
+    bottom: 300
+    left: 300
+    right: 300
+  arrowDistanceFromIcon: 40
 --- !u!114 &4170222949461605391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,9 +223,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e0dfce171bc33e43969598d50bc9e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _margins:
-    top: 300
-    bottom: 80
-    left: 80
-    right: 80
-  _arrowDistanceFromIcon: 50
