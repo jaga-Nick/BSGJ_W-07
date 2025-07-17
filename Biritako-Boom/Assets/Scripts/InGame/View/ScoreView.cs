@@ -17,7 +17,7 @@ namespace InGame.View
         /// </summary>
         public void DisplayScore(int Score)
         {
-            ScoreText.text = "Score: " + Score.ToString();
+            ScoreText.text = Score.ToString();
         }
     }
 }
