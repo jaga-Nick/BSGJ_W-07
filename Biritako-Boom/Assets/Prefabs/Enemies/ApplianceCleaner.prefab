@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3153495799284178636}
   - component: {fileID: 4240236121170441486}
   - component: {fileID: 7415799958227691434}
-  - component: {fileID: 281090712196066164}
+  - component: {fileID: 3450199077080961082}
   m_Layer: 9
   m_Name: ApplianceCleaner
   m_TagString: Untagged
@@ -188,7 +188,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &281090712196066164
+--- !u!61 &3450199077080961082
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,5 +232,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.48, y: 0.34}
+  m_Size: {x: 1, y: 0.8}
   m_EdgeRadius: 0
