@@ -97,12 +97,19 @@ namespace InGame.NonMVP
             int damage,
             string animationName)
         {
-            var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
-            var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
-            var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
-            explosionCollider.radius = collisionSize;
-            explosionAttach.SetDamage(damage);
-            await explosionAttach.Explosion(animationName);
+            try
+            {
+                var gameObject = Instantiate(explosionObject, vector, Quaternion.identity);
+                var explosionAttach = gameObject.GetComponent<ExplosionAttach>();
+                var explosionCollider = gameObject.GetComponent<CircleCollider2D>();
+                explosionCollider.radius = collisionSize;
+                explosionAttach.SetDamage(damage);
+                await explosionAttach.Explosion(animationName);
+            }
+            catch (Exception e)
+            {
+                // キャンセル処理
+            }
         }
     }
 }

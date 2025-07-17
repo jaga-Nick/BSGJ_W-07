@@ -47,12 +47,6 @@ namespace InGame.Model
         /// </summary>
         int IEnemyModel.CurrentHp { get; set; } = 1;
         
-        /// <summary>
-        /// アニメーション管理
-        /// Viewにもあるが、ここでも必要なため
-        /// </summary>
-        private Animator _animator;
-        
 
         /// <summary>
         /// UFOのスコア管理のフィールド
@@ -115,7 +109,7 @@ namespace InGame.Model
         {
             // スコアを加算する
             ScoreModel.Instance().IncrementScore(UfoScore);
-            // 爆発エフェクトを表示
+            // 死んだときの爆発エフェクトを表示
             GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 2);
             // SpawnerのUFOカウントを減らしたことを通知
             EnemySpawner.Instance().OnUfoDead(gameObject);
