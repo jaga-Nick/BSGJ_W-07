@@ -15,7 +15,7 @@ namespace InGame.NonMVP
         private int _damage;
         private Animator _animator;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         
         /// <summary>
         /// ゲームオブジェクトを爆発させる
@@ -37,7 +37,7 @@ namespace InGame.NonMVP
                 await UniTask.WaitUntil(() => {
                     var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
                     return stateInfo.IsName(animationName) && stateInfo.normalizedTime >= 1f;
-                },cancellationToken:linkedToken);
+                }, cancellationToken: linkedToken);
                 // アニメーションが終わったら爆発のオブジェクトを破棄
                 Destroy(gameObject);
             }
