@@ -170,6 +170,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df086330aa2d027438d8f124ff5cbc11
+    m_Address: Pose
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e16baaee058eb984cbf279b2f8819b8c
     m_Address: MediumExplosion
     m_ReadOnly: 0

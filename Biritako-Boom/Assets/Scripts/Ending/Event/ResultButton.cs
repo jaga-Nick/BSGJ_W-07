@@ -1,7 +1,8 @@
-using Common;
+﻿using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Ending.Loader;
+using Title.Loader;
 
 namespace Result.Model
 {

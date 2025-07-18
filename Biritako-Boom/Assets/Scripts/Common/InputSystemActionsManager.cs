@@ -26,6 +26,10 @@ namespace Common
         /// </summary>
         public void PlayerEnable()
         {
+            if (_InputSystemActions == null)
+            {
+                _InputSystemActions = new InputSystem_Actions();
+            }
             _InputSystemActions?.Player.Enable();
             _InputSystemActions?.UI.Disable();
         }
@@ -35,6 +39,10 @@ namespace Common
         /// </summary>
         public void UIEnable()
         {
+            if (_InputSystemActions == null)
+            {
+                _InputSystemActions = new InputSystem_Actions();
+            }
             _InputSystemActions?.Player.Disable();
             _InputSystemActions?.UI.Enable();
         }
@@ -44,6 +52,10 @@ namespace Common
         /// </summary>
         public void PlayerDisable()
         {
+            if (_InputSystemActions == null)
+            {
+                _InputSystemActions = new InputSystem_Actions();
+            }
             _InputSystemActions?.Player.Disable();
             Debug.Log("プレイヤー操作無効化");
         }
@@ -53,6 +65,10 @@ namespace Common
         /// </summary>
         public void UIDisable()
         {
+            if (_InputSystemActions == null)
+            {
+                _InputSystemActions = new InputSystem_Actions();
+            }
             _InputSystemActions?.UI.Disable();
             Debug.Log("UI操作無効化");
         }
