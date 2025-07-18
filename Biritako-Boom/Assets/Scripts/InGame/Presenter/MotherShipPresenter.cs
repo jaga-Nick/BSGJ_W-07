@@ -47,6 +47,8 @@ namespace InGame.Presenter
         {
             Model.Move();
         }
+        
+        public MotherShipModel GetModel() { return Model; }
     }
 }
 

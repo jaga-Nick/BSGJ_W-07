@@ -17,13 +17,11 @@ namespace InGame.Presenter
         
         private void OnEnable()
         {
-            // イベントに自分の更新処理を登録
             EnemySpawner.OnGenerateMotherShip += FindAndSetTarget;
         }
         
         private void OnDisable()
         {
-            // オブジェクトが破棄される際などに、イベントから登録を解除（重要）
             EnemySpawner.OnGenerateMotherShip -= FindAndSetTarget;
         }
         

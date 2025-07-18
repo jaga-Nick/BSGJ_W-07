@@ -53,6 +53,8 @@ namespace InGame.Model
                               targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
                               targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
 
+
+
             return (isOnScreen, targetScreenPosition);
         }
 
