@@ -48,7 +48,7 @@ namespace InGame.Model
         private const float MaxCodeGauge = 30.0f;
         private float CurrentCodeGauge= 30.0f;
 
-        private float RegenCodeGauge =0.005f;
+        private float RegenCodeGauge =0.007f;
         
         //探索範囲
         private float SearchScale =1f;

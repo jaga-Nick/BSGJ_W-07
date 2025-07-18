@@ -1,5 +1,7 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
+using InGame.Model;
+using Setting;
 using UnityEngine;
 
 namespace Title.Loader
@@ -23,6 +25,8 @@ namespace Title.Loader
         /// </summary>
         public async UniTask Init()
         {
+            ScoreModel.Instance().RestoreScore();
+            AudioManager.Instance().LoadBgm("BgmTitle");
             Debug.Log("テスト_Init");
         }
 

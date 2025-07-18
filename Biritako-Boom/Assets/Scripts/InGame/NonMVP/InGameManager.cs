@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using Common;
 using InGame.Model;
+using TMPro;
+using Setting;
+using System.Threading.Tasks;
 
 namespace InGame.NonMVP
 {
@@ -19,10 +22,12 @@ namespace InGame.NonMVP
         [SerializeField] private float inGameSecond;
         
         private float _time;
-        
+
         /// <summary>
         /// uGUI
         /// </summary>
+        [Header("タイマーのテキスト")]
+        [SerializeField] private TextMeshProUGUI timerText;
         [Header("タイマーのUI")]
         [SerializeField] private Image timerUI;
         [Header("開始の色")]
@@ -32,11 +37,12 @@ namespace InGame.NonMVP
         // [SerializeField] private Button pauseButton;
         
         InGameSceneEvent _sceneEvent =  new InGameSceneEvent();
-        
-        private void Start()
+
+        private async Task Start()
         {
             // ゲーム開始時はゲームタイムを0にする。
             TimeManager.Instance().ResetInGameTime(inGameSecond);
+            ScoreModel.Instance().RestoreScore();
         }
         
         private void OnEnable()
@@ -83,6 +89,7 @@ namespace InGame.NonMVP
         private void UpdateTimerUI(float time)
         {
             timerUI.fillAmount = time / inGameSecond;
+            timerText.text = ((int)time).ToString();
             // 時間経過とともに色を変えていく
             var t = Mathf.Clamp01(time / inGameSecond);
             var color = Color.Lerp(endColor, startColor, t);
