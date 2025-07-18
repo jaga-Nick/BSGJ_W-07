@@ -27,7 +27,7 @@ namespace Title.Loader
         public async UniTask Init()
         {
             ScoreModel.Instance().RestoreScore();
-            AudioManager.Instance().LoadBgm("BgmTitle");
+            AudioManager.Instance().LoadBgm("BgmInGame");
             Debug.Log("テスト_Init");
             TimeManager.Instance().SetTimeScale(1);
         }
