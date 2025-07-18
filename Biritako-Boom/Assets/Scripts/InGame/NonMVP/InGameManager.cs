@@ -42,7 +42,6 @@ namespace InGame.NonMVP
         {
             // ゲーム開始時はゲームタイムを0にする。
             TimeManager.Instance().ResetInGameTime(inGameSecond);
-            ScoreModel.Instance().RestoreScore();
         }
         
         private void OnEnable()
