@@ -227,16 +227,13 @@ namespace InGame.NonMVP
         /// <summary>
         /// Codeを置いた時のイベント。
         /// </summary>
-        public async void PutCodeEvent(PlayerModel model)
+        public async UniTask PutCodeEvent(PlayerModel model)
         {
-            //Debug.Log()
-            EndObject = await EndPointGenerate();
-            
-            //拾う判定を作る為に。
-            //GameObject endPoint = new GameObject("EndPoint");
-            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
+            GameObject obje= await EndPointGenerate();
 
-            EndObject.transform.position = EndObject.transform.position;
+            obje.transform.position = EndObject.transform.position;
+            EndObject = obje;
+            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
 
             //コライダー生成
             CircleCollider2D circle = EndObject.GetComponent<CircleCollider2D>();
@@ -260,7 +257,7 @@ namespace InGame.NonMVP
 
 
             //最終地点に進める。その後消える。
-            ReturnEndPoint(cts.Token,model).Forget();
+            await ReturnEndPoint(cts.Token,model);
         }
         
         
