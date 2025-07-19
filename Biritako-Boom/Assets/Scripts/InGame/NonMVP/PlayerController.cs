@@ -3,6 +3,7 @@ using Common;
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.Presenter;
+using Pose;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -93,6 +94,11 @@ namespace InGame.NonMVP
                     //Debug.Log("コンセント回収");
                     Model.DeleteSocket();
                 }
+            }
+            if (ActionMap.Player.Pose.WasPressedThisFrame())
+            {
+                TimeManager.Instance().SetTimeScale(0);
+                SceneManager.Instance().LoadSubScene(new PoseSceneLoader()).Forget();
             }
         }
 

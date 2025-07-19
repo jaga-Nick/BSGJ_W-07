@@ -43,18 +43,25 @@ namespace Pose
             AddHoverEvents(RestartButton);
             AddHoverEvents(TitleButton);
 
-            PlayButton.onClick.AddListener(()=> { ButtonEvents(PlayButton); });
+            PlayButton.onClick.AddListener(() => { ButtonEvents(PlayButton); });
             RestartButton.onClick.AddListener(() => { ButtonEvents(RestartButton); });
             TitleButton.onClick.AddListener(() => { ButtonEvents(TitleButton); });
 
 
-            action=InputSystemActionsManager.Instance().GetInputSystem_Actions();
+            action = InputSystemActionsManager.Instance().GetInputSystem_Actions();
             InputSystemActionsManager.Instance().UIEnable();
 
             buttons = new Button[] { PlayButton, RestartButton, TitleButton };
             SelectButton(buttons[currentIndex]);
 
-            
+            foreach (var button in buttons)
+            {
+                Animator animator = button.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                }
+            }
         }
 
         public void Update()
