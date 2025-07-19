@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Common;
 using Cysharp.Threading.Tasks;
+using InGame.NonMVP;
 
 namespace Pose
 {
@@ -10,7 +11,7 @@ namespace Pose
 
         async UniTask ISceneInfo.End()
         {
-            
+            TimeManager.Instance().SetTimeScale(1);
         }
 
         async UniTask ISceneInfo.Init()

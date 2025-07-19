@@ -197,6 +197,7 @@ namespace Pose
         }
         private void OnTitle()
         {
+            TimeManager.Instance().SetTimeScale(1);
             SceneManager.Instance().LoadMainScene(new TitleSceneLoader()).Forget();
         }
     }
