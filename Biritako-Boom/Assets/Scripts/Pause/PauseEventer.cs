@@ -1,19 +1,17 @@
 ﻿using Common;
 using Cysharp.Threading.Tasks;
-using InGame.Model;
 using InGame.NonMVP;
-using Settings.Button;
 using Title.Loader;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Pose
+namespace Pause
 {
     /// <summary>
     /// PoseのButtonイベント設定。
     /// </summary>
-    public class PoseEventer : MonoBehaviour
+    public class PauseEventer : MonoBehaviour
     {
         private static readonly int Highlighted = Animator.StringToHash("Highlighted");
         private static readonly int Selected = Animator.StringToHash("Selected");

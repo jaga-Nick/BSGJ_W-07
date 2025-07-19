@@ -5,9 +5,9 @@ using InGame.NonMVP;
 
 namespace Pose
 {
-    public class PoseSceneLoader : ISceneInfo
+    public class PauseSceneLoader : ISceneInfo
     {
-        string ISceneInfo.SceneName => "Pose";
+        string ISceneInfo.SceneName => "Pause";
 
         async UniTask ISceneInfo.End()
         {

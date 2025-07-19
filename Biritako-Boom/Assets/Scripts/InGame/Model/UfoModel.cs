@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using InGame.NonMVP;
 using System;
-using InGame.Presenter;
 using UnityEngine;
 
 namespace InGame.Model
@@ -9,7 +8,7 @@ namespace InGame.Model
     /// <summary>
     /// UFO（Enemy）の管理クラス
     /// </summary>
-    public class UfoModel : MonoBehaviour,IEnemyModel
+    public class UfoModel : MonoBehaviour, IEnemyModel
     {
         /// <summary>
         /// 移動許容距離
@@ -112,7 +111,8 @@ namespace InGame.Model
             // 死んだときの爆発エフェクトを表示
             GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 2);
             // SpawnerのUFOカウントを減らしたことを通知
-            EnemySpawner.Instance().OnUfoDead(gameObject);
+            var enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
+            enemySpawner.OnUfoDead(gameObject);
             // UFOを破棄
             GameObject.Destroy(gameObject);
         }
