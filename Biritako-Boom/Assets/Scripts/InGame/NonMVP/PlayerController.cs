@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Common;
+﻿using Common;
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.Presenter;
@@ -13,99 +12,114 @@ namespace InGame.NonMVP
     /// </summary>
     public class PlayerController
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="playerModel"></param>
+        /// <param name="playerPresenter"></param>
         public PlayerController(PlayerModel playerModel,PlayerPresenter playerPresenter)
         {
-            Model = playerModel;
-            this.Presenter = playerPresenter;
-
-            InputSystemActionsManager manage=InputSystemActionsManager.Instance();
-            ActionMap = manage.GetInputSystem_Actions();
-            
+            _model = playerModel;
+            _presenter = playerPresenter;
+            _enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
+            var manage = InputSystemActionsManager.Instance();
+            _actionMap = manage.GetInputSystem_Actions();
         }
-        private PlayerPresenter Presenter;
-        private PlayerModel Model;
-        private InputSystem_Actions ActionMap;
-        private ComponentChecker checker=new ComponentChecker();
+        
+        /// <summary>
+        /// presenterとmodelとInputSystem_Actionsとcheckerを保持する。
+        /// </summary>
+        private readonly PlayerPresenter _presenter;
+        private readonly PlayerModel _model;
+        private InputSystem_Actions _actionMap;
+        private readonly ComponentChecker _checker = new ComponentChecker();
+        private EnemySpawner _enemySpawner;
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public void Init()
         {
-            InputSystemActionsManager manager = InputSystemActionsManager.Instance();
-            ActionMap=manager.GetInputSystem_Actions();
+            var manager = InputSystemActionsManager.Instance();
+            _actionMap = manager.GetInputSystem_Actions();
             manager.PlayerEnable();
         }
 
         public void Update()
         {
-            //移動処理
-            Model.MoveInput(ActionMap);
+            // 移動処理
+            _model.MoveInput(_actionMap);
 
-            //爆発
-            if (ActionMap.Player.Attack.WasPressedThisFrame())
+            // ジャンプ処理
+            if (_actionMap.Player.Attack.WasPressedThisFrame())
             {
-                Model.Explosion();
+                // 爆発動作の開始
+                _model.ExplosionToSimultaneous();
+                // 爆発させた分だけ家電の数を減らす
+                Debug.Log(_model.codeSimulators.Count);
+                _enemySpawner.CurrentElectronics -= _model.codeSimulators.Count;
             }
 
-            //コードを保持する
-            if (ActionMap.Player.Have.WasPressedThisFrame())
+            // コードを保持する
+            if (_actionMap.Player.Have.WasPressedThisFrame())
             {
-                Presenter.animationView.SetHaveConcent(true);
+                _presenter.animationView.SetHaveConcent(true);
                 //コードを生成-保持する為の処理
-                Model.OnHave();
+                _model.OnHave();
             }
-            if (ActionMap.Player.Have.WasReleasedThisFrame())
+            
+            // コードを保持している時に離した場合
+            if (_actionMap.Player.Have.WasReleasedThisFrame())
             {
-                Presenter.animationView.SetHaveConcent(false);
-            }
-
-            //ーーー
-            if (ActionMap.Player.Have.WasReleasedThisFrame())
-            {
-                if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 1f) != null)
+                // 範囲内にコンセントがある場合
+                _presenter.animationView.SetHaveConcent(false);
+                
+                // 保持しているときかつ範囲内にコンセントがある場合
+                if (_checker.CharacterCheck<SocketPresenter>(_model.PlayerObject.transform.position, 1f) != null)
                 {
-
-                    Presenter.animationView.SetHaveConcent(true);
-                    //Debug.Log("プラグを刺す");
-                    Model.ConnectSocketCode();
-
+                    _presenter.animationView.SetHaveConcent(true);
+                    // プラグをコンセントにさす
+                    _model.ConnectSocketToCode();
                 }
-                //範囲内にコードがない場合(それで保持している時。)
-                else if (Model.CurrentHaveCodeSimulator != null)
+                
+                // 保持しているかつ範囲内にコードがない場合
+                else if (_model.CurrentHaveCodeSimulator != null)
                 {
-
-                    Presenter.animationView.SetHaveConcent(false);
-                    //Debug.Log("プラグを置く");
-                    Model.PutCode();
-
-                }
-
-            }
-
-            //コンセント生成/回収
-            if (ActionMap.Player.Jump.WasPressedThisFrame()) 
-            {
-                if (Model.Socket==null)
-                {
-                    //Debug.Log("コンセント生成");
-                    //コンセントを生成する。
-                    Model.GenerateSocket(Presenter.GetSocketPrefab());
-                }
-                else// if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
-                {
-                    Model.DeleteSocket();
-                    Model.GenerateSocket(Presenter.GetSocketPrefab());
+                    _presenter.animationView.SetHaveConcent(false);
+                    // コードを地面に置く
+                    _model.PutOnCode();
                 }
             }
-            if (ActionMap.Player.Pose.WasPressedThisFrame())
+
+            // コンセント生成および回収
+            if (_actionMap.Player.Jump.WasPressedThisFrame()) 
             {
-                TimeManager.Instance().SetTimeScale(0);
-                SceneManager.Instance().LoadSubScene(new PoseSceneLoader()).Forget();
+                // すでに接続されているなら何もしない
+                if (_model.IsConnectedToSocket()) { return; }
+                
+                if (_model.Socket ==null)
+                {
+                    // コンセントがない場合は生成
+                    _model.GenerateSocket(_presenter.GetSocketPrefab());
+                }
+                else 
+                {
+                    // すでにコンセントがある場合は回収して生成
+                    _model.RetrieveSocket();
+                    _model?.GenerateSocket(_presenter.GetSocketPrefab());
+                }
             }
+
+            // ポーズ画面の表示
+            if (!_actionMap.Player.Pose.WasPressedThisFrame()) return;
+            TimeManager.Instance().SetTimeScale(0);
+            SceneManager.Instance().LoadSubScene(new PauseSceneLoader()).Forget();
         }
 
         
         public void FixedUpdate()
         {
-            Model.MovePlayer();
+            _model.MovePlayer();
         }
     }   
 }

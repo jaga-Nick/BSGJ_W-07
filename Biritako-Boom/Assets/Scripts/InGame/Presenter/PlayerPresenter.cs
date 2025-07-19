@@ -67,7 +67,7 @@ namespace InGame.Presenter
         private void Update()
         {
             View?.AnimationUpdate();
-            View?.UpdatePlayerView(Model.GetCodeGaugePercent());
+            View?.UpdatePlayerView(Model.CalculatePercentOfCodeGaugePercent());
             View?.UpdateTimerView(timerModel.GetTimePersent());
 
             //Input系列の制御

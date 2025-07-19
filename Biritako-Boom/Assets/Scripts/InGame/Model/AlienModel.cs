@@ -287,7 +287,7 @@ namespace InGame.Model
                     // プレイヤーがコードを持っている（妨害できる）場合のみPutCodeを実行
                     if (playerModel.CurrentHaveCodeSimulator != null)
                     {
-                        playerModel.PutCode();
+                        playerModel.PutOnCode();
                         var effect = GetComponent<EnemyEffect>();
                         effect.GenerateEffect();
                     }

@@ -13,7 +13,7 @@ namespace InGame.NonMVP
     /// <summary>
     /// Enemyのスポナー
     /// </summary>
-    public class EnemySpawner : DestroyAvailable_SingletonMonoBehaviourBase<EnemySpawner>
+    public class EnemySpawner : MonoBehaviour
     {
         /// <summary>
         /// 時間設定
@@ -99,8 +99,6 @@ namespace InGame.NonMVP
 
         private void Start()
         {
-            //アタッチされているのでそのままを維持する為に格納。（一つのみを想定しているので維持しない場合も放置でもよい。
-            instance = this;
             // タイマーをスポーン時間のインターバルにセット
             _timer = spawnInterval;
             // UFOをスポーンする
@@ -115,7 +113,6 @@ namespace InGame.NonMVP
         private void Update()
         {
             _timer -= Time.deltaTime;
-            // Debug.Log(CurrentElectronics);
             if (!(_timer <= 0) || CurrentElectronics >= maxElectronics) return;
             SpawnElectronics().Forget();
             _timer = spawnInterval;
