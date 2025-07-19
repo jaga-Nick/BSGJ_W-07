@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.NonMVP;
+using Settings.Button;
 using Title.Loader;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -27,20 +28,84 @@ namespace Pose
         [SerializeField]
         private Button TitleButton;
 
+        private InputSystem_Actions action;
+
+
+        private Button[] buttons;
+        private Button previousButton;
+        private int currentIndex = 0;
+        private float navigateCooldown = 0.2f;
+        private float lastNavigateTime = 0f;
+
         public void Awake()
         {
             AddHoverEvents(PlayButton);
             AddHoverEvents(RestartButton);
             AddHoverEvents(TitleButton);
 
-            PlayButton.onClick.AddListener(()=> { ButttonEvents(PlayButton); });
-            RestartButton.onClick.AddListener(() => { ButttonEvents(RestartButton); });
-            TitleButton.onClick.AddListener(() => { ButttonEvents(TitleButton); });
+            PlayButton.onClick.AddListener(()=> { ButtonEvents(PlayButton); });
+            RestartButton.onClick.AddListener(() => { ButtonEvents(RestartButton); });
+            TitleButton.onClick.AddListener(() => { ButtonEvents(TitleButton); });
+
+
+            action=InputSystemActionsManager.Instance().GetInputSystem_Actions();
+            InputSystemActionsManager.Instance().UIEnable();
+
+            buttons = new Button[] { PlayButton, RestartButton, TitleButton };
+            SelectButton(buttons[currentIndex]);
+
+            
         }
 
-        public void Play()
+        public void Update()
         {
+            Vector2 nav = action.UI.Navigate.ReadValue<Vector2>();
+            // 時間経過チェック（入力連打防止）
+            if (Time.unscaledTime - lastNavigateTime < navigateCooldown) return;
 
+            if (nav.y > 0.5f) // 上方向
+            {
+                currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
+                SelectButton(buttons[currentIndex]);
+                lastNavigateTime = Time.unscaledTime;
+            }
+            else if (nav.y < -0.5f) // 下方向
+            {
+                currentIndex = (currentIndex + 1) % buttons.Length;
+                SelectButton(buttons[currentIndex]);
+                lastNavigateTime = Time.unscaledTime;
+            }
+
+            if (action.UI.Submit.WasPressedThisFrame())
+            {
+                ButtonEvents(buttons[currentIndex]);
+            }
+        }
+
+        private void SelectButton(Button button)
+        {
+            // 前のボタンをNormalに戻す
+            if (previousButton != null && previousButton != button)
+            {
+                Animator prevAnimator = previousButton.GetComponent<Animator>();
+                if (prevAnimator != null)
+                {
+                    prevAnimator.SetTrigger(Normal);
+                }
+            }
+
+            // 現在のボタンを選択状態に
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            button.Select();
+
+            Animator animator = button.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetTrigger(Highlighted);
+            }
+
+            // 次回のために記録
+            previousButton = button;
         }
 
 
@@ -48,7 +113,7 @@ namespace Pose
         /// 実行処理（OnClick用）
         /// </summary>
         /// <param name="button"></param>
-        private void ButttonEvents(Button button)
+        private void ButtonEvents(Button button)
         {
             switch (button)
             {
@@ -123,7 +188,6 @@ namespace Pose
             TimeManager.Instance().SetTimeScale(1);
             SceneManager.Instance().LoadMainScene(new InGameSceneLoader()).Forget();
         }
-
         private void OnTitle()
         {
             SceneManager.Instance().LoadMainScene(new TitleSceneLoader()).Forget();
