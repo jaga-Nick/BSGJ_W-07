@@ -9,33 +9,29 @@ namespace InGame.Presenter
     public class PlayerPresenter:MonoBehaviour
     {
         [Header("キャラクターPrefabデータ")]
-        [SerializeField]
-        private GameObject CharacterPrefab;
-
+        [SerializeField] private GameObject CharacterPrefab;
+        [SerializeField] private string CharacterAddress="PlayerCharacter";
         public GameObject characterPrefab { get; private set; }
 
-        [SerializeField]
-        private string CharacterAddress="PlayerCharacter";
-
         [Header("ソケット(コンセント）データ")]
-        [SerializeField]
-        private GameObject SocketPrefab;
-        [SerializeField]
-        private string SocketAddress = "PlayerCharacter";
-        //----------------------------------------------
-
-        //Player統括
-        public PlayerModel Model { get; private set; }
-        private GameHUDView View;
-
-        public PlayerView animationView { get; private set; }
-
+        [SerializeField] private GameObject SocketPrefab;
+        [SerializeField] private GameObject SocketTipPrefab;
+        [SerializeField] private string SocketAddress = "PlayerCharacter";
         
-        //システムモデル
-        private TimerModel timerModel=new TimerModel();
-        private ScoreModel scoreModel;
+        /// <summary>
+        /// model
+        /// </summary>
+        public PlayerModel Model { get; private set; }
+        private readonly TimerModel _timerModel = new TimerModel();
+        private ScoreModel _scoreModel;
+        
+        /// <summary>
+        /// view
+        /// </summary>
+        private GameHUDView _view;
+        public PlayerView AnimationView { get; private set; }
 
-        private PlayerController playerController;
+        private PlayerController _playerController;
 
         private void Awake()
         {
@@ -53,46 +49,58 @@ namespace InGame.Presenter
             //コード生成に必要なクラスを取得。
             Model?.SetGenerateCodeSystem(gameObject.GetComponent<GenerateCodeSystem>());
 
-            View = gameObject.GetComponent<GameHUDView>();
-            View.SetModel(Model);
-            animationView=View.GetplayerView();
+            _view = gameObject.GetComponent<GameHUDView>();
+            _view.SetModel(Model);
+            AnimationView=_view.GetplayerView();
 
             //スコアイベントの購読(Singletonの呼び出し）
-            scoreModel = ScoreModel.Instance();
-            scoreModel.ScoreChanged += ScoreChanged;
+            _scoreModel = ScoreModel.Instance();
+            _scoreModel.ScoreChanged += ScoreChanged;
 
-            playerController = new PlayerController(Model,this);
-            playerController.Init();
+            _playerController = new PlayerController(Model,this);
+            _playerController.Init();
         }
+        
         private void Update()
         {
-            View?.AnimationUpdate();
-            View?.UpdatePlayerView(Model.CalculatePercentOfCodeGaugePercent());
-            View?.UpdateTimerView(timerModel.GetTimePersent());
+            _view?.AnimationUpdate();
+            _view?.UpdatePlayerView(Model.CalculatePercentOfCodeGaugePercent());
+            _view?.UpdateTimerView(_timerModel.GetTimePersent());
 
             //Input系列の制御
-            playerController?.Update();
+            _playerController?.Update();
         }
-        private void FixedUpdate()
+        
+        /// <summary>
+        /// PlayerControllerのFixedUpdate
+        /// </summary>
+        private void FixedUpdate() { _playerController?.FixedUpdate(); }
+        
+        /// <summary>
+        /// スコアの変更を監視し、HUDに反映する
+        /// </summary>
+        private void ScoreChanged() { _view.UpdateScoreView(_scoreModel.Score); } 
+        
+        /// <summary>
+        /// コンセントのPrefabを取得する
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetSocketPrefab() { return SocketPrefab; }
+        
+        /// <summary>
+        /// コンセントに刺さったプラグの先端のPrefabを取得する
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetSocketTipPrefab() { return SocketTipPrefab; }
+        
+        public void DestroySocketTip(GameObject socketTip)
         {
-            playerController?.FixedUpdate();
+            
         }
-
-        //購読解除対策
-        private void ScoreChanged()
-        {
-            View.UpdateScoreView(scoreModel.Score);
-        } 
-        public GameObject GetSocketPrefab()
-        {
-            return SocketPrefab;
-        }
-        private void OnDestroy()
-        {
-            //購読解除
-            scoreModel.ScoreChanged -= ScoreChanged;
-        }
-
-
+        
+        /// <summary>
+        /// スコアモデルのインスタンスを破壊
+        /// </summary>
+        private void OnDestroy() { _scoreModel.ScoreChanged -= ScoreChanged; }
     }
 }

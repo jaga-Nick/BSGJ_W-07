@@ -70457,6 +70457,7 @@ MonoBehaviour:
   CharacterPrefab: {fileID: 6643896999913150986, guid: 0e8eb706557ec0a43b4181f095ab9f32, type: 3}
   CharacterAddress: PlayerCharacter
   SocketPrefab: {fileID: 5145646027522680112, guid: 3d8b964afbf2ae04ab387309caf0a053, type: 3}
+  SocketTipPrefab: {fileID: 6331477108501677103, guid: 3bc6048b75d0dee49b08524e8518f6bd, type: 3}
   SocketAddress: PlayerCharacter
 --- !u!114 &1927360534
 MonoBehaviour:

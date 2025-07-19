@@ -55,6 +55,8 @@ namespace InGame.NonMVP
             {
                 // 爆発動作の開始
                 _model.ExplosionToSimultaneous();
+                // プラグの先を消す
+                _model.DestroySocketTips();
                 // 爆発させた分だけ家電の数を減らす
                 Debug.Log(_model.codeSimulators.Count);
                 _enemySpawner.CurrentElectronics -= _model.codeSimulators.Count;
@@ -63,7 +65,7 @@ namespace InGame.NonMVP
             // コードを保持する
             if (_actionMap.Player.Have.WasPressedThisFrame())
             {
-                _presenter.animationView.SetHaveConcent(true);
+                _presenter.AnimationView.SetHaveConcent(true);
                 //コードを生成-保持する為の処理
                 _model.OnHave();
             }
@@ -72,12 +74,22 @@ namespace InGame.NonMVP
             if (_actionMap.Player.Have.WasReleasedThisFrame())
             {
                 // 範囲内にコンセントがある場合
-                _presenter.animationView.SetHaveConcent(false);
+                _presenter.AnimationView.SetHaveConcent(false);
                 
                 // 保持しているときかつ範囲内にコンセントがある場合
                 if (_checker.CharacterCheck<SocketPresenter>(_model.PlayerObject.transform.position, 1f) != null)
                 {
-                    _presenter.animationView.SetHaveConcent(true);
+                    _presenter.AnimationView.SetHaveConcent(true);
+                    
+                    // プラグの先のPrefabをコンセントの先に表示
+                    var plugTip = _presenter.GetSocketTipPrefab();
+                    var socketTipTransform = _model.Socket.transform;
+                    _model.plugTips.Add(plugTip);
+                    if (plugTip != null && socketTipTransform != null)
+                    {
+                        GameObject.Instantiate(plugTip, socketTipTransform.position, socketTipTransform.rotation);
+                    }
+                    
                     // プラグをコンセントにさす
                     _model.ConnectSocketToCode();
                 }
@@ -85,7 +97,7 @@ namespace InGame.NonMVP
                 // 保持しているかつ範囲内にコードがない場合
                 else if (_model.CurrentHaveCodeSimulator != null)
                 {
-                    _presenter.animationView.SetHaveConcent(false);
+                    _presenter.AnimationView.SetHaveConcent(false);
                     // コードを地面に置く
                     _model.PutOnCode();
                 }

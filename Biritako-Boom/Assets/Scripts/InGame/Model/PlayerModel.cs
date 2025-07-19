@@ -74,6 +74,11 @@ namespace InGame.Model
         public GameObject Socket { get; set;} = null;
         
         /// <summary>
+        /// コンセントに刺さったプラグの先端
+        /// </summary>
+        public List<GameObject> plugTips { get; set; } = null;
+        
+        /// <summary>
         /// コードのシミュレーター
         /// </summary>
         public GenerateCodeSystem GenerateCodeSystem { get; private set; }
@@ -427,7 +432,7 @@ namespace InGame.Model
             _codeHaveCancellation = null;
             
             // コードを持ってない時のアニメーション
-            _presenter.animationView.SetHaveConcent(false);
+            _presenter.AnimationView.SetHaveConcent(false);
 
             CurrentHaveCodeSimulator?.PutCodeEvent(this);
             CurrentHaveCodeSimulator = null;
@@ -474,5 +479,10 @@ namespace InGame.Model
                 doExplosion = false;
             }
         }
+
+        /// <summary>
+        /// コンセントに刺さっているプラグリストを空にする
+        /// </summary>
+        public void DestroySocketTips() { plugTips.Clear(); }
     }
 }
