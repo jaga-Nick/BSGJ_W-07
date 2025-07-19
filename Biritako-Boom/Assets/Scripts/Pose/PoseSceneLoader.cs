@@ -25,7 +25,7 @@ namespace Pose
 
         void ISceneInfo.InputStop()
         {
-            throw new System.NotImplementedException();
+            InputSystemActionsManager.Instance().UIDisable();
         }
     }
 }
