@@ -8,8 +8,14 @@ namespace Ending.Presenter
 {
     public class EndingPresenter : MonoBehaviour
     {
-        [SerializeField]
+        
         private VideoPlayer _vp;
+        
+        [Header("背景Image"), SerializeField] 
+        private Image _image;
+
+        [Header("背景スライド画像"), SerializeField] 
+        private Sprite[] EndingSprites;
 
         [Header("リザルトのUI"), SerializeField]
         private GameObject resultUI;
