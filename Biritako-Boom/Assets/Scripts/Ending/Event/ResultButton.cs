@@ -1,7 +1,9 @@
-using Common;
+﻿using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Ending.Loader;
+using InGame.Model;
+using Title.Loader;
 
 namespace Result.Model
 {
@@ -16,6 +18,7 @@ namespace Result.Model
         /// </summary>
         public async void OnClickRePlayButton()
         {
+            ScoreModel.Instance().RestoreScore();
             await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
         }
         
@@ -24,6 +27,7 @@ namespace Result.Model
         /// </summary>
         public async void OnClickTitleButton()
         {
+            ScoreModel.Instance().RestoreScore();
             await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
         }
         

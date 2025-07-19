@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Setting;
 using UnityEngine;
+using InGame.Model;
 
 public class TitleSceneLoader : ISceneInfo
 {
@@ -22,6 +23,8 @@ public class TitleSceneLoader : ISceneInfo
     /// </summary>
     public async UniTask Init()
     {
+        ScoreModel.Instance().RestoreScore();
+
         AudioManager.Instance().LoadBgm("BgmTitle");
     }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Ending.Model;
 using Ending.View;
-using InGame.Model; // ScoreModelを参照するために必要
+using InGame.Model;
 
 namespace Ending.Presenter
 {

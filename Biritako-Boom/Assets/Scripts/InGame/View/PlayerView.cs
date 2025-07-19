@@ -51,6 +51,16 @@ namespace InGame.View
             {
                 _animator.SetBool(Move, true);
             }
+
+            if(move.x  > 0)
+            {
+                model.PlayerObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else if (move.x <0)
+            {
+                model.PlayerObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+            }
         }
 
         public void SetPlayerModel(PlayerModel _model)

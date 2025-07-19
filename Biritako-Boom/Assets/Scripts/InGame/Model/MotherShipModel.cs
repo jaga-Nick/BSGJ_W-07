@@ -65,6 +65,7 @@ namespace InGame.Model
         // 母艦のHP
 
         int IEnemyModel.CurrentHp { get; set;}
+        private int MaxHp;
         
         
         // 母艦の移動速度
@@ -98,6 +99,7 @@ namespace InGame.Model
         #region イベント
 
         public static event Action<bool> OnGameClear;
+        public static event Action<int> OnBossHit;
 
         #endregion
 
@@ -110,6 +112,7 @@ namespace InGame.Model
         {
             IntervalTime = 0.2f;
             _speed = speed;
+            MaxHp = _hp;
             ((IEnemyModel)this).CurrentHp = _hp;
             ExplosionPower = 100;
             isEnd = false;
@@ -126,6 +129,10 @@ namespace InGame.Model
         }
         
         public void SetRandomPatrol(bool mode){ isRandomPatrol  = mode; }
+
+        public int GetMaxHp() { return MaxHp; }
+
+        public int GetCurrentHp() { return ((IEnemyModel)this).CurrentHp; }
         
         public void SetSpeed(float speed) { _speed = speed; }
 
@@ -227,6 +234,7 @@ namespace InGame.Model
         {
             ((IEnemyModel)this).CurrentHp -= damage;
             ScoreModel.Instance().IncrementScore(_hitScore);
+            OnBossHit?.Invoke(((IEnemyModel)this).CurrentHp);
             _cameraShaker.Shake(_explosionShake);
             if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
         }
