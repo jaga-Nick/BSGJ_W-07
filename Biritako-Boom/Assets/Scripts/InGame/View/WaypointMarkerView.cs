@@ -120,5 +120,6 @@ namespace InGame.View
             );
             element.anchoredPosition = localPoint;
         }
+        
     }
 }

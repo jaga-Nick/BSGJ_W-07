@@ -4,6 +4,7 @@ using UnityEngine.Rendering;
 using Common;
 using System.Threading;
 using System;
+using InGame.Model;
 
 namespace Common
 {
@@ -88,20 +89,37 @@ namespace Common
             FindTargetPlayer();
         }
         
+        private void OnEnable()
+        {
+            // イベントの購読を開始
+            PlayerModel.OnPlayerSpawned += FindTargetPlayer;
+            
+            if (GraphicsSettings.defaultRenderPipeline != null)
+                RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+        }
+
+        private void OnDisable()
+        {
+            // オブジェクトが破棄される際に、忘れずに購読を解除
+            PlayerModel.OnPlayerSpawned -= FindTargetPlayer;
+            
+            if (GraphicsSettings.defaultRenderPipeline != null)
+                RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+        }
+        
 
         private void LateUpdate()
         {
             UpdateShaderParameters();
-            if (_target == null)
+            if (_target != null)
             {
-                FindTargetPlayer();
+                // ターゲットを追従する
+                Vector3 targetPosition = _target.position;
+                Vector3 finalPosition = targetPosition + _offset;
+                transform.position = finalPosition;
                 return;
             }
             
-            // ターゲットを追従する
-            Vector3 targetPosition = _target.position;
-            Vector3 finalPosition = targetPosition + _offset;
-            transform.position = finalPosition;
         }
 
         private void FindTargetPlayer()
@@ -298,17 +316,9 @@ namespace Common
         }
         
         // --- URP/HDRP用 ---
-        private void OnEnable()
-        {
-            if (GraphicsSettings.defaultRenderPipeline != null)
-                RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
-        }
 
-        private void OnDisable()
-        {
-            if (GraphicsSettings.defaultRenderPipeline != null)
-                RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
-        }
+
+
 
         private void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
         {

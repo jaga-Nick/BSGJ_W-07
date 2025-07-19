@@ -13,6 +13,8 @@ namespace InGame.Presenter
     {
         private WaypointMarkerView _view;
         private WaypointMarkerModel _model = new WaypointMarkerModel();
+
+        [SerializeField] private Camera _camera;
         
         
         private void OnEnable()
@@ -38,7 +40,14 @@ namespace InGame.Presenter
             
             // ViewとModelの初期化
             _view.Initialize();
-            _model.SetMainCamera(Camera.main);
+            if (_camera == null)
+            {
+                _model.SetMainCamera(Camera.main);
+            }
+            else
+            {
+                _model.SetMainCamera(_camera);
+            }
         }
         
         private void Start()
@@ -50,6 +59,7 @@ namespace InGame.Presenter
 
         private void LateUpdate()
         {
+            
             // Modelにターゲットの可視性判定を依頼
             var (isOnScreen, screenPosition) = _model.CheckTargetVisibility();
 
