@@ -85,11 +85,15 @@ namespace Common
             using (var cts = new CancellationTokenSource())
             {
                 var token = cts.Token;
-            
                 try
                 {
                     _subScene = Addressables.LoadSceneAsync(sceneInfo.SceneName,UnityEngine.SceneManagement.LoadSceneMode.Additive);
                     await _subScene.ToUniTask(cancellationToken: token);
+
+                    //データ
+                    _subSceneInfo = sceneInfo;
+                    _subSceneInfo.Init().Forget();
+                    _subSceneInfo.InputStart();
                 }
                 catch (OperationCanceledException)
                 {
@@ -109,6 +113,8 @@ namespace Common
                 _subSceneInfo?.InputStop();
                 //終了処理
                 await _subSceneInfo.End();
+                //入力だけ可能にする。
+                _mainSceneInfo?.InputStart();
 
                 using (var _cts = new CancellationTokenSource()) { 
 

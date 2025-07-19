@@ -63,6 +63,11 @@ namespace InGame.NonMVP
             
             UpdateTimerUI(_time);
             
+            if(inGameSecond/2 == _time)
+            {
+                AudioManager.Instance().LoadBgm("GameTimeupIsComming");
+            }
+
             if (0f >= _time) // 時間切れ
             {
                 _sceneEvent.OnGameOverLoder();
