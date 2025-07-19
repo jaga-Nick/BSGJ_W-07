@@ -85,6 +85,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3558a593c4cead042b1a5d6fd753d95c
+    m_Address: Pose
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3797fbd8633120d40ac0c98243466f72
     m_Address: InGame
     m_ReadOnly: 0
@@ -157,11 +162,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bc38c5dff6c7a354c8c856df9a53f837
     m_Address: GameOver
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bfc6f95487cd7fb409c384c81eed5a78
-    m_Address: Pose
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
