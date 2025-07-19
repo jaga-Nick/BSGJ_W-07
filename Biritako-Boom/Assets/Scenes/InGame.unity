@@ -70478,7 +70478,7 @@ MonoBehaviour:
   Gravity: {x: 0, y: 0, z: 0}
   Damping: 2
   Stiffness: 0.8
-  ExplosionTriggerDistance: 2
+  ExplosionTriggerDistance: 1
   MaxExplosion: 20
 --- !u!114 &1927360535
 MonoBehaviour:

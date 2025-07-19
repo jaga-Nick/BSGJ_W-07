@@ -215,7 +215,7 @@ namespace InGame.Model
                     if (codeSimulators.Count > 0)
                     {
                         Debug.Log(RegenCodeGauge * (1 + codeSimulators.Count-1));
-                        DecreaseCodeGauge(RegenCodeGauge * (1+codeSimulators.Count-1));
+                        DecreaseCodeGauge(RegenCodeGauge * (1.1f+codeSimulators.Count-1)).Forget();
                     }
                     else if (CurrentHaveCodeSimulator == null) {
                         IncrementCodeGauge(RegenCodeGauge);

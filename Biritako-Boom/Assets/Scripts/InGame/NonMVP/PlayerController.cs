@@ -91,8 +91,8 @@ namespace InGame.NonMVP
                 }
                 else// if (checker.CharacterCheck<SocketPresenter>(Model.PlayerObject.transform.position, 0.5f) != null )
                 {
-                    //Debug.Log("コンセント回収");
                     Model.DeleteSocket();
+                    Model.GenerateSocket(Presenter.GetSocketPrefab());
                 }
             }
             if (ActionMap.Player.Pose.WasPressedThisFrame())
