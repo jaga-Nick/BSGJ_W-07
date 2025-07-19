@@ -8,14 +8,14 @@ namespace Pose
     {
         string ISceneInfo.SceneName => "Pose";
 
-        UniTask ISceneInfo.End()
+        async UniTask ISceneInfo.End()
         {
-            throw new System.NotImplementedException();
+            
         }
 
-        UniTask ISceneInfo.Init()
+        async UniTask ISceneInfo.Init()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         void ISceneInfo.InputStart()
