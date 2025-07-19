@@ -19,6 +19,8 @@ namespace InGame.Model
     [Serializable]
     public class PlayerModel
     {
+        public static event Action OnPlayerSpawned;
+        
         /// <summary>
         /// 初期化
         /// </summary>
@@ -155,6 +157,7 @@ namespace InGame.Model
         {
             if (PlayerObject != null) return;
             PlayerObject = UnityEngine.Object.Instantiate( _presenter.characterPrefab , _instancePosition, Quaternion.identity);
+            OnPlayerSpawned?.Invoke();
             Rb = PlayerObject?.GetComponent<Rigidbody2D>();
             HealCodeGauge().Forget();
         }
