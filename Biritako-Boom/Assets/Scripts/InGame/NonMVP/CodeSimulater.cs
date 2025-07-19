@@ -4,6 +4,9 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 using InGame.Model;
+using Common;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace InGame.NonMVP
 {
@@ -210,34 +213,43 @@ namespace InGame.NonMVP
             _isReturning = false;
         }
 
-        
+        public async UniTask<GameObject> EndPointGenerate()
+        {
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>("EndPoint");
+
+            using (new HandleDisposable<GameObject>(handle))
+            {
+                GameObject prefab = await handle;
+                GameObject instance = Instantiate(prefab);
+                return instance;
+            }
+        }
         /// <summary>
         /// Codeを置いた時のイベント。
         /// </summary>
-        public void PutCodeEvent(PlayerModel model)
+        public async UniTask PutCodeEvent(PlayerModel model)
         {
-            //拾う判定を作る為に。
-            GameObject endPoint = new GameObject("EndPoint");
-            endPoint.transform.SetParent(this.transform); // 親を this の Transform に設定
+            GameObject obje= await EndPointGenerate();
 
-            endPoint.transform.position = EndObject.transform.position;
-
-            EndObject = endPoint;
+            obje.transform.position = EndObject.transform.position;
+            EndObject = obje;
+            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
 
             //コライダー生成
-            CircleCollider2D circle = EndObject.AddComponent<CircleCollider2D>();
+            CircleCollider2D circle = EndObject.GetComponent<CircleCollider2D>();
             //コライダーの情報セット
             circle.radius = 1;
             circle.offset = new Vector2(0, 0);
             circle.isTrigger = true;
 
             //判定用のスクリプト
-            CodeEndPointAttach endPointAttach=EndObject.AddComponent<CodeEndPointAttach>();
+            CodeEndPointAttach endPointAttach=EndObject.GetComponent<CodeEndPointAttach>();
             //EndPointに情報を残す。
             endPointAttach.SetCodeSimulater(this);
 
+
             //判定の為、Rigidbodyを作成。
-            Rigidbody2D rb = EndObject.AddComponent<Rigidbody2D>();
+            Rigidbody2D rb = EndObject.GetComponent<Rigidbody2D>();
             rb.gravityScale = 0;
             cts?.Cancel();
             cts?.Dispose();
@@ -245,7 +257,7 @@ namespace InGame.NonMVP
 
 
             //最終地点に進める。その後消える。
-            ReturnEndPoint(cts.Token,model).Forget();
+            await ReturnEndPoint(cts.Token,model);
         }
         
         
@@ -255,7 +267,7 @@ namespace InGame.NonMVP
         public void TakeCodeEvent(GameObject player)
         {
             // 以前の終点として使用していたGameObjectを破棄します。
-            if (EndObject != null && EndObject.name == "EndPoint")
+            if (EndObject != null && EndObject.name == "EndPoint(Clone)")
             {
                 Destroy(EndObject);
             }

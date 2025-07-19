@@ -155,6 +155,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae55a5617c2b77241984e107643425f8
+    m_Address: EndPoint
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b26e274c0d1e041a381ac4274392e60d
     m_Address: UiCursor
     m_ReadOnly: 0
