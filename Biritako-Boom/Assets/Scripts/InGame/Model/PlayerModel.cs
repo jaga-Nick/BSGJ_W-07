@@ -78,7 +78,7 @@ namespace InGame.Model
         /// <summary>
         /// コンセントに刺さったプラグの先端
         /// </summary>
-        public List<GameObject> plugTips { get; set; } = null;
+        public List<GameObject> SocketTips = new List<GameObject>();
         
         /// <summary>
         /// コードのシミュレーター
@@ -482,10 +482,5 @@ namespace InGame.Model
                 doExplosion = false;
             }
         }
-
-        /// <summary>
-        /// コンセントに刺さっているプラグリストを空にする
-        /// </summary>
-        public void DestroySocketTips() { plugTips.Clear(); }
     }
 }

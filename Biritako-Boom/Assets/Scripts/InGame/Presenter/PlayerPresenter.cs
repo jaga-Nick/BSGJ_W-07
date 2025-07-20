@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 
 namespace InGame.Presenter
 {
-    public class PlayerPresenter:MonoBehaviour
+    public class PlayerPresenter : MonoBehaviour
     {
         [Header("キャラクターPrefabデータ")]
         [SerializeField] private GameObject CharacterPrefab;
@@ -30,7 +30,10 @@ namespace InGame.Presenter
         /// </summary>
         private GameHUDView _view;
         public PlayerView AnimationView { get; private set; }
-
+        
+        /// <summary>
+        /// controller
+        /// </summary>
         private PlayerController _playerController;
 
         private void Awake()
@@ -93,9 +96,13 @@ namespace InGame.Presenter
         /// <returns></returns>
         public GameObject GetSocketTipPrefab() { return SocketTipPrefab; }
         
-        public void DestroySocketTip(GameObject socketTip)
+        public void DestroySocketTip()
         {
-            
+            foreach (Transform child in GetSocketPrefab().transform)
+            {
+                Destroy(child.gameObject);
+            }
+            Model.SocketTips.Clear();
         }
         
         /// <summary>
