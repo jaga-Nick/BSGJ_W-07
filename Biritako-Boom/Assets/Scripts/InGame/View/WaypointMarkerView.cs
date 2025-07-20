@@ -28,9 +28,9 @@ namespace InGame.View
 
         [Header("見た目の設定")]
         [Tooltip("画面の端からのマージン（ピクセル）")]
-        [SerializeField] private ScreenMargins margins = new ScreenMargins { top = 150f, bottom = 50f, left = 50f, right = 50f };
+        [SerializeField] private ScreenMargins margins = new ScreenMargins { };
         [Tooltip("アイコンから矢印までの距離")]
-        [SerializeField] private float arrowDistanceFromIcon = 40f;
+        [SerializeField] private float arrowDistanceFromIcon;
         
         private Canvas _parentCanvas;
         private Camera _uiCamera;
