@@ -19,6 +19,8 @@ namespace InGame.Model
     [Serializable]
     public class PlayerModel
     {
+        public static event Action OnPlayerSpawned;
+        
         /// <summary>
         /// 初期化
         /// </summary>
@@ -72,6 +74,11 @@ namespace InGame.Model
         /// コンセント（Socketとして命名）
         /// </summary>
         public GameObject Socket { get; set;} = null;
+        
+        /// <summary>
+        /// コンセントに刺さったプラグの先端
+        /// </summary>
+        public List<GameObject> SocketTips = new List<GameObject>();
         
         /// <summary>
         /// コードのシミュレーター
@@ -150,6 +157,7 @@ namespace InGame.Model
         {
             if (PlayerObject != null) return;
             PlayerObject = UnityEngine.Object.Instantiate( _presenter.characterPrefab , _instancePosition, Quaternion.identity);
+            OnPlayerSpawned?.Invoke();
             Rb = PlayerObject?.GetComponent<Rigidbody2D>();
             HealCodeGauge().Forget();
         }
@@ -427,7 +435,7 @@ namespace InGame.Model
             _codeHaveCancellation = null;
             
             // コードを持ってない時のアニメーション
-            _presenter.animationView.SetHaveConcent(false);
+            _presenter.AnimationView.SetHaveConcent(false);
 
             CurrentHaveCodeSimulator?.PutCodeEvent(this);
             CurrentHaveCodeSimulator = null;
