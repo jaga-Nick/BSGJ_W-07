@@ -76,6 +76,11 @@ namespace InGame.Model
         public GameObject Socket { get; set;} = null;
         
         /// <summary>
+        /// コンセントに刺さったプラグの先端
+        /// </summary>
+        public List<GameObject> SocketTips = new List<GameObject>();
+        
+        /// <summary>
         /// コードのシミュレーター
         /// </summary>
         public GenerateCodeSystem GenerateCodeSystem { get; private set; }
@@ -430,7 +435,7 @@ namespace InGame.Model
             _codeHaveCancellation = null;
             
             // コードを持ってない時のアニメーション
-            _presenter.animationView.SetHaveConcent(false);
+            _presenter.AnimationView.SetHaveConcent(false);
 
             CurrentHaveCodeSimulator?.PutCodeEvent(this);
             CurrentHaveCodeSimulator = null;
