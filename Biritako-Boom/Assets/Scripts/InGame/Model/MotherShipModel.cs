@@ -275,11 +275,17 @@ namespace InGame.Model
             // リスト内の破壊されたUFO（nullになったもの）を安全に削除
             _ufoTargets.RemoveAll(target => target == null || !target.activeInHierarchy);
 
-            // 全ての雑魚UFOが破壊された場合、中央への移動状態に遷移します
+            // 全ての雑魚UFOが破壊された場合、再度索敵を試みる
             if (_ufoTargets.Count == 0)
             {
-                _currentState = State.MovingToCenter; 
-                return;
+                FindTargets(); // ターゲットを再検索
+                
+                // それでもターゲットが見つからなければ、中央への移動状態に遷移します
+                if (_ufoTargets.Count == 0)
+                {
+                    _currentState = State.MovingToCenter; 
+                    return;
+                }
             }
             
             // ターゲットインデックスがリストの範囲を超えるのを防ぐ
