@@ -11,7 +11,7 @@ namespace Pose
 
         async UniTask ISceneInfo.End()
         {
-            TimeManager.Instance().SetTimeScale(1);
+            TimeManager.Instance(true).SetTimeScale(1);
         }
 
         async UniTask ISceneInfo.Init()

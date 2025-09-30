@@ -10,25 +10,25 @@ namespace InGame.NonMVP
     /// TimeManager
     /// ゲーム内の時間を管理するクラス。
     /// </summary>
-    public class TimeManager : DestroyAvailable_SingletonMonoBehaviourBase<TimeManager>
+    public class TimeManager : SingletonMonoBehaviourBase<TimeManager>
     {
         /// <summary>
         /// ゲーム状態のパラメタ
         /// </summary>
-        private float _inGameTime;
-        private bool _isPaused;
+        private float inGameTime;
+        private bool isPaused;
 
         /// <summary>
         /// 常時タイマーを減らしていく
         /// </summary>
         private void Update()
         {
-            if (!_isPaused)
+            if (!isPaused)
             {
-                _inGameTime -= Time.deltaTime;
+                inGameTime -= Time.deltaTime;
             }
             //0以下の時、ゲームを終了する
-            if (_inGameTime <= 0)
+            if (inGameTime <= 0)
             {
                 ISceneInfo info = new ResultSceneLoader();
                 //SceneManager.Instance().LoadMainScene(info).Forget();
@@ -50,7 +50,7 @@ namespace InGame.NonMVP
         /// <returns></returns>
         public float GetInGameTime()
         {
-            return _inGameTime;
+            return inGameTime;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void ResetInGameTime(float inGameSecond)
         {
-            _inGameTime = inGameSecond;
+            inGameTime = inGameSecond;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace InGame.NonMVP
         /// <param name="time"></param>
         public void AddInGameTime(float time)
         {
-            _inGameTime += time;
+            inGameTime += time;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void Pause()
         {
-            _isPaused = true;
+            isPaused = true;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void Resume()
         {
-            _isPaused = false;
+            isPaused = false;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace InGame.NonMVP
         /// <returns></returns>
         public bool IsPaused()
         {
-            return _isPaused;
+            return isPaused;
         }
     }
 }

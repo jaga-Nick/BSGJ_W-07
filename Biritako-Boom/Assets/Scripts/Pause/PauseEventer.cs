@@ -185,18 +185,18 @@ namespace Pause
         private void OnPlay()
         {
             //TimeScale変更
-            TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().UnloadSubScene().Forget();
+            TimeManager.Instance(true).SetTimeScale(1);
+            SceneManager.Instance(true).UnloadSubScene().Forget();
         }
         private void OnRestart()
         {
-            TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().LoadMainScene(new InGameSceneLoader()).Forget();
+            TimeManager.Instance(true).SetTimeScale(1);
+            SceneManager.Instance(true).LoadMainScene(new InGameSceneLoader()).Forget();
         }
         private void OnTitle()
         {
-            TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().LoadMainScene(new TitleSceneLoader()).Forget();
+            TimeManager.Instance(true).SetTimeScale(1);
+            SceneManager.Instance(true).LoadMainScene(new TitleSceneLoader()).Forget();
         }
     }
 }

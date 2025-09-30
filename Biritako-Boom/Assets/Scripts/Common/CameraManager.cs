@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Common;
@@ -12,7 +12,7 @@ namespace Common
     /// カメラの追従、ポストプロセスエフェクトの実行と制御をすべて担当する統合マネージャー。
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class CameraManager : DestroyAvailable_SingletonMonoBehaviourBase<CameraManager>
+    public class CameraManager : SingletonMonoBehaviourBase<CameraManager>
     {
         [Header("ポストプロセス設定")]
         [Tooltip("ポストプロセス用のマテリアル")]
@@ -92,7 +92,7 @@ namespace Common
         private void OnEnable()
         {
             // イベントの購読を開始
-            PlayerModel.OnPlayerSpawned += FindTargetPlayer;
+            PlayerModel.onPlayerSpawned += FindTargetPlayer;
             
             if (GraphicsSettings.defaultRenderPipeline != null)
                 RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
@@ -101,7 +101,7 @@ namespace Common
         private void OnDisable()
         {
             // オブジェクトが破棄される際に、忘れずに購読を解除
-            PlayerModel.OnPlayerSpawned -= FindTargetPlayer;
+            PlayerModel.onPlayerSpawned -= FindTargetPlayer;
             
             if (GraphicsSettings.defaultRenderPipeline != null)
                 RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;

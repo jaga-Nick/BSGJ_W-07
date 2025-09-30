@@ -37,23 +37,23 @@ namespace InGame.Presenter
         /// <summary>
         /// modelとview
         /// </summary>
-        private UfoModel _model;
-        private UfoView _view;
+        private UfoModel model;
+        private UfoView view;
 
-        private CancellationTokenSource _autoMoveCancel;
-        private CancellationTokenSource _moveCancel;
+        private CancellationTokenSource autoMoveCancel;
+        private CancellationTokenSource moveCancel;
         
         private void Start()
         {
             // パラメタのセット
-            _model = gameObject.GetComponent<UfoModel>();
-            _model.Rb = gameObject.GetComponent<Rigidbody2D>();
-            _model.Speed = moveSpeed;
-            _model.Position = transform.position;
-            _model.MaxUfoHp = maxUfoHp;
-            _model.UfoScore = ufoScore;
-            _model.UfoDeadScore = ufoDeadScore;
-            _view = gameObject.GetComponent<UfoView>();
+            model = gameObject.GetComponent<UfoModel>();
+            model.rb = gameObject.GetComponent<Rigidbody2D>();
+            model.speed = moveSpeed;
+            model.position = transform.position;
+            model.maxUfoHp = maxUfoHp;
+            model.ufoScore = ufoScore;
+            model.ufoDeadScore = ufoDeadScore;
+            view = gameObject.GetComponent<UfoView>();
             
             // UFOの自動運転スタート
             AutoMoveUfoRoutine().Forget();
@@ -65,10 +65,10 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask AutoMoveUfoRoutine()
         {
-            _autoMoveCancel?.Cancel();
-            _autoMoveCancel?.Dispose();
-            _autoMoveCancel = new CancellationTokenSource();
-            var linked = CancellationTokenSource.CreateLinkedTokenSource(_autoMoveCancel.Token, destroyCancellationToken);
+            autoMoveCancel?.Cancel();
+            autoMoveCancel?.Dispose();
+            autoMoveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(autoMoveCancel.Token, destroyCancellationToken);
             var linkedToken = linked.Token;
             try
             {
@@ -89,7 +89,7 @@ namespace InGame.Presenter
                     target.y = Mathf.Clamp(target.y, ufoSpawnRate.yMin, ufoSpawnRate.yMax);
 
                     // 移動アニメーションの開始
-                    _view.PlayMoveAnimation(true);
+                    view.PlayMoveAnimation(true);
                     // 移動コルーチン
                     await MoveUfoRoutine(target);
                     // 時間待機
@@ -102,7 +102,7 @@ namespace InGame.Presenter
             }
             finally
             {
-                _autoMoveCancel = null;
+                autoMoveCancel = null;
             }
         }
 
@@ -112,10 +112,10 @@ namespace InGame.Presenter
         /// <returns></returns>
         private async UniTask MoveUfoRoutine(Vector2 target)
         {
-            _moveCancel?.Cancel();
-            _moveCancel?.Dispose();
-            _moveCancel = new CancellationTokenSource();
-            var linked = CancellationTokenSource.CreateLinkedTokenSource(_moveCancel.Token, destroyCancellationToken);
+            moveCancel?.Cancel();
+            moveCancel?.Dispose();
+            moveCancel = new CancellationTokenSource();
+            var linked = CancellationTokenSource.CreateLinkedTokenSource(moveCancel.Token, destroyCancellationToken);
             var linkedToken = linked.Token;
             try
             {
@@ -124,8 +124,8 @@ namespace InGame.Presenter
                 {
                     linkedToken.ThrowIfCancellationRequested();
 
-                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
-                    _model.Position = transform.position;
+                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * model.speed);
+                    model.position = transform.position;
                     await UniTask.Yield(linkedToken);
                 }
             }
@@ -135,7 +135,7 @@ namespace InGame.Presenter
             }
             finally
             {
-                _moveCancel = null;
+                moveCancel = null;
             }
         }
 
@@ -147,18 +147,18 @@ namespace InGame.Presenter
         public void StopAllTasks()
         {
             // キャンセル処理
-            _autoMoveCancel?.Cancel();
-            _autoMoveCancel?.Dispose();
-            _autoMoveCancel = null;
+            autoMoveCancel?.Cancel();
+            autoMoveCancel?.Dispose();
+            autoMoveCancel = null;
             
-            _moveCancel?.Cancel();
-            _moveCancel?.Dispose();
-            _moveCancel = null;
+            moveCancel?.Cancel();
+            moveCancel?.Dispose();
+            moveCancel = null;
 
             // 移動アニメーションの開始
-            // _view.PlayMoveAnimation(false);
+            // view.PlayMoveAnimation(false);
             // 死亡アニメーションの開始
-            // _view.PlayDeadAnimation();
+            // view.PlayDeadAnimation();
         }
     }
 }

@@ -30,19 +30,19 @@ namespace InGame.Presenter
         /// <summary>
         /// modelとview
         /// </summary>
-        private ElectronicsModel _model;
-        private ElectronicsView _view;
-        private UfoModel _ufoModel;
+        private ElectronicsModel model;
+        private ElectronicsView view;
+        private UfoModel ufoModel;
 
         private void Start()
         {
             // modelにセット
-            _model = gameObject.GetComponent<ElectronicsModel>();
-            _model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
-            _model.Speed = moveSpeed;
+            model = gameObject.GetComponent<ElectronicsModel>();
+            model.Initialize(gameObject.GetComponent<Rigidbody2D>(),transform.position);
+            model.Speed = moveSpeed;
             
             // viewにセット
-            _view = gameObject.GetComponent<ElectronicsView>();
+            view = gameObject.GetComponent<ElectronicsView>();
 
             AutoMoveElectronicsRoutine().Forget();
         }
@@ -77,7 +77,7 @@ namespace InGame.Presenter
                     target.y = Mathf.Clamp(target.y, electronicsSpawnRate.yMin, electronicsSpawnRate.yMax);
 
                     // 移動アニメーションの開始
-                    _view.PlayMoveAnimation(true);
+                    view.PlayMoveAnimation(true);
                     // 移動コルーチン
                     await MoveElectronicsRoutine(target);
                     // 一定時間待機
@@ -107,8 +107,8 @@ namespace InGame.Presenter
                     // キャンセル要求があったら、例外を投げて処理を中断
                     linkedToken.ThrowIfCancellationRequested();
                     
-                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * _model.Speed);
-                    _model.Position = transform.position;
+                    transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * model.Speed);
+                    model.Position = transform.position;
                     await UniTask.Yield(linkedToken);
                 }
             }

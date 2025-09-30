@@ -16,20 +16,20 @@ namespace Setting
     public class AudioManager : SingletonMonoBehaviourBase<AudioManager>
     {
         //BGM
-        private AudioTokenPackage Bgm;
+        private AudioTokenPackage bgm;
         //SE
-        private AudioTokenPackage SoundEffectOne;
-        private AudioTokenPackage SoundEffectTwo;
+        private AudioTokenPackage soundEffectOne;
+        private AudioTokenPackage soundEffectTwo;
 
 
         AsyncOperationHandle<AudioMixer> handle;
         AudioMixer mixer;
         void Awake()
         {
-            Bgm = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
-            Bgm.LoopOnOff(true);
-            SoundEffectOne = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
-            SoundEffectTwo = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
+            bgm = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
+            bgm.LoopOnOff(true);
+            soundEffectOne = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
+            soundEffectTwo = new AudioTokenPackage(gameObject.AddComponent<AudioSource>());
 
             LoadAudioMixer().Forget();
         }
@@ -39,23 +39,23 @@ namespace Setting
             handle=Addressables.LoadAssetAsync<AudioMixer>("AudioMixer");
             mixer=await handle;
 
-            Bgm.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM")[0];
-            SoundEffectOne.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Effect")[0];
-            SoundEffectTwo.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Effect")[0];
+            bgm.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM")[0];
+            soundEffectOne.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Effect")[0];
+            soundEffectTwo.audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Effect")[0];
         }
 
         public void LoadBgm(string Address)
         {
-            Bgm.Load(Address).Forget();
+            bgm.Load(Address).Forget();
         }
 
         public void StopBgm()
         {
-            Bgm.Stop().Forget();
+            bgm.Stop().Forget();
         }
         public void LoadSoundEffect(string Address)
         {
-            SoundEffectOne.Load(Address).Forget();
+            soundEffectOne.Load(Address).Forget();
         }
 
         private void OnDestroy()

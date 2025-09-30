@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Ending.Model;
 using Ending.View;
 using InGame.Model;
@@ -11,8 +11,8 @@ namespace Ending.Presenter
     public class ResultPresenter : MonoBehaviour
     {
         // --- 関連コンポーネント ---
-        private ResultScoreView _resultScoreView; 
-        private ResultScoreModel _resultScoreModel = new ResultScoreModel(); 
+        private ResultScoreView resultScoreView; 
+        private ResultScoreModel resultScoreModel = new ResultScoreModel(); 
     
         /// <summary>
         /// スクリプトインスタンスがロードされたときに呼び出されます。
@@ -20,8 +20,8 @@ namespace Ending.Presenter
         private void Awake()
         {
             // 自身のGameObjectにあるViewコンポーネントを取得
-            _resultScoreView = GetComponent<ResultScoreView>();
-            if (_resultScoreView == null)
+            resultScoreView = GetComponent<ResultScoreView>();
+            if (resultScoreView == null)
             {
                 Debug.LogError("同じGameObjectにResultScoreViewが見つかりません！", this);
                 enabled = false;
@@ -33,33 +33,33 @@ namespace Ending.Presenter
         private void Start()
         {
             // Modelに最終スコアを設定
-            int targetScore = ScoreModel.Instance().Score;
-            _resultScoreModel.SetTargetScore(targetScore);
+            int targetScore = ScoreModel.Instance().score;
+            resultScoreModel.SetTargetScore(targetScore);
             
             // Viewの初期表示を0に設定
-            _resultScoreView.UpdateScoreText(0);
+            resultScoreView.UpdateScoreText(0);
         }
     
 
         private void Update()
         {
             // Modelの状態をチェックし、カウントアップが完了していれば処理を中断
-            if (_resultScoreModel.IsCountUpFinished())
+            if (resultScoreModel.IsCountUpFinished())
             {
                 return;
             }
 
             // Viewからカウントアップ時間を取得
-            float duration = _resultScoreView.GetCountUpDuration();
+            float duration = resultScoreView.GetCountUpDuration();
             
             // Modelに計算の更新を依頼
-            _resultScoreModel.UpdateScoreCalculation(Time.deltaTime, duration);
+            resultScoreModel.UpdateScoreCalculation(Time.deltaTime, duration);
 
             // Modelから現在の表示スコアを取得
-            int displayScore = _resultScoreModel.GetCurrentDisplayScore();
+            int displayScore = resultScoreModel.GetCurrentDisplayScore();
             
             // Viewにスコア表示の更新を指示
-            _resultScoreView.UpdateScoreText(displayScore);
+            resultScoreView.UpdateScoreText(displayScore);
         }
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using InGame.View;
 using InGame.Model;
 using InGame.NonMVP;
@@ -13,17 +13,17 @@ namespace InGame.Presenter
     /// </summary>
     public class MotherShipHpGaugePresenter : MonoBehaviour
     {
-        private MotherShipHpGaugeView _view;
-        private MotherShipModel _motherShipModel;
+        private MotherShipHpGaugeView view;
+        private MotherShipModel motherShipModel;
 
         // --- 内部で利用する変数 ---
-        private int _maxHp;
-        private float _lerpFillAmount;   // 現在ゲージに表示されている滑らかな量（ダメージゲージ用）
-        private float _targetFillAmount;  // ゲージが目指すべき実際のHP割合（HPゲージ用）
-        private bool _isLerpAllowed = true; // ダメージゲージのLerpを許可するかどうかのフラグ
+        private int maxHp;
+        private float lerpFillAmount;   // 現在ゲージに表示されている滑らかな量（ダメージゲージ用）
+        private float targetFillAmount;  // ゲージが目指すべき実際のHP割合（HPゲージ用）
+        private bool isLerpAllowed = true; // ダメージゲージのLerpを許可するかどうかのフラグ
 
         // --- UniTask関連 ---
-        private CancellationTokenSource _cts; // 遅延タスクをキャンセルするためのトークンソース
+        private CancellationTokenSource cts; // 遅延タスクをキャンセルするためのトークンソース
 
         [Header("ゲージの変動設定")]
         [Tooltip("ゲージが滑らかに変化する際の速さ。数値が大きいほど速く追従します。")]
@@ -33,7 +33,7 @@ namespace InGame.Presenter
         [Tooltip("ダメージゲージモードで、ゲージが減り始めるまでの遅延時間（秒）")]
         [SerializeField] private float damageGaugeDelay = 1f;
 
-        private bool _useDamageGaugeMode; // Viewのモードを保持
+        private bool useDamageGaugeMode; // Viewのモードを保持
 
         #region イベント購読
 
@@ -49,48 +49,48 @@ namespace InGame.Presenter
             MotherShipModel.OnBossHit -= HandleBossHit;
 
             // オブジェクトが無効になる際にCancellationTokenをキャンセルして破棄
-            _cts?.Cancel();
-            _cts?.Dispose();
+            cts?.Cancel();
+            cts?.Dispose();
         }
 
         #endregion
 
         private void Awake()
         {
-            _view = GetComponent<MotherShipHpGaugeView>();
+            view = GetComponent<MotherShipHpGaugeView>();
             // CancellationTokenSourceを初期化
-            _cts = new CancellationTokenSource();
+            cts = new CancellationTokenSource();
         }
 
         private void Start()
         {
-            if (_view == null)
+            if (view == null)
             {
                 Debug.LogError("同じGameObjectにMotherShipHpGaugeViewが見つかりません！", this);
                 enabled = false;
                 return;
             }
             // Viewの初期設定を呼び出す
-            _view.Initialize();
+            view.Initialize();
 
 
-            _useDamageGaugeMode = _view.GetDamageGauge();
+            useDamageGaugeMode = view.GetDamageGauge();
         }
 
         private void LateUpdate()
         {
             // Modelがまだ見つかっていない場合は処理しない
-            if (_motherShipModel == null) return;
+            if (motherShipModel == null) return;
             
             // Lerpが許可されている場合のみ、ゲージを滑らかに動かす
-            if (_isLerpAllowed && !Mathf.Approximately(_lerpFillAmount, _targetFillAmount))
+            if (isLerpAllowed && !Mathf.Approximately(lerpFillAmount, targetFillAmount))
             {
                 // Lerpを使って、現在の表示量を目標量に近づける
-                _lerpFillAmount = Mathf.Lerp(_lerpFillAmount, _targetFillAmount, Time.deltaTime * gaugeLerpSpeed);
+                lerpFillAmount = Mathf.Lerp(lerpFillAmount, targetFillAmount, Time.deltaTime * gaugeLerpSpeed);
             }
             
             // Viewに、実際のHP割合と、滑らかに変化するゲージの割合を両方渡す
-            _view.UpdateView(_targetFillAmount, _lerpFillAmount);
+            view.UpdateView(targetFillAmount, lerpFillAmount);
         }
         
         /// <summary>
@@ -101,15 +101,15 @@ namespace InGame.Presenter
             var motherShip = FindObjectOfType<MotherShipPresenter>();
             if (motherShip != null)
             {
-                _motherShipModel = motherShip.GetModel();
-                _maxHp = _motherShipModel.GetMaxHp();
-                int currentHp = _motherShipModel.GetCurrentHp();
+                motherShipModel = motherShip.GetModel();
+                maxHp = motherShipModel.GetMaxHp();
+                int currentHp = motherShipModel.GetCurrentHp();
                 
-                float initialFill = (_maxHp > 0) ? (float)currentHp / _maxHp : 0;
-                _lerpFillAmount = initialFill;
-                _targetFillAmount = initialFill;
+                float initialFill = (maxHp > 0) ? (float)currentHp / maxHp : 0;
+                lerpFillAmount = initialFill;
+                targetFillAmount = initialFill;
 
-                _view.UpdateView(_targetFillAmount, _lerpFillAmount);
+                view.UpdateView(targetFillAmount, lerpFillAmount);
             }
         }
         
@@ -118,18 +118,18 @@ namespace InGame.Presenter
         /// </summary>
         private void HandleBossHit(int currentHp)
         {
-            if (_maxHp <= 0) return;
+            if (maxHp <= 0) return;
 
             // 目標値（実際のHP割合）を更新する
-            _targetFillAmount = (float)currentHp / _maxHp;
+            targetFillAmount = (float)currentHp / maxHp;
 
             // ダメージゲージモードの場合、遅延処理を開始する
-            if (_useDamageGaugeMode)
+            if (useDamageGaugeMode)
             {
                 // 既に実行中の遅延タスクがあればキャンセルして、新しいタスクを開始する
-                _cts?.Cancel();
-                _cts = new CancellationTokenSource();
-                StartDamageGaugeDelayAsync(_cts.Token).Forget();
+                cts?.Cancel();
+                cts = new CancellationTokenSource();
+                StartDamageGaugeDelayAsync(cts.Token).Forget();
             }
         }
 
@@ -139,7 +139,7 @@ namespace InGame.Presenter
         private async UniTaskVoid StartDamageGaugeDelayAsync(CancellationToken token)
         {
             // ダメージを受けた直後はLerpを停止
-            _isLerpAllowed = false;
+            isLerpAllowed = false;
 
             try
             {
@@ -147,7 +147,7 @@ namespace InGame.Presenter
                 await UniTask.Delay(System.TimeSpan.FromSeconds(damageGaugeDelay), cancellationToken: token);
                 
                 // 遅延時間が経過したら、Lerpを許可する
-                _isLerpAllowed = true;
+                isLerpAllowed = true;
             }
             catch (System.OperationCanceledException)
             {

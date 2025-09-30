@@ -9,20 +9,20 @@ namespace InGame.Model
     {
         public void Initialize(Rigidbody2D rb,Vector3 trans)
         {
-            this.Rb = rb;
+            this.rb = rb;
             this.Position=trans;
         }
 
-        int IEnemyModel.CurrentHp { get; set; } = 1;
+        int IEnemyModel.currentHp { get; set; } = 1;
 
         /// <summary>
         /// 移動許容距離
         /// </summary>
-        public float LimitMoveDistance { get; }
-        public Rigidbody2D Rb { get; set; }
-        public float CurrentTime { get; set; }
-        public float IntervalTime { get; set; }
-        public Vector3 Angle { get; set; }
+        public float limitMoveDistance { get; }
+        public Rigidbody2D rb { get; set; }
+        public float currentTime { get; set; }
+        public float intervalTime { get; set; }
+        public Vector3 angle { get; set; }
         
         /// <summary>
         /// 速さと向きと座標
@@ -34,7 +34,7 @@ namespace InGame.Model
         /// <summary>
         /// 爆発力
         /// </summary>
-        public float ExplosionPower { get; }
+        public float explosionPower { get; }
         
         /// <summary>
         /// 何の家電かを数字で判別する

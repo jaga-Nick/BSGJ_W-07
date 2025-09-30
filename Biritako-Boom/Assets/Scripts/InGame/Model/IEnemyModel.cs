@@ -8,22 +8,22 @@ namespace InGame.Model
     /// </summary>
     public interface IEnemyModel
     {
-        public int CurrentHp { get; set; }
+        public int currentHp { get; set; }
 
-        //public int MaxUfoHp { get;}
+        //public int maxUfoHp { get;}
         /// <summary>
         /// 移動許容距離
         /// </summary>
-        public float LimitMoveDistance { get; }
-        public Rigidbody2D Rb { get;}
-        public float CurrentTime { get; set; }
-        public float IntervalTime { get; set; }
-        public Vector3 Angle { get; set; }
+        public float limitMoveDistance { get; }
+        public Rigidbody2D rb { get;}
+        public float currentTime { get; set; }
+        public float intervalTime { get; set; }
+        public Vector3 angle { get; set; }
         
         /// <summary>
         /// 爆発力
         /// </summary>
-        public float ExplosionPower { get;}
+        public float explosionPower { get;}
 
         /// <summary>
         /// ダメージを食らうときの処理
@@ -31,8 +31,8 @@ namespace InGame.Model
         /// <param name="damage"></param>
         public void OnDamage(int damage) 
         {
-            CurrentHp -= damage;
-            if (CurrentHp <= 0) OnDead();
+            currentHp -= damage;
+            if (currentHp <= 0) OnDead();
         }
 
 
@@ -53,19 +53,19 @@ namespace InGame.Model
         /// </summary>
         public virtual void Move()
         {
-            CurrentTime += Time.deltaTime;
+            currentTime += Time.deltaTime;
 
-            if (IntervalTime >= CurrentTime)
+            if (intervalTime >= currentTime)
             {
                 var num=Random.Range(1, 360);
                 var value = Mathf.Deg2Rad*num;
 
-                Angle = new Vector3(Mathf.Cos(value), Mathf.Sin(value), 0);
+                angle = new Vector3(Mathf.Cos(value), Mathf.Sin(value), 0);
                 
                 //次の時間設定
-                IntervalTime=Random.Range(1, 5);
+                intervalTime=Random.Range(1, 5);
             }
-            Rb.linearVelocity = Angle;
+            rb.linearVelocity = angle;
         }
 
         /// <summary>

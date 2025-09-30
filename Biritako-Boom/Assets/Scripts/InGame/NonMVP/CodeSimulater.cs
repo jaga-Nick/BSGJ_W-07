@@ -11,7 +11,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 namespace InGame.NonMVP
 {
     /// <summary>
-    /// Codeシミュレーター(GenerateCodeSystem-Classから生成する。)
+    /// Codeシミュレーター(generateCodeSystem-Classから生成する。)
     /// </summary>
     public class CodeSimulater : MonoBehaviour
     {
@@ -49,10 +49,10 @@ namespace InGame.NonMVP
             this.Gravity = gravity;
             this.Damping = damping;
             this.Stiffness = stiffness;
-            this.StartObject = startObject;
-            this.EndObject = endObject;
-            this.ExplosionTriggerDistance = explosionTriggerDistance;
-            this.MaxExplosion = maxExplosion;
+            this.startObject = startObject;
+            this.endObject = endObject;
+            this.explosionTriggerDistance = explosionTriggerDistance;
+            this.maxExplosion = maxExplosion;
 
             InitializeRope();
             //位置設定の総量変更
@@ -78,17 +78,17 @@ namespace InGame.NonMVP
         /// <summary>
         /// 始点（家電）→ここは基本変わらない想定。
         /// </summary>
-        public GameObject StartObject { get; private set; }
+        public GameObject startObject { get; private set; }
         /// <summary>
         /// 終点（プレイヤーかその場、ソケット）
         /// </summary>
-        private GameObject EndObject;
+        private GameObject endObject;
 
         /// <summary>
         /// 爆発関係
         /// </summary>
-        private int ExplosionTriggerDistance = 3;
-        private int MaxExplosion;
+        private int explosionTriggerDistance = 3;
+        private int maxExplosion;
 
         #region データの実装（外部から設定される。Initializeで設定)
         /// <summary>
@@ -162,7 +162,7 @@ namespace InGame.NonMVP
 
         public void Update()
         {
-            if (StartObject!=null) {
+            if (startObject!=null) {
                 Simulate();
                 UpdateLineRenderer();
                 UpdateEdgeCollider();
@@ -208,7 +208,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void InjectionSocketCode(GameObject socket)
         {
-            EndObject = socket;
+            endObject = socket;
             //戻る処理
             _isReturning = false;
         }
@@ -231,25 +231,25 @@ namespace InGame.NonMVP
         {
             GameObject obje= await EndPointGenerate();
 
-            obje.transform.position = EndObject.transform.position;
-            EndObject = obje;
-            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
+            obje.transform.position = endObject.transform.position;
+            endObject = obje;
+            endObject.transform.SetParent(this.transform); // 親を this の Transform に設定
 
             //コライダー生成
-            CircleCollider2D circle = EndObject.GetComponent<CircleCollider2D>();
+            CircleCollider2D circle = endObject.GetComponent<CircleCollider2D>();
             //コライダーの情報セット
             circle.radius = 1;
             circle.offset = new Vector2(0, 0);
             circle.isTrigger = true;
 
             //判定用のスクリプト
-            CodeEndPointAttach endPointAttach=EndObject.GetComponent<CodeEndPointAttach>();
+            CodeEndPointAttach endPointAttach=endObject.GetComponent<CodeEndPointAttach>();
             //EndPointに情報を残す。
             endPointAttach.SetCodeSimulater(this);
 
 
             //判定の為、Rigidbodyを作成。
-            Rigidbody2D rb = EndObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = endObject.GetComponent<Rigidbody2D>();
             rb.gravityScale = 0;
             cts?.Cancel();
             cts?.Dispose();
@@ -267,13 +267,13 @@ namespace InGame.NonMVP
         public void TakeCodeEvent(GameObject player)
         {
             // 以前の終点として使用していたGameObjectを破棄します。
-            if (EndObject != null && EndObject.name == "EndPoint(Clone)")
+            if (endObject != null && endObject.name == "EndPoint(Clone)")
             {
-                Destroy(EndObject);
+                Destroy(endObject);
             }
 
             // 新しい終点をプレイヤーに設定します。
-            EndObject = player;
+            endObject = player;
 
             // 実行中のReturnEndPointタスクがあればキャンセルします。
             cts?.Cancel();
@@ -336,9 +336,9 @@ namespace InGame.NonMVP
                     _activeParticleCount = Mathf.CeilToInt(Mathf.Lerp(ParticleCount, 1, t));
 
                     // EndObjectを、アクティブな最後のパーティクルの位置に追従させる
-                    if (_activeParticleCount > 0 && EndObject != null)
+                    if (_activeParticleCount > 0 && endObject != null)
                     {
-                        EndObject.transform.position = Positions[_activeParticleCount - 1];
+                        endObject.transform.position = Positions[_activeParticleCount - 1];
                     }
 
                     elapsedTime += Time.deltaTime;
@@ -376,15 +376,15 @@ namespace InGame.NonMVP
         public async UniTask Explosion(int explosionSize)
         {
             //ここでどれだけ離れているかを設定する
-            var generater = GenerateExplosionManager.Instance();
+            var generater = GenerateExplosionManager.Instance(true);
             //紐の総長さを計算し、基準に地点を
             float totalDistance = TotalDistance();
-            int num = (int)totalDistance / ExplosionTriggerDistance;
+            int num = (int)totalDistance / explosionTriggerDistance;
 
             //最大４以上の爆発
-            if (num >= MaxExplosion)
+            if (num >= maxExplosion)
             {
-                num = MaxExplosion;
+                num = maxExplosion;
             }
             else if (num < 1)
             {
@@ -419,10 +419,10 @@ namespace InGame.NonMVP
                 }
 
                 // 家電を爆破（本来は死亡処理を呼び出すが、統合が不完全なのでこれで良い）
-                generater.Factory(StartObject.transform.position, explosionSize);
+                generater.Factory(startObject.transform.position, explosionSize);
                 // 家電の死亡処理を呼び出す
                 // EnemySpawner.Instance().OnElectronicsDead(playerModel.codeSimulators.Count);
-                Destroy(this.StartObject);
+                Destroy(this.startObject);
             }
 
             //このアタッチしているオブジェクトを全てスクリプトごと削除する。
@@ -505,7 +505,7 @@ namespace InGame.NonMVP
             for (int i = 0; i < ParticleCount; i++)
             {
                 float t = (float)i / (ParticleCount - 1);
-                Positions[i] = Vector3.Lerp(StartObject.transform.position, EndObject.transform.position, t);
+                Positions[i] = Vector3.Lerp(startObject.transform.position, endObject.transform.position, t);
                 Velocities[i] = Vector3.zero;
                 Masses[i] = 1f;
             }
@@ -541,7 +541,7 @@ namespace InGame.NonMVP
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject == StartObject || hitCollider.gameObject == EndObject)
+                    if (hitCollider.gameObject == startObject || hitCollider.gameObject == endObject)
                     {
                         continue;
                     }
@@ -635,21 +635,21 @@ namespace InGame.NonMVP
             }
 
             // 両端の処理
-            Positions[0] = StartObject.transform.position;
+            Positions[0] = startObject.transform.position;
 
             if (_isReturning)
             {
                 // 戻り処理中は、非アクティブなパーティクルを始点に集める
                 for (int i = _activeParticleCount; i < ParticleCount; i++)
                 {
-                    Positions[i] = StartObject.transform.position;
+                    Positions[i] = startObject.transform.position;
                     Velocities[i] = Vector3.zero;
                 }
             }
             else
             {
                 // 通常時は終点をEndObjectに固定
-                Positions[ParticleCount - 1] = EndObject.transform.position;
+                Positions[ParticleCount - 1] = endObject.transform.position;
             }
         }
 

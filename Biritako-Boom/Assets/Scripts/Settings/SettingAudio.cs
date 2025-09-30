@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
@@ -10,7 +10,7 @@ public class SettingAudio : MonoBehaviour
 
     //それぞれのスライダーを入れるとこです。。
     [SerializeField] Slider BGMSlider;
-    [SerializeField] Slider EffectSlider;
+    [SerializeField] Slider effectSlider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
@@ -21,7 +21,7 @@ public class SettingAudio : MonoBehaviour
         BGMSlider.value = bgmVolume;
         //Effect
         audioMixer.GetFloat("Effect", out float effectVolume);
-        EffectSlider.value = effectVolume;
+        effectSlider.value = effectVolume;
     }
 
     public void SetBGM(float volume)

@@ -11,7 +11,7 @@ namespace Title.Loader
     {
         public string SceneName => "InGame";
 
-        public bool IsDefault => throw new System.NotImplementedException();
+        public bool IsDefault => false;
 
         /// <summary>
         /// 
@@ -29,7 +29,7 @@ namespace Title.Loader
             ScoreModel.Instance().RestoreScore();
             AudioManager.Instance().LoadBgm("BgmInGame");
             Debug.Log("テスト_Init");
-            TimeManager.Instance().SetTimeScale(1);
+            TimeManager.Instance(true).SetTimeScale(1);
         }
 
         public void InputStart()

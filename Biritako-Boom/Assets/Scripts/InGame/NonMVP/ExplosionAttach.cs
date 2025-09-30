@@ -12,10 +12,10 @@ namespace InGame.NonMVP
     /// </summary>
     public class ExplosionAttach : MonoBehaviour
     {
-        private int _damage;
-        private Animator _animator;
+        private int damage;
+        private Animator animator;
 
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         
         /// <summary>
         /// ゲームオブジェクトを爆発させる
@@ -25,17 +25,17 @@ namespace InGame.NonMVP
         {
             try
             {
-                var token = _cancellationTokenSource.Token;
+                var token = cancellationTokenSource.Token;
                 var linked = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy());
                 var linkedToken = linked.Token;
 
                 // Animatorの取得
-                _animator = gameObject.GetComponent<Animator>();
+                animator = gameObject.GetComponent<Animator>();
                 // アニメーションの再生
-                _animator.Play(animationName);
+                animator.Play(animationName);
                 // アニメーションが終わるまで待機
                 await UniTask.WaitUntil(() => {
-                    var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+                    var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                     return stateInfo.IsName(animationName) && stateInfo.normalizedTime >= 1f;
                 }, cancellationToken: linkedToken);
                 // アニメーションが終わったら爆発のオブジェクトを破棄
@@ -49,7 +49,7 @@ namespace InGame.NonMVP
 
         public void SetDamage(int num)
         {
-            _damage = num;
+            damage = num;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -58,7 +58,7 @@ namespace InGame.NonMVP
             IEnemyModel enemies = collision.GetComponents<MonoBehaviour>().OfType<IEnemyModel>().FirstOrDefault();
             if(enemies != null) 
             {
-                enemies.OnDamage(_damage); 
+                enemies.OnDamage(damage); 
             }
         }
     }

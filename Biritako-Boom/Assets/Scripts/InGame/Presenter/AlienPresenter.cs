@@ -12,27 +12,27 @@ namespace InGame.Presenter
     public class AlienPresenter : MonoBehaviour
     {
         // 自身が担当するModel
-        public AlienModel Model { get; private set; }
+        public AlienModel model { get; private set; }
 
         // 自身が担当するView
-        public AlienView View { get; private set; }
+        public AlienView view { get; private set; }
         // 自分を管理するManagerへの参照
-        private AlienManager _manager;
+        private AlienManager manager;
 
         // Unityイベント: オブジェクトが有効になる前に一度だけ呼ばれる
         private void Awake()
         {
             // --- 自身が持つ各コンポーネントの参照を取得 ---
-            Model = GetComponent<AlienModel>();
-            View = GetComponent<AlienView>();
+            model = GetComponent<AlienModel>();
+            view = GetComponent<AlienView>();
             
-            Model.SetRigidbody(GetComponent<Rigidbody2D>());
-            View.SetSprite(GetComponent<SpriteRenderer>());
+            model.SetRigidbody(GetComponent<Rigidbody2D>());
+            view.SetSprite(GetComponent<SpriteRenderer>());
             
 
             // --- Modelのイベントを購読 ---
-            Model.OnDamaged += OnDamaged;
-            Model.OnReturnedToPool += OnReturnedToPool;
+            model.OnDamaged += OnDamaged;
+            model.OnReturnedToPool += OnReturnedToPool;
         }
         
         /// <summary>
@@ -41,7 +41,7 @@ namespace InGame.Presenter
         public void Initialize(AlienManager manager)
         {
             // Managerを保持
-            _manager = manager;
+            this.manager = manager;
         }
 
         // --- イベントハンドラ ---
@@ -53,8 +53,8 @@ namespace InGame.Presenter
 
         private void OnReturnedToPool()
         {
-            View.OnReturnToPool();
-            _manager?.ReturnAlien(this);
+            view.OnReturnToPool();
+            manager?.ReturnAlien(this);
         }
     }
 }

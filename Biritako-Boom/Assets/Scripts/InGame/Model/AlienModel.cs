@@ -40,17 +40,17 @@ namespace InGame.Model
         private readonly ComponentChecker _checker = new ComponentChecker(); // 周囲のオブジェクトを探索するユーティリティ
 
         // --- IEnemyModel/既存のプロパティ ---
-        public float LimitMoveDistance { get; private set; } = 20f;
-        public float ExplosionPower { get; private set; } = 5f;
-        public Rigidbody2D Rb { get; private set; }
-        public Vector3 Angle { get; set; }
-        int IEnemyModel.CurrentHp { get; set; }
+        public float limitMoveDistance { get; private set; } = 20f;
+        public float explosionPower { get; private set; } = 5f;
+        public Rigidbody2D rb { get; private set; }
+        public Vector3 angle { get; set; }
+        int IEnemyModel.currentHp { get; set; }
         private const int _deadScore = 20;
         private bool _isRightFlip = true; // trueなら右向き、falseなら左向き
         
         // UFO挙動用のプロパティ（このクラスでは未使用）
-        public float CurrentTime { get; set; } 
-        public float IntervalTime { get; set; }
+        public float currentTime { get; set; } 
+        public float intervalTime { get; set; }
 
         /// <summary>
         /// ダメージを受けた時に発行されるイベント
@@ -67,12 +67,12 @@ namespace InGame.Model
         /// このモデルが使用するRigidbody2Dコンポーネントを設定する
         /// </summary>
         /// <param name="rigidbody">アタッチされているRigidbody2D</param>
-        public void SetRigidbody(Rigidbody2D rigidbody) => this.Rb = rigidbody;
+        public void SetRigidbody(Rigidbody2D rigidbody) => this.rb = rigidbody;
 
         /// <summary>
         /// 現在のHPを取得する
         /// </summary>
-        public int GetHp() => ((IEnemyModel)this).CurrentHp;
+        public int GetHp() => ((IEnemyModel)this).currentHp;
 
         /// <summary>
         /// キャラクターが右を向いているかどうかの状態を取得する
@@ -86,7 +86,7 @@ namespace InGame.Model
         public void SetInitialState(int initialHp)
         {
             // HPを設定
-            ((IEnemyModel)this).CurrentHp = initialHp;
+            ((IEnemyModel)this).currentHp = initialHp;
             
             // AIパラメータを固定値で初期化
             this._moveSpeed = 2f;
@@ -118,9 +118,9 @@ namespace InGame.Model
         /// <param name="damage">受けるダメージ量</param>
         public void OnDamage(int damage)
         {
-            ((IEnemyModel)this).CurrentHp -= damage;
+            ((IEnemyModel)this).currentHp -= damage;
             // HPがまだ残っている場合
-            if (((IEnemyModel)this).CurrentHp > 0)
+            if (((IEnemyModel)this).currentHp > 0)
             {
                 OnDamaged?.Invoke();
             }
@@ -154,7 +154,7 @@ namespace InGame.Model
         public virtual void Move()
         {
             // Rigidbodyがなければ処理を中断
-            if (Rb == null) return;
+            if (rb == null) return;
 
             // 状態ごとのタイマーを進める
             _stateTimer += Time.deltaTime;
@@ -197,13 +197,13 @@ namespace InGame.Model
                     {
                         // プレイヤーへの方向ベクトルを計算して移動
                         Vector3 chaseDirection = (_playerTransform.position - transform.position).normalized;
-                        Rb.linearVelocity = chaseDirection * _chaseSpeed;
+                        rb.linearVelocity = chaseDirection * _chaseSpeed;
                         JudgeFlip(chaseDirection.x);
                     }
                     // 攻撃範囲内に入ったら、物理衝突を避けるために移動を停止する
                     else
                     {
-                        Rb.linearVelocity = Vector2.zero;
+                        rb.linearVelocity = Vector2.zero;
                         // 停止してもプレイヤーの方向は向き続ける
                         float horizontalDiff = _playerTransform.position.x - transform.position.x;
                         JudgeFlip(horizontalDiff);
@@ -231,20 +231,20 @@ namespace InGame.Model
             switch (newState)
             {
                 case AlienState.Waiting:
-                    Rb.linearVelocity = Vector2.zero; // 待機状態では移動を止める
+                    rb.linearVelocity = Vector2.zero; // 待機状態では移動を止める
                     break;
                 case AlienState.Moving:
                     // ランダムな角度を計算し、その方向へ移動を開始
                     float randomAngle = Random.Range(0, 360);
                     float rad = Mathf.Deg2Rad * randomAngle;
-                    Angle = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0);
-                    Rb.linearVelocity = Angle * _moveSpeed;
-                    JudgeFlip(Angle.x); // 移動方向に応じて向きを変える
+                    angle = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0);
+                    rb.linearVelocity = angle * _moveSpeed;
+                    JudgeFlip(angle.x); // 移動方向に応じて向きを変える
                     break;
                 case AlienState.Searching:
                 case AlienState.Attacking:
                     // 探索や攻撃の直前には、一旦停止する
-                    Rb.linearVelocity = Vector2.zero;
+                    rb.linearVelocity = Vector2.zero;
                     break;
             }
         }
@@ -283,9 +283,9 @@ namespace InGame.Model
                 PlayerPresenter playerPresenter = FindObjectOfType<PlayerPresenter>();
                 if (playerPresenter != null)
                 {
-                    var playerModel = playerPresenter.Model;
+                    var playerModel = playerPresenter.model;
                     // プレイヤーがコードを持っている（妨害できる）場合のみPutCodeを実行
-                    if (playerModel.CurrentHaveCodeSimulator != null)
+                    if (playerModel.currentHaveCodeSimulator != null)
                     {
                         playerModel.PutOnCode();
                         var effect = GetComponent<EnemyEffect>();

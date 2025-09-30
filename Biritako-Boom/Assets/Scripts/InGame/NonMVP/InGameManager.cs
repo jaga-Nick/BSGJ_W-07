@@ -12,7 +12,7 @@ namespace InGame.NonMVP
     /// ゲームの流れを管理するクラス。
     /// UI周りもこちらで行う。
     /// </summary>
-    public class InGameManager : DestroyAvailable_SingletonMonoBehaviourBase<InGameManager>
+    public class InGameManager : SingletonMonoBehaviourBase<InGameManager>
     {
         /// <summary>
         /// ゲームタイムのパラメタ
@@ -21,7 +21,7 @@ namespace InGame.NonMVP
         [Header("ゲームの全体時間（秒）")]
         [SerializeField] private float inGameSecond;
         
-        private float _time;
+        private float time;
 
         /// <summary>
         /// uGUI
@@ -41,7 +41,7 @@ namespace InGame.NonMVP
         private async Task Start()
         {
             // ゲーム開始時はゲームタイムを0にする。
-            TimeManager.Instance().ResetInGameTime(inGameSecond);
+            TimeManager.Instance(true).ResetInGameTime(inGameSecond);
         }
         
         private void OnEnable()
@@ -59,16 +59,16 @@ namespace InGame.NonMVP
         /// </summary>
         private void Update()
         {
-            _time = TimeManager.Instance().GetInGameTime();
+            time = TimeManager.Instance(true).GetInGameTime();
             
-            UpdateTimerUI(_time);
+            UpdateTimerUI(time);
             
-            if(inGameSecond/2 == _time)
+            if(inGameSecond/2 == time)
             {
                 AudioManager.Instance().LoadBgm("GameTimeupIsComming");
             }
 
-            if (0f >= _time) // 時間切れ
+            if (0f >= time) // 時間切れ
             {
                 _sceneEvent.OnGameOverLoder();
             }
@@ -79,7 +79,7 @@ namespace InGame.NonMVP
         /// </summary>
         private void HandleGameClear(bool clearFlag)
         {
-            if (0f < _time && clearFlag)
+            if (0f < time && clearFlag)
             {
                 this.enabled = false; // 自分自身のUpdateを止め、OnDisableを呼び出してイベントを解除する
                 _sceneEvent.OnGameClearLoder();

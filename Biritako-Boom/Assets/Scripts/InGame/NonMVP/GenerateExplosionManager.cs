@@ -1,13 +1,14 @@
 ﻿using Setting;
 using System;
 using UnityEngine;
+using Common;
 
 namespace InGame.NonMVP
 {
     /// <summary>
     /// 破壊可能でどこからでも呼び出せるようにする。
     /// </summary>
-    public class GenerateExplosionManager:DestroyAvailable_SingletonMonoBehaviourBase<GenerateExplosionManager>
+    public class GenerateExplosionManager:SingletonMonoBehaviourBase<GenerateExplosionManager>
     {
         /// <summary>
         /// カットインパラメタ
@@ -53,7 +54,7 @@ namespace InGame.NonMVP
         }
 
         /// <summary>
-        /// 爆発生成(InterfaceでSwitch変わりしたほうがいいけどプランナーに調節させたらでええわ。）
+        /// 爆発生成
         /// </summary>
         public async void Factory(Vector3 point, int explosionPower)
         {
@@ -80,7 +81,7 @@ namespace InGame.NonMVP
             }
             catch (Exception e)
             {
-                // キャンセル処理
+                Debug.Log("爆発生成中断");
             }
         }
 

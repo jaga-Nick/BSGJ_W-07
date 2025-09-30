@@ -13,9 +13,9 @@ namespace Title.Button
         /// <summary>
         /// Loader
         /// </summary>
-        private readonly ISceneInfo _settingSceneLoader = new SettingSceneLoader();
+        private readonly ISceneInfo settingSceneLoader = new SettingSceneLoader();
         // private readonly ISceneInfo _introSceneLoader = new IntroSceneLoader();
-        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
+        private readonly ISceneInfo inGameSceneLoader = new InGameSceneLoader();
         
 
         /// <summary>
@@ -27,13 +27,13 @@ namespace Title.Button
         /// <summary>
         /// Manager
         /// </summary>
-        private FadeManager _sceneFadeManager;
-        private FadeManager _panelFadeManager;
+        private FadeManager sceneFadeManager;
+        private FadeManager panelFadeManager;
 
         private void Start()
         {
-            _sceneFadeManager = new FadeManager(fadePanel);
-            _panelFadeManager = new FadeManager(fadePanel);
+            sceneFadeManager = new FadeManager(fadePanel);
+            panelFadeManager = new FadeManager(fadePanel);
             // 最初はクレジットパネルは隠す
             creditPanel.SetActive(false);
         }
@@ -43,9 +43,9 @@ namespace Title.Button
         /// </summary>
         public async void OnClickSettingButton()
         {
-            await _sceneFadeManager.End();
-            await SceneManager.Instance().LoadMainScene(_settingSceneLoader);
-            await _sceneFadeManager.Init();
+            await sceneFadeManager.End();
+            await SceneManager.Instance().LoadMainScene(settingSceneLoader);
+            await sceneFadeManager.Init();
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace Title.Button
         /// </summary>
         public async void OnClickPlayButton()
         {
-            await _sceneFadeManager.End();
+            await sceneFadeManager.End();
             // await SceneManager.Instance().LoadMainScene(_introSceneLoader);
-            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
-            await _panelFadeManager.Init();
+            await SceneManager.Instance().LoadMainScene(inGameSceneLoader);
+            await panelFadeManager.Init();
         }
 
         /// <summary>

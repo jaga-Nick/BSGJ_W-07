@@ -9,14 +9,14 @@ namespace InGame.View
     public class TimerView 
     {
         [SerializeField]
-        private Image Timer;
+        private Image timer;
         /// <summary>
         /// 引数:時間の割合
         /// </summary>
         /// <param name="TimePercent"></param>
         public void DisplayTimer(float TimePercent)
         {
-            Timer.fillAmount = TimePercent;
+            timer.fillAmount = TimePercent;
         }
     }
 }

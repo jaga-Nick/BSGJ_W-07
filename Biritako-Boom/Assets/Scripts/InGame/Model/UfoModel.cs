@@ -13,46 +13,46 @@ namespace InGame.Model
         /// <summary>
         /// 移動許容距離
         /// </summary>
-        public float LimitMoveDistance { get; }
-        public Rigidbody2D Rb { get; set; }
-        public float CurrentTime { get; set; }
-        public float IntervalTime { get; set; }
-        public Vector3 Angle { get; set; }
+        public float limitMoveDistance { get; }
+        public Rigidbody2D rb { get; set; }
+        public float currentTime { get; set; }
+        public float intervalTime { get; set; }
+        public Vector3 angle { get; set; }
         
         /// <summary>
         /// 速さと座標
         /// </summary>
-        public float Speed { get; set; }
-        public Vector3 Position { get; set; }
+        public float speed { get; set; }
+        public Vector3 position { get; set; }
         
         /// <summary>
         /// UFOのmodel管理
         /// </summary>
-        public event Action UfoHpChanged;
+        public event Action ufoHpChanged;
         
         /// <summary>
         /// 爆発力
         /// </summary>
-        public float ExplosionPower { get; }
+        public float explosionPower { get; }
         
         /// <summary>
         /// UFOのHP管理のフィールド
         /// </summary>
-        public int MinUfoHp { get; set; } = 0;
-        public int MaxUfoHp { get; set; } = 100;
+        public int minUfoHp { get; set; } = 0;
+        public int maxUfoHp { get; set; } = 100;
 
         /// <summary>
         /// IEnemyModelの現在のHP
         /// </summary>
-        int IEnemyModel.CurrentHp { get; set; } = 1;
+        int IEnemyModel.currentHp { get; set; } = 1;
         
 
         /// <summary>
         /// UFOのスコア管理のフィールド
         /// </summary>
-        public int UfoScore { get; set; }
-        public int UfoDeadScore { get; set; }
-        public int CurrentScore { get; set; }
+        public int ufoScore { get; set; }
+        public int ufoDeadScore { get; set; }
+        public int currentScore { get; set; }
 
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace InGame.Model
             // UFOのHPを減らす
             DecrementUfoHp(damage);
             // スコアを増やす
-            ScoreModel.Instance().IncrementScore(UfoDeadScore);
+            ScoreModel.Instance().IncrementScore(ufoDeadScore);
             // HPが0になったら殺す
-            if (((IEnemyModel)this).CurrentHp <= 0)
+            if (((IEnemyModel)this).currentHp <= 0)
             {
                 ((IEnemyModel)this).OnDead();
             }
@@ -78,8 +78,8 @@ namespace InGame.Model
         /// <param name="amount"></param>
         private void DecrementUfoHp(int amount)
         {
-            ((IEnemyModel)this).CurrentHp -= amount;
-            ((IEnemyModel)this).CurrentHp = Mathf.Clamp(((IEnemyModel)this).CurrentHp, MinUfoHp, MaxUfoHp);
+            ((IEnemyModel)this).currentHp -= amount;
+            ((IEnemyModel)this).currentHp = Mathf.Clamp(((IEnemyModel)this).currentHp, minUfoHp, maxUfoHp);
             UpdateUfoHp();
         }
         
@@ -89,7 +89,7 @@ namespace InGame.Model
         /// </summary>
         public void RestoreUfoHp()
         {
-            ((IEnemyModel)this).CurrentHp = MaxUfoHp;
+            ((IEnemyModel)this).currentHp = maxUfoHp;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace InGame.Model
         /// </summary>
         private void UpdateUfoHp()
         {
-            UfoHpChanged?.Invoke();
+            ufoHpChanged?.Invoke();
         }
         
         /// <summary>
@@ -107,9 +107,9 @@ namespace InGame.Model
         async UniTask IEnemyModel.OnDead()
         {
             // スコアを加算する
-            ScoreModel.Instance().IncrementScore(UfoScore);
+            ScoreModel.Instance().IncrementScore(ufoScore);
             // 死んだときの爆発エフェクトを表示
-            GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 2);
+            GenerateExplosionManager.Instance(true).Factory(gameObject.transform.position, 2);
             // SpawnerのUFOカウントを減らしたことを通知
             var enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
             enemySpawner.OnUfoDead(gameObject);

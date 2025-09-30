@@ -48,14 +48,14 @@ namespace InGame.Model
         /// インターフェイスプロパティ
         /// </summary>
         // 移動許容距離
-        public float LimitMoveDistance { get; private set; }
-        public Rigidbody2D Rb { get; private set; }
+        public float limitMoveDistance { get; private set; }
+        public Rigidbody2D rb { get; private set; }
         // 爆発力
-        public float ExplosionPower { get; private set; }
+        public float explosionPower { get; private set; }
         
-        public float CurrentTime { get; set; }
-        public float IntervalTime { get; set; } = 0.2f;
-        public Vector3 Angle { get; set; }
+        public float currentTime { get; set; }
+        public float intervalTime { get; set; } = 0.2f;
+        public Vector3 angle { get; set; }
 
         /// <summary>
         /// 母艦固有プロパティ
@@ -64,7 +64,7 @@ namespace InGame.Model
 
         // 母艦のHP
 
-        int IEnemyModel.CurrentHp { get; set;}
+        int IEnemyModel.currentHp { get; set;}
         private int MaxHp;
         
         
@@ -110,11 +110,11 @@ namespace InGame.Model
         /// </summary>
         public void Initialize(int _hp, float speed)
         {
-            IntervalTime = 0.2f;
+            intervalTime = 0.2f;
             _speed = speed;
             MaxHp = _hp;
-            ((IEnemyModel)this).CurrentHp = _hp;
-            ExplosionPower = 100;
+            ((IEnemyModel)this).currentHp = _hp;
+            explosionPower = 100;
             isEnd = false;
         }
 
@@ -124,7 +124,7 @@ namespace InGame.Model
         
         public void SetRb(Rigidbody2D rb)
         {
-            Rb = rb;
+            this.rb = rb;
             _transform = rb.transform;
         }
         
@@ -132,7 +132,7 @@ namespace InGame.Model
 
         public int GetMaxHp() { return MaxHp; }
 
-        public int GetCurrentHp() { return ((IEnemyModel)this).CurrentHp; }
+        public int GetCurrentHp() { return ((IEnemyModel)this).currentHp; }
         
         public void SetSpeed(float speed) { _speed = speed; }
 
@@ -232,11 +232,11 @@ namespace InGame.Model
         /// </summary>
         public void OnDamage(int damage)
         {
-            ((IEnemyModel)this).CurrentHp -= damage;
+            ((IEnemyModel)this).currentHp -= damage;
             ScoreModel.Instance().IncrementScore(_hitScore);
-            OnBossHit?.Invoke(((IEnemyModel)this).CurrentHp);
+            OnBossHit?.Invoke(((IEnemyModel)this).currentHp);
             _cameraShaker.Shake(_explosionShake);
-            if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
+            if (((IEnemyModel)this).currentHp <= 0) OnDead().Forget();
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace InGame.Model
             // ターゲットに十分に近づいたら、次のターゲットへ移行します
             if (Vector2.Distance(_transform.position, currentTarget.position) < DESTINATION_THRESHOLD)
             {
-                Rb.linearVelocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
                 _currentTargetIndex++;
             }
             else
@@ -329,7 +329,7 @@ namespace InGame.Model
             // 中央に十分に近づいたら完全に停止し、状態をStoppedにします
             if (Vector2.Distance(_transform.position, Vector2.zero) < DESTINATION_THRESHOLD)
             {
-                if(Rb != null) Rb.linearVelocity = Vector2.zero;
+                if(rb != null) rb.linearVelocity = Vector2.zero;
                 _currentState = State.Stopped;
             }
         }
@@ -339,11 +339,11 @@ namespace InGame.Model
         /// </summary>
         private void MoveTowards(Vector2 targetPosition)
         {
-            if (Rb == null || _transform == null || Time.timeScale == 0f) return;
+            if (rb == null || _transform == null || Time.timeScale == 0f) return;
             
             Vector2 direction = (targetPosition - (Vector2)_transform.position).normalized;
 
-            Rb.linearVelocity = direction * _speed;
+            rb.linearVelocity = direction * _speed;
         }
         
         

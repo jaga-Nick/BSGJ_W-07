@@ -10,14 +10,14 @@ namespace InGame.View
     [Serializable]
     public class ScoreView
     {
-        [SerializeField] private TextMeshProUGUI ScoreText;
+        [SerializeField] private TextMeshProUGUI scoreText;
 
         /// <summary>
         /// スコアのテキストを表示する。
         /// </summary>
         public void DisplayScore(int Score)
         {
-            ScoreText.text = Score.ToString();
+            scoreText.text = Score.ToString();
         }
     }
 }

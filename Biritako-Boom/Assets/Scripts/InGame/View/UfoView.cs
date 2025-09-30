@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace InGame.View
 {
@@ -8,9 +7,9 @@ namespace InGame.View
     /// </summary>
     public class UfoView : MonoBehaviour
     {
-        private Animator _animator;
+        private Animator animator;
         
-        private static readonly int IsMoving = Animator.StringToHash("isMoving");
+        private static readonly int isMoving = Animator.StringToHash("isMoving");
         
         /// <summary>
         /// 動くときのアニメーションの再生
@@ -18,9 +17,9 @@ namespace InGame.View
         /// <param name="isMoving"></param>
         public void PlayMoveAnimation(bool isMoving)
         {
-            if (_animator)
+            if (animator)
             {
-                _animator.SetBool(IsMoving, isMoving);
+                animator.SetBool(UfoView.isMoving, isMoving);
             }
         }
     }

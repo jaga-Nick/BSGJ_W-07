@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace InGame.View
 {
@@ -7,13 +7,13 @@ namespace InGame.View
     /// </summary>
     public class AlienView : MonoBehaviour
     {
-        private Animator _animator;
-        private SpriteRenderer _spriteRenderer;
+        private Animator animator;
+        private SpriteRenderer spriteRenderer;
 
 
         public void SetSprite(SpriteRenderer spriteRenderer)
         {
-            this._spriteRenderer = spriteRenderer;
+            this.spriteRenderer = spriteRenderer;
         }
 
         /// <summary>
@@ -23,11 +23,11 @@ namespace InGame.View
         {
             if (isRight)
             {
-                _spriteRenderer.flipX = false; // 右向き
+                spriteRenderer.flipX = false; // 右向き
             }
             else
             {
-                _spriteRenderer.flipX = true; // 左向き
+                spriteRenderer.flipX = true; // 左向き
             }
         }
 

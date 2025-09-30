@@ -7,31 +7,31 @@ namespace InGame.Model
     //シーン間のデータ以降が行われる為。DontDestroy化
     public class ScoreModel : SingletonMonoBehaviourBase<ScoreModel>
     {
-        public int Score { get; private set; }
+        public int score { get; private set; }
 
-        public event Action ScoreChanged;
+        public event Action scoreChanged;
 
         //変更イベント
         private void UpdateScoreInfo()
         {
-            ScoreChanged?.Invoke();
+            scoreChanged?.Invoke();
             AudioManager.Instance().LoadSoundEffect("Scored");
         }
         //加算
         public void IncrementScore(int Num) { 
-            Score += Num;
+            score += Num;
             UpdateScoreInfo();
         }
         //減少
         public void DecrementScore(int Num)
         {
-            Score -= Num;
+            score -= Num;
             UpdateScoreInfo();
         }
         //初期化
         public void RestoreScore() 
         {
-            Score = 0;
+            score = 0;
             UpdateScoreInfo ();
         }
     }

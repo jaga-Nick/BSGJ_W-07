@@ -9,9 +9,9 @@ namespace Result.Model
 {
     public class ResultButton : MonoBehaviour
     {
-        private readonly ISceneInfo _inGameSceneLoader = new InGameSceneLoader();
-        private readonly ISceneInfo _titleSceneLoader = new TitleSceneLoader();
-        private readonly ISceneInfo _resultSceneLoader = new ResultSceneLoader();
+        private readonly ISceneInfo inGameSceneLoader = new InGameSceneLoader();
+        private readonly ISceneInfo titleSceneLoader = new TitleSceneLoader();
+        private readonly ISceneInfo resultSceneLoader = new ResultSceneLoader();
         
         /// <summary>
         /// ReTryボタンを押したらInGameシーンに遷移する
@@ -19,7 +19,7 @@ namespace Result.Model
         public async void OnClickRePlayButton()
         {
             ScoreModel.Instance().RestoreScore();
-            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
+            await SceneManager.Instance().LoadMainScene(inGameSceneLoader);
         }
         
         /// <summary>
@@ -28,7 +28,7 @@ namespace Result.Model
         public async void OnClickTitleButton()
         {
             ScoreModel.Instance().RestoreScore();
-            await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
+            await SceneManager.Instance().LoadMainScene(titleSceneLoader);
         }
         
         /// <summary>

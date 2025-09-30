@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
@@ -14,41 +14,41 @@ namespace InGame.Presenter
         [SerializeField] private ShakePreset explosionShake;
         
         [Header("HP"), SerializeField]
-        private int _hp = 250;
+        private int hp = 250;
         [Header("スピード"), SerializeField]
-        private float _speed = 2.5f;
+        private float speed = 2.5f;
         
         //MotherShip統括
-        private MotherShipModel Model;
-        private MotherShipView View;
+        private MotherShipModel model;
+        private MotherShipView view;
 
 
         private void Awake()
         {
-            View = GetComponent<MotherShipView>();
-            Model = GetComponent<MotherShipModel>();
+            view = GetComponent<MotherShipView>();
+            model = GetComponent<MotherShipModel>();
             
             cameraShaker = Camera.main.GetComponent<Shaker>();
             
-            Model.Initialize(_hp, _speed);
-            Model.SetRb(View.GetRb());
+            model.Initialize(hp, speed);
+            model.SetRb(view.GetRb());
         }
         
         private void Start()
         {
-            Model.SetShaker(cameraShaker);
-            Model.SetShakePreset(explosionShake);
+            model.SetShaker(cameraShaker);
+            model.SetShakePreset(explosionShake);
             
-            Model.FindTargets();
-            Model.StartPatrol();
+            model.FindTargets();
+            model.StartPatrol();
         }
         
         private void Update()
         {
-            Model.Move();
+            model.Move();
         }
         
-        public MotherShipModel GetModel() { return Model; }
+        public MotherShipModel GetModel() { return model; }
     }
 }
 
