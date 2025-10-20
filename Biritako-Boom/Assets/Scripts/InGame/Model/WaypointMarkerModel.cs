@@ -44,19 +44,14 @@ namespace InGame.Model
             {
                 return (false, Vector3.zero);
             }
-            
 
             // ターゲットのワールド座標をスクリーン座標に変換
-            Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(_target.position);
+            var viewportPoint = _mainCamera.WorldToViewportPoint(_target.position);
 
-            // ターゲットがカメラの前方にあり、かつ画面の境界内にいるかを判定
-            bool isOnScreen = targetScreenPosition.z >= 0 &&
-                              targetScreenPosition.x >= 0 && targetScreenPosition.x <= Screen.width &&
-                              targetScreenPosition.y >= 0 && targetScreenPosition.y <= Screen.height;
+            // ターゲットがカメラの前方にあり、かつ画面の境界内にいるかを判定\
+            var isOnScreen = viewportPoint is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
 
-
-
-            return (isOnScreen, targetScreenPosition);
+            return (isOnScreen, viewportPoint);
         }
 
         /// <summary>

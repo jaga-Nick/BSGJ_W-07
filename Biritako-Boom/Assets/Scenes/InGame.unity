@@ -12780,6 +12780,14 @@ PrefabInstance:
       value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -12831,6 +12839,22 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 329412400}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.top
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.left
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.right
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.bottom
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 8583346181685917207, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_Name
       value: MotherShipMarker
