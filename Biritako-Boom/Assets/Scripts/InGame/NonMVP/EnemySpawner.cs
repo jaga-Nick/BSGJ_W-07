@@ -6,6 +6,8 @@ using UnityEngine.AddressableAssets;
 using Common;
 using UnityEngine;
 using System;
+using Cysharp.Threading.Tasks.Triggers;
+using InGame.Presenter;
 
 namespace InGame.NonMVP
 {
@@ -43,18 +45,17 @@ namespace InGame.NonMVP
         /// <summary>
         /// 宇宙人
         /// </summary>
-        [Header("宇宙人スポーン時間のインターバル")]
-        [SerializeField] private int alienSpawnInterval;
         [Header("一度に生成される宇宙人の数")]
         [SerializeField] private int numberOfSpawnAlien;
+        [Header("UFO死後のAlienスポーンに待つ時間")]
+        [SerializeField] private float alienSpawnDelaySeconds = 2f;
+        [Header("UFO死後のAlienスポーン範囲の半径")]
+        [SerializeField] private float alienSpawnRadius = 3f;
         
         [Header("スポーン範囲のバッファ (画面外からの距離)")]
         [SerializeField] private float spawnBuffer;
         
-        /// <summary>
-        /// 外部マネージャーへの参照
-        /// </summary>
-        private AlienManager _alienManager;
+        // AlienManagerへの依存を廃止。代わりに AlienPresenter の静的プールAPI を使用します。
 
         /// <summary>
         /// Addressableアセットのキー
@@ -84,6 +85,7 @@ namespace InGame.NonMVP
         /// </summary>
         public int CurrentElectronics { get; set; }
         public int CurrentUfo { get; set; }
+        public int CurrentAlien { get; set; }
         
         
         /// <summary>
@@ -153,9 +155,10 @@ namespace InGame.NonMVP
             SpawnUfo().Forget();
             // 母艦UFOをスポーンする
             SpawnMotherShip(motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
-            // 宇宙人をスポーンする
-            _alienManager = FindFirstObjectByType<AlienManager>();
-            SpawnAlien().Forget();
+            
+            // AlienPresenter のプールを初期化
+            // Addressables からプレハブをロードしてプールを作成します。
+            InGame.Presenter.AlienPresenter.InitializePool().Forget();
         }
 
         private void Update()
@@ -183,6 +186,56 @@ namespace InGame.NonMVP
             
                 // 家電の数をインクリメント
                 CurrentElectronics++;
+                
+                await UniTask.Yield();
+            }
+        }
+        
+        /// <summary>
+        /// MotherShipのスポーン
+        /// </summary>
+        public async UniTask SpawnMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        {
+            // Addressables経由でプレハブを非同期ロード
+            var handle = Addressables.LoadAssetAsync<GameObject>(address);
+
+            using (new HandleDisposable<GameObject>(handle))
+            {
+                var prefab = await handle;
+                // ロードしたプレハブからGameObjectをインスタンス化
+                Instantiate(prefab,position,Quaternion.identity);
+            }
+            OnGenerateMotherShip?.Invoke();
+        }
+        
+        
+        /// <summary>
+        /// Alienのスポーン
+        /// UFOが爆発されたところにスポーンする
+        /// </summary>
+        public async UniTask SpawnAlien(Vector3 center)
+        {
+            // AlienPresenter の静的プールを用いて生成する
+             
+            if (numberOfSpawnAlien >= CurrentAlien) return;
+
+            await UniTask.Delay(TimeSpan.FromSeconds(alienSpawnDelaySeconds),
+                cancellationToken: this.GetCancellationTokenOnDestroy());
+            
+            for (var i = 0; i < numberOfSpawnAlien; i++)
+            {
+                // UFO死亡位置を中心とした円形範囲内でランダムな位置を決定
+                var randomCircle = UnityEngine.Random.insideUnitCircle * alienSpawnRadius;
+                var spawnPosition = new Vector3(
+                    center.x + randomCircle.x,
+                    center.y + randomCircle.y,
+                    0f);
+
+                // AlienPresenter に生成を依頼
+                AlienPresenter.SpawnAlien(spawnPosition, 1);
+                
+                // Alienの数をインクリメント
+                CurrentAlien++;
                 
                 await UniTask.Yield();
             }
@@ -237,6 +290,7 @@ namespace InGame.NonMVP
             return spawnPosition;
         }
 
+        
         /// <summary>
         /// 指定された位置がカメラの視界内かどうかを判定
         /// </summary>
@@ -245,11 +299,10 @@ namespace InGame.NonMVP
             if (_camera == null) return false;
 
             var viewportPoint = _camera.WorldToViewportPoint(worldPosition);
-            return viewportPoint.z > 0 && 
-                   viewportPoint.x >= 0 && viewportPoint.x <= 1 && 
-                   viewportPoint.y >= 0 && viewportPoint.y <= 1;
+            return viewportPoint is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
         }
 
+        
         /// <summary>
         /// 家電のスポーンされる座標を決定する
         /// </summary>
@@ -286,28 +339,6 @@ namespace InGame.NonMVP
 
             return spawnPosition;
         }
-        
-        /// <summary>
-        /// ランダムな値を取得。カメラ中心を基準にして画面外の範囲を返すオーバーロード
-        /// </summary>
-        /// <param name="center">カメラ中心のXまたはY座標</param>
-        /// <param name="limit">カメラのワールド座標での半分の幅または高さ（例: _cameraWidth）</param>
-        /// <param name="buffer">画面の端からどれだけ外側にスポーンさせるかのバッファ</param>
-        /// <returns>カメラの描画範囲外となるXまたはY座標値の片方</returns>
-        private static float DynamicRandomRun(float center, float limit, float buffer)
-        {
-            // より遠くにスポーンするように、最小距離をbufferの分だけ離す
-            var minDist = limit + buffer;
-            var maxDist = limit + buffer * 2f; // 最大距離は最小距離の2倍
-            if (UnityEngine.Random.value < 0.5f)
-            {
-                return UnityEngine.Random.Range(center - maxDist, center - minDist);
-            }
-            else
-            {
-                return UnityEngine.Random.Range(center + minDist, center + maxDist);
-            }
-        }
 
 
         /// <summary>
@@ -326,57 +357,19 @@ namespace InGame.NonMVP
         /// <param name="ufo"></param>
         public void OnUfoDead(GameObject ufo)
         {
+            var deathPosition = ufo.transform.position;
+            
             _ufoList.Remove(ufo);
             CurrentUfo--;
+            
+            // UFOが死んだらAlienをスポーンさせる
+            SpawnAlien(deathPosition).Forget();
         }
-        
 
-        /// <summary>
-        /// MotherShipのスポーン
-        /// </summary>
-        public async UniTask SpawnMotherShip(string address, Vector3 position, CancellationToken cancellationToken)
+        public void OnAlienDead(GameObject alien)
         {
-            // Addressables経由でプレハブを非同期ロード
-            var handle = Addressables.LoadAssetAsync<GameObject>(address);
-
-            using (new HandleDisposable<GameObject>(handle))
-            {
-                var prefab = await handle;
-                // ロードしたプレハブからGameObjectをインスタンス化
-                Instantiate(prefab,position,Quaternion.identity);
-            }
-            OnGenerateMotherShip?.Invoke();
-        }
-        
-        
-        /// <summary>
-        /// Alienのスポーン
-        /// UFOが爆発されたところにスポーンする
-        /// </summary>
-        public async UniTask SpawnAlien()
-        {
-            // AlienManagerが設定されているか確認
-            if (!_alienManager)
-            {
-                Debug.LogError("EnemySpawnerにAlienManagerが設定されていません！");
-                return;
-            }
-
-            while (this.isActiveAndEnabled)
-            {
-                for (var i = 0; i < numberOfSpawnAlien; i++)
-                {
-                    var position = _alienManager.GetRandomPosition();
-                    var viewPosition = Camera.main.WorldToViewportPoint(position);
-                    var isInView = viewPosition is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
-                    if (isInView) continue;
-                    
-                    // 実際のスポーン処理はAlienManagerにすべて任せる
-                    _alienManager.SpawnAlien(position, 1);
-                }
-                
-                await UniTask.Delay(alienSpawnInterval * 100, cancellationToken: this.GetCancellationTokenOnDestroy());
-            }
+            // プールのクリーンナップ（必要なら）
+            AlienPresenter.OnDestroyAsync().Forget();
         }
     }
 }
