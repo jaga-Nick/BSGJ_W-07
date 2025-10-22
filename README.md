@@ -2,8 +2,8 @@
 
 ## 概要
 
-BitSummit2025 のチーム W07 のリポジトリです。
-↓↓↓ こちらから遊べます ↓↓↓
+BitSummit2025 のチーム W07 のリポジトリです。<br>
+↓↓↓ こちらから遊べます ↓↓↓<br>
 https://bitsummit-gamejam.itch.io/spaghetti-explode
 
 ## ルール
