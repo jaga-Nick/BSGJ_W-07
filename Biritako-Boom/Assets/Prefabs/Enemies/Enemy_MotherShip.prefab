@@ -70,7 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9054054628699632387, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
       propertyPath: _hp
-      value: 3500
+      value: 7000
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054054628699632387, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
+      propertyPath: _speed
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9054054628699632387, guid: 52ac4f2a6b1073444a285bd27c9ed96b, type: 3}
       propertyPath: explosionShake
@@ -126,8 +130,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -2.2}
-  m_Size: {x: 5, y: 7}
+  m_Offset: {x: -0.04104519, y: -2.1486933}
+  m_Size: {x: 7.134348, y: 7.8824706}
   m_Direction: 0
 --- !u!4 &6979648196072135824 stripped
 Transform:

@@ -12780,6 +12780,14 @@ PrefabInstance:
       value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333104117101445400, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -12831,6 +12839,22 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 329412400}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.top
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.left
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.right
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502292196336639378, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
+      propertyPath: margins.bottom
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 8583346181685917207, guid: 11a9626640889c940860e5392b1a2d2d, type: 3}
       propertyPath: m_Name
       value: MotherShipMarker
@@ -18711,6 +18735,49 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 219547815386306109, guid: ea081f253a470e14b8e1a33ca05bd514, type: 3}
   m_PrefabInstance: {fileID: 396893805}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &397334737 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1914269717338498812, guid: cfc66a3a21ed1434c86b2d2e37c05edb, type: 3}
+  m_PrefabInstance: {fileID: 1445085171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1839735485 &397334742
+Tilemap:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397334737}
+  m_Enabled: 1
+  m_Tiles: {}
+  m_AnimatedTiles: {}
+  m_TileAssetArray: []
+  m_TileSpriteArray: []
+  m_TileMatrixArray: []
+  m_TileColorArray: []
+  m_TileObjectToInstantiateArray: []
+  m_AnimationFrameRate: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Origin: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0, y: 0, z: 1}
+  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileOrientation: 0
+  m_TileOrientationMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
 --- !u!1001 &397943858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24335,6 +24402,7 @@ MonoBehaviour:
   - {fileID: 3302240598328390801, guid: 9f4cab842a6642449b87905856215feb, type: 3}
   - {fileID: 2689977577218633989, guid: 35782de7450be884a8f7075fc4e8d00b, type: 3}
   ufoPrefabs: {fileID: 6858216646905114242, guid: d00407b17b12eac49946bbc1a95d416c, type: 3}
+  mapBoundary: {fileID: 878652427}
 --- !u!4 &531447711
 Transform:
   m_ObjectHideFlags: 0
@@ -63754,7 +63822,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7910453173591562327, guid: cfc66a3a21ed1434c86b2d2e37c05edb, type: 3}
       insertIndex: 5
       addedObject: {fileID: 1320124224}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -1914269717338498812, guid: cfc66a3a21ed1434c86b2d2e37c05edb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 397334742}
   m_SourcePrefab: {fileID: -2695619058785784247, guid: cfc66a3a21ed1434c86b2d2e37c05edb, type: 3}
 --- !u!4 &1445085172 stripped
 Transform:
@@ -85923,7 +85994,7 @@ GameObject:
   - component: {fileID: 1927360534}
   - component: {fileID: 1927360535}
   m_Layer: 0
-  m_Name: PlayerManage
+  m_Name: PlayerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
