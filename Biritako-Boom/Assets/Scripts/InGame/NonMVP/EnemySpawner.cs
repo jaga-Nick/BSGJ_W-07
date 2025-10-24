@@ -48,9 +48,6 @@ namespace InGame.NonMVP
         [Header("一度に生成される宇宙人の数")]
         [SerializeField] private int numberOfSpawnAlien;
         
-        [Header("スポーン範囲のバッファ (画面外からの距離)")]
-        [SerializeField] private float spawnBuffer;
-        
         /// <summary>
         /// 外部マネージャーへの参照
         /// </summary>
@@ -84,6 +81,7 @@ namespace InGame.NonMVP
         /// </summary>
         public int CurrentElectronics { get; set; }
         public int CurrentUfo { get; set; }
+        public int CurrentAlien { get; set; }
         
         
         /// <summary>
@@ -153,9 +151,8 @@ namespace InGame.NonMVP
             SpawnUfo().Forget();
             // 母艦UFOをスポーンする
             SpawnMotherShip(motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
-            // 宇宙人をスポーンする
+            // AlienManagerの参照を取得
             _alienManager = FindFirstObjectByType<AlienManager>();
-            SpawnAlien().Forget();
         }
 
         private void Update()
@@ -245,9 +242,7 @@ namespace InGame.NonMVP
             if (_camera == null) return false;
 
             var viewportPoint = _camera.WorldToViewportPoint(worldPosition);
-            return viewportPoint.z > 0 && 
-                   viewportPoint.x >= 0 && viewportPoint.x <= 1 && 
-                   viewportPoint.y >= 0 && viewportPoint.y <= 1;
+            return viewportPoint is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
         }
 
         /// <summary>
@@ -299,14 +294,7 @@ namespace InGame.NonMVP
             // より遠くにスポーンするように、最小距離をbufferの分だけ離す
             var minDist = limit + buffer;
             var maxDist = limit + buffer * 2f; // 最大距離は最小距離の2倍
-            if (UnityEngine.Random.value < 0.5f)
-            {
-                return UnityEngine.Random.Range(center - maxDist, center - minDist);
-            }
-            else
-            {
-                return UnityEngine.Random.Range(center + minDist, center + maxDist);
-            }
+            return UnityEngine.Random.value < 0.5f ? UnityEngine.Random.Range(center - maxDist, center - minDist) : UnityEngine.Random.Range(center + minDist, center + maxDist);
         }
 
 
@@ -321,15 +309,22 @@ namespace InGame.NonMVP
 
         
         /// <summary>
-        /// UFOが死んだらUFOカウントを減らす
+        /// UFOが死んだらUFOカウントを減らし、その位置にエイリアンをスポーンする
         /// </summary>
         /// <param name="ufo"></param>
         public void OnUfoDead(GameObject ufo)
         {
+            // UFOの最後の位置を記録
+            var lastUfoPosition = ufo.transform.position;
+            
+            // UFOをリストから削除し、カウントを減らす
             _ufoList.Remove(ufo);
             CurrentUfo--;
+
+
+            // UFOが倒された正確な位置にエイリアンをスポーン
+            SpawnAlien(lastUfoPosition).Forget();
         }
-        
 
         /// <summary>
         /// MotherShipのスポーン
@@ -353,29 +348,16 @@ namespace InGame.NonMVP
         /// Alienのスポーン
         /// UFOが爆発されたところにスポーンする
         /// </summary>
-        public async UniTask SpawnAlien()
+        public async UniTask SpawnAlien(Vector3 position)
         {
-            // AlienManagerが設定されているか確認
-            if (!_alienManager)
+            await  UniTask.Delay(2000, cancellationToken: this.GetCancellationTokenOnDestroy());
+            Debug.Log($"Spawning {numberOfSpawnAlien} aliens at position {position}"); // デバッグログを追加
+            
+            for (var i = 0; i < numberOfSpawnAlien; i++)
             {
-                Debug.LogError("EnemySpawnerにAlienManagerが設定されていません！");
-                return;
-            }
-
-            while (this.isActiveAndEnabled)
-            {
-                for (var i = 0; i < numberOfSpawnAlien; i++)
-                {
-                    var position = _alienManager.GetRandomPosition();
-                    var viewPosition = Camera.main.WorldToViewportPoint(position);
-                    var isInView = viewPosition is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
-                    if (isInView) continue;
-                    
-                    // 実際のスポーン処理はAlienManagerにすべて任せる
-                    _alienManager.SpawnAlien(position, 1);
-                }
-                
-                await UniTask.Delay(alienSpawnInterval * 100, cancellationToken: this.GetCancellationTokenOnDestroy());
+                if (CurrentAlien >= 20) break; // 各生成時に上限チェック
+                _alienManager.SpawnAlien(position, 1);
+                CurrentAlien++;
             }
         }
     }
