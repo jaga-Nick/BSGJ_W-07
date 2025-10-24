@@ -159,8 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3333104117101445400}
-  - component: {fileID: 8502292196336639378}
-  - component: {fileID: 4170222949461605391}
+  - component: {fileID: 3269391103676963312}
   m_Layer: 5
   m_Name: MotherShipMarker
   m_TagString: Untagged
@@ -189,7 +188,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8502292196336639378
+--- !u!114 &3269391103676963312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,28 +197,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8583346181685917207}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1ac865858545f54cbd06bf67f84e3c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ce8459326ed4235aa5794e698d1cfd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTransform: {fileID: 6979648196072135824, guid: 4cf8e22ca6a7347489e934142d7add4a, type: 3}
   iconRectTransform: {fileID: 2219369736070936982}
   arrowRectTransform: {fileID: 6228203004088253446}
   iconImage: {fileID: 6808513546779934383}
   arrowImage: {fileID: 4976672744610969238}
   margins:
-    top: 300
-    bottom: 300
-    left: 300
-    right: 300
+    top: 500
+    bottom: 500
+    left: 600
+    right: 600
   arrowDistanceFromIcon: 40
---- !u!114 &4170222949461605391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8583346181685917207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e0dfce171bc33e43969598d50bc9e36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -69,6 +69,9 @@ namespace InGame.NonMVP
         [Header("UFOPrefab")]
         [SerializeField] private GameObject ufoPrefabs;
         
+        [Header("UI")]
+        [SerializeField] private WaypointMarker wayPointMarker;
+        
         
         /// <summary>
         /// 生成されたUFOたちの管理
@@ -282,21 +285,6 @@ namespace InGame.NonMVP
             return spawnPosition;
         }
         
-        /// <summary>
-        /// ランダムな値を取得。カメラ中心を基準にして画面外の範囲を返すオーバーロード
-        /// </summary>
-        /// <param name="center">カメラ中心のXまたはY座標</param>
-        /// <param name="limit">カメラのワールド座標での半分の幅または高さ（例: _cameraWidth）</param>
-        /// <param name="buffer">画面の端からどれだけ外側にスポーンさせるかのバッファ</param>
-        /// <returns>カメラの描画範囲外となるXまたはY座標値の片方</returns>
-        private static float DynamicRandomRun(float center, float limit, float buffer)
-        {
-            // より遠くにスポーンするように、最小距離をbufferの分だけ離す
-            var minDist = limit + buffer;
-            var maxDist = limit + buffer * 2f; // 最大距離は最小距離の2倍
-            return UnityEngine.Random.value < 0.5f ? UnityEngine.Random.Range(center - maxDist, center - minDist) : UnityEngine.Random.Range(center + minDist, center + maxDist);
-        }
-
 
         /// <summary>
         /// 家電が死んだら家電カウントを減らす
@@ -338,7 +326,9 @@ namespace InGame.NonMVP
             {
                 var prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
-                Instantiate(prefab,position,Quaternion.identity);
+                var motherShip = Instantiate(prefab, position, Quaternion.identity);
+                // WaypointMarkerにターゲットを設定
+                wayPointMarker.SetTargetTransform(motherShip.transform);
             }
             OnGenerateMotherShip?.Invoke();
         }

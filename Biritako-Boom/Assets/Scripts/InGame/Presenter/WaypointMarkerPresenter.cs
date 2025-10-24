@@ -85,7 +85,7 @@ namespace InGame.Presenter
         
 
         /// <summary>
-        /// EnemySpawnerのイベントから呼び出され、ターゲットをModelに設定
+        /// 母艦UFOを探してターゲットとして設定
         /// </summary>
         private void FindAndSetTarget()
         {
