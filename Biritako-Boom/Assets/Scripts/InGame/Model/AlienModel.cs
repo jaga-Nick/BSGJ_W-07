@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using InGame.Model;
-using InGame.View;
 using InGame.NonMVP;
 using Cysharp.Threading.Tasks;
 using InGame.Presenter;
@@ -49,7 +47,7 @@ namespace InGame.Model
         private bool _isRightFlip = true; // trueなら右向き、falseなら左向き
         
         // UFO挙動用のプロパティ（このクラスでは未使用）
-        public float CurrentTime { get; set; } 
+        public float CurrentTime { get; set; }
         public float IntervalTime { get; set; }
 
         /// <summary>
