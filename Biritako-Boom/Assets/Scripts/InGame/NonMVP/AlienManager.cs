@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.AddressableAssets; // Addressablesの機能を使うために必要
 using Cysharp.Threading.Tasks;
 using InGame.Presenter;
-using Random = UnityEngine.Random;
 
 
 namespace InGame.NonMVP
@@ -147,28 +145,6 @@ namespace InGame.NonMVP
             alienObj.SetActive(false);
             // プールに追加
             _pool.Enqueue(presenter);
-        }
-
-        public async UniTask SpawnTest()
-        {
-            // このコンポーネントが有効である限りループを続ける
-            while (this.isActiveAndEnabled)
-            {
-                // エイリアンを一体生成する
-                SpawnAlien(new Vector3(3.0f, 3.0f, 0.0f), 1);
-
-                // 10秒間待機する。
-                // CancellationTokenを指定することで、このオブジェクトが破棄された時に待機を安全に中断できる
-                await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: this.GetCancellationTokenOnDestroy());
-            }
-        }
-
-        public Vector3 GetRandomPosition()
-        {
-            // 1. マップ境界内でランダムな位置を生成
-            float randomX = Random.Range(_spawnAreaMin.x, _spawnAreaMax.x);
-            float randomY = Random.Range(_spawnAreaMin.y, _spawnAreaMax.y);
-            return new Vector3(randomX, randomY, 0f);
         }
     }
 }

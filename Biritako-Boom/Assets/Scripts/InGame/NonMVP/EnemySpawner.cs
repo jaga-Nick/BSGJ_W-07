@@ -6,7 +6,6 @@ using UnityEngine.AddressableAssets;
 using Common;
 using UnityEngine;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace InGame.NonMVP
 {
@@ -70,6 +69,9 @@ namespace InGame.NonMVP
         [Header("UFOPrefab")]
         [SerializeField] private GameObject ufoPrefabs;
         
+        [Header("UI")]
+        [SerializeField] private WaypointMarker wayPointMarker;
+        
         
         /// <summary>
         /// 生成されたUFOたちの管理
@@ -80,14 +82,25 @@ namespace InGame.NonMVP
         /// <summary>
         /// 現在のEnemyの数
         /// </summary>
-        public int CurrentElectronics { get; set; } = 0;
-        public int CurrentUfo { get; set; } = 0;
+        public int CurrentElectronics { get; set; }
+        public int CurrentUfo { get; set; }
+        public int CurrentAlien { get; set; }
         
         
         /// <summary>
         /// Camera
         /// </summary>
         private Camera _camera;
+        // デフォルトを設定して静的解析の警告を軽減（Awake で上書きされる）
+        private float _cameraHeight = 5f;
+        private float _cameraWidth = 5f;
+
+        /// <summary>
+        /// マップの範囲を定義するコライダー
+        /// </summary>
+        [Header("マップの範囲を定義するコライダー")]
+        [SerializeField] private Collider2D mapBoundary;
+        private Bounds _mapBounds;
 
         /// <summary>
         /// Cameraの設定
@@ -95,19 +108,54 @@ namespace InGame.NonMVP
         private void Awake()
         {
             _camera = Camera.main;
+            // カメラのワールド幅・高さを計算する
+            if (_camera != null)
+            {
+                if (_camera.orthographic)
+                {
+                    // orthographic の場合、orthographicSize が画面縦の半分
+                    _cameraHeight = _camera.orthographicSize;
+                    _cameraWidth = _cameraHeight * _camera.aspect;
+                }
+                else
+                {
+                    // perspective の場合は、カメラからZ=0平面までの距離でViewport->Worldを使って算出
+                    var camPos = _camera.transform.position;
+                    var distance = Mathf.Abs(camPos.z); // カメラとワールドZ=0面の距離
+                    var bottomLeft = _camera.ViewportToWorldPoint(new Vector3(0, 0, distance));
+                    var topRight = _camera.ViewportToWorldPoint(new Vector3(1, 1, distance));
+                    _cameraWidth = (topRight.x - bottomLeft.x) / 2f;
+                    _cameraHeight = (topRight.y - bottomLeft.y) / 2f;
+                }
+            }
+            else
+            {
+                // Main Camera が見つからない場合のフォールバック値
+                _cameraHeight = 5f; // 任意のデフォルト半高さ
+                _cameraWidth = _cameraHeight * (Screen.width / (float)Screen.height);
+            }
         }
 
         private void Start()
         {
+            // マップの範囲を取得
+            if (mapBoundary != null)
+            {
+                _mapBounds = mapBoundary.bounds;
+            }
+            else
+            {
+                Debug.LogWarning("Map Boundaryが設定されていません。デフォルトの範囲を使用します。");
+                _mapBounds = new Bounds(Vector3.zero, new Vector3(100f, 100f, 0f));
+            }
             // タイマーをスポーン時間のインターバルにセット
             _timer = spawnInterval;
             // UFOをスポーンする
             SpawnUfo().Forget();
             // 母艦UFOをスポーンする
             SpawnMotherShip(motherShipAddress, new Vector3(0f, 30f, 0f), CancellationToken.None).Forget();
-            // 宇宙人をスポーンする
-            _alienManager = FindObjectOfType<AlienManager>();
-            SpawnAlien().Forget();
+            // AlienManagerの参照を取得
+            _alienManager = FindFirstObjectByType<AlienManager>();
         }
 
         private void Update()
@@ -130,7 +178,8 @@ namespace InGame.NonMVP
                 var electronics = Instantiate(electronicsPrefabs[randomIndex]);
                 
                 // Presenterで決定した座標をもとに初期座標を決定
-                electronics.transform.position = DetermineElectronicsSpawnPoints(spawnRadius, exclusionRadius, _camera);
+                // フィールドを使うように変更（パラメータ名の隠蔽を避ける）
+                electronics.transform.position = DetermineElectronicsSpawnPoints();
             
                 // 家電の数をインクリメント
                 CurrentElectronics++;
@@ -138,43 +187,7 @@ namespace InGame.NonMVP
                 await UniTask.Yield();
             }
         }
-
-        /// <summary>
-        /// 家電のスポーンされる座標を決定する
-        /// </summary>
-        /// <param name="spawnRadius"></param>
-        /// <param name="exclusionRadius"></param>
-        /// <param name="camera"></param>
-        /// <returns></returns>
-        private Vector3 DetermineElectronicsSpawnPoints(float spawnRadius, float exclusionRadius, Camera camera)
-        {
-            
-            // カメラ外にいるUFOをランダムで決定する
-            var offScreenUfo = new List<Transform>();
-            foreach (var ufo in _ufoList)
-            {
-                var viewportPosition = camera.WorldToViewportPoint(ufo.transform.position);
-                var isInView = viewportPosition.x is >= 0 and <= 1 && viewportPosition.y is >= 0 and <= 1;
-                if (!isInView) { offScreenUfo.Add(ufo.transform); }
-            }
-            
-            // カメラ外からUFOをランダムで選択
-            var ufoRandomIndex = UnityEngine.Random.Range(0, offScreenUfo.Count);
-            var ufoPosition = offScreenUfo[ufoRandomIndex].position;
-            
-            // UFOの座標半径いくらかを取得してポジションを決める
-            Vector3 spawnOffset;
-            do
-            {
-                var randomCircle = UnityEngine.Random.insideUnitCircle * spawnRadius;
-                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
-            } 
-            while (spawnOffset.magnitude < exclusionRadius);
-            
-            var spawnPosition = ufoPosition + spawnOffset;
-            
-            return spawnPosition;
-        }
+        
 
         /// <summary>
         /// UFOのスポーン
@@ -202,48 +215,104 @@ namespace InGame.NonMVP
             }
         }
         
+        
         /// <summary>
         /// UFOのスポーンされる座標を決定する
         /// </summary>
         private Vector3 DetermineUfoSpawnPoints()
         {
-            // ランダムな座標を生成
-            var randomPositionX = RandomRun();
-            var randomPositionY = RandomRun();
-            
-            // 画面外の座標を取得
-            var position = _camera.ViewportToWorldPoint(new Vector3(randomPositionX, randomPositionY, _camera.nearClipPlane));
-            return position;
-        }
-        
-        /// <summary>
-        /// ランダムな値を取得
-        /// </summary>
-        /// <returns></returns>
-        private static float RandomRun()
-        {
-            float value;
-            do { value = UnityEngine.Random.Range(-1.0f, 2.0f); } while (value is >= 0.0f and <= 1.0f);
-            return value;
+            // マップの範囲内でランダムな位置を生成
+            Vector3 spawnPosition;
+            do
+            {
+                spawnPosition = new Vector3(
+                    UnityEngine.Random.Range(_mapBounds.min.x, _mapBounds.max.x),
+                    UnityEngine.Random.Range(_mapBounds.min.y, _mapBounds.max.y),
+                    0f
+                );
+            }
+            // カメラの視界内ならやり直し（画面外になるまで繰り返し）
+            while (IsPositionVisible(spawnPosition));
+
+            return spawnPosition;
         }
 
+        /// <summary>
+        /// 指定された位置がカメラの視界内かどうかを判定
+        /// </summary>
+        private bool IsPositionVisible(Vector3 worldPosition)
+        {
+            if (_camera == null) return false;
+
+            var viewportPoint = _camera.WorldToViewportPoint(worldPosition);
+            return viewportPoint is { z: > 0, x: >= 0 and <= 1, y: >= 0 and <= 1 };
+        }
+
+        /// <summary>
+        /// 家電のスポーンされる座標を決定する
+        /// </summary>
+        private Vector3 DetermineElectronicsSpawnPoints()
+        {
+            // ランダムなUFOを選択
+            Vector3 ufoPosition;
+            if (_ufoList.Count > 0)
+            {
+                var randomUfo = _ufoList[UnityEngine.Random.Range(0, _ufoList.Count)];
+                ufoPosition = randomUfo.transform.position;
+            }
+            else
+            {
+                // UFOがいない場合は、マップ内のランダムな位置を使用
+                ufoPosition = new Vector3(
+                    UnityEngine.Random.Range(_mapBounds.min.x, _mapBounds.max.x),
+                    UnityEngine.Random.Range(_mapBounds.min.y, _mapBounds.max.y),
+                    0f
+                );
+            }
+
+            // UFOの座標半径いくらかを取得してポジションを決める
+            Vector3 spawnOffset;
+            do
+            {
+                var randomCircle = UnityEngine.Random.insideUnitCircle * spawnRadius;
+                spawnOffset = new Vector3(randomCircle.x, randomCircle.y, 0);
+            } 
+            while (spawnOffset.magnitude < exclusionRadius);
+            
+            var spawnPosition = ufoPosition + spawnOffset;
+            
+
+            return spawnPosition;
+        }
+        
 
         /// <summary>
         /// 家電が死んだら家電カウントを減らす
         /// </summary>
-        /// <param name="electronics"></param>
         /// <param name="deadCount"></param>
         public void OnElectronicsDead(int deadCount)
         {
             CurrentElectronics -= deadCount;
         }
 
+        
+        /// <summary>
+        /// UFOが死んだらUFOカウントを減らし、その位置にエイリアンをスポーンする
+        /// </summary>
+        /// <param name="ufo"></param>
         public void OnUfoDead(GameObject ufo)
         {
+            // UFOの最後の位置を記録
+            var lastUfoPosition = ufo.transform.position;
+            
+            // UFOをリストから削除し、カウントを減らす
             _ufoList.Remove(ufo);
             CurrentUfo--;
+
+
+            // UFOが倒された正確な位置にエイリアンをスポーン
+            SpawnAlien(lastUfoPosition).Forget();
         }
-        
 
         /// <summary>
         /// MotherShipのスポーン
@@ -257,7 +326,9 @@ namespace InGame.NonMVP
             {
                 var prefab = await handle;
                 // ロードしたプレハブからGameObjectをインスタンス化
-                Instantiate(prefab,position,Quaternion.identity);
+                var motherShip = Instantiate(prefab, position, Quaternion.identity);
+                // WaypointMarkerにターゲットを設定
+                wayPointMarker.SetTargetTransform(motherShip.transform);
             }
             OnGenerateMotherShip?.Invoke();
         }
@@ -265,32 +336,18 @@ namespace InGame.NonMVP
         
         /// <summary>
         /// Alienのスポーン
+        /// UFOが爆発されたところにスポーンする
         /// </summary>
-        public async UniTask SpawnAlien()
+        public async UniTask SpawnAlien(Vector3 position)
         {
-            // AlienManagerが設定されているか確認
-            if (!_alienManager)
+            await  UniTask.Delay(2000, cancellationToken: this.GetCancellationTokenOnDestroy());
+            Debug.Log($"Spawning {numberOfSpawnAlien} aliens at position {position}"); // デバッグログを追加
+            
+            for (var i = 0; i < numberOfSpawnAlien; i++)
             {
-                Debug.LogError("EnemySpawnerにAlienManagerが設定されていません！");
-                return;
-            }
-
-            while (this.isActiveAndEnabled)
-            {
-                for (var i = 0; i < numberOfSpawnAlien; i++)
-                {
-                    var position = _alienManager.GetRandomPosition();
-                    var viewPosition = Camera.main.WorldToViewportPoint(position);
-                    var isInView = viewPosition.z > 0 && 
-                                   viewPosition.x >= 0 && viewPosition.x <= 1 && 
-                                   viewPosition.y >= 0 && viewPosition.y <= 1;
-                    if (isInView) continue;
-                    
-                    // 実際のスポーン処理はAlienManagerにすべて任せる
-                    _alienManager.SpawnAlien(position, 1);
-                }
-                
-                await UniTask.Delay(alienSpawnInterval * 100, cancellationToken: this.GetCancellationTokenOnDestroy());
+                if (CurrentAlien >= 20) break; // 各生成時に上限チェック
+                _alienManager.SpawnAlien(position, 1);
+                CurrentAlien++;
             }
         }
     }
