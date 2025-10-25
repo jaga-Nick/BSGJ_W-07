@@ -1,27 +1,28 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
 
 namespace InGame.NonMVP
 {
     public class EnemyEffectAttach : MonoBehaviour
     {
-        [SerializeField]
-        private String _name;
+        [FormerlySerializedAs("_name")] [SerializeField]
+        private String name;
         void Awake()
         {
             //生成
             ActEffect().Forget();
         }
 
-        private Animator animator;
+        private Animator _animator;
         public async UniTask ActEffect()
         {
-            animator = gameObject.GetComponent<Animator>();
-            animator.Play(_name);
+            _animator = gameObject.GetComponent<Animator>();
+            _animator.Play(name);
             await UniTask.WaitUntil(() => {
-                var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                return stateInfo.IsName(_name) && stateInfo.normalizedTime >= 1f;
+                var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+                return stateInfo.IsName(name) && stateInfo.normalizedTime >= 1f;
             });
             Destroy(gameObject);
         }

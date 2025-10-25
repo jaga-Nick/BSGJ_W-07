@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ShakeEffect
+namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// シェイクによる位置と回転の情報を保持するためのデータ構造です。

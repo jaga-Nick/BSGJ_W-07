@@ -43,7 +43,7 @@ namespace InGame.Model
         public Rigidbody2D Rb { get; private set; }
         public Vector3 Angle { get; set; }
         int IEnemyModel.CurrentHp { get; set; }
-        private const int _deadScore = 20;
+        private const int DeadScore = 20;
         private bool _isRightFlip = true; // trueなら右向き、falseなら左向き
         
         // UFO挙動用のプロパティ（このクラスでは未使用）
@@ -138,7 +138,7 @@ namespace InGame.Model
         public UniTask OnDead()
         {
             // シングルトンのスコアモデルにアクセスしてスコアを加算
-            ScoreModel.Instance().IncrementScore(_deadScore);
+            ScoreModel.Instance.IncrementScore(DeadScore);
             // Presenterにプールへ戻るよう通知
             OnReturnedToPool?.Invoke();
             return UniTask.CompletedTask;

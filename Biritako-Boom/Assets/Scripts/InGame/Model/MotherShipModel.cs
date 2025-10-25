@@ -6,8 +6,9 @@ using Cysharp.Threading.Tasks;
 using InGame.Presenter;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using ShakeEffect;
 using System;
+using Common.GameSystem;
+using Common.ShakeEffectSetting;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -20,10 +21,10 @@ namespace InGame.Model
     {
         #region 定数
         // この距離までターゲットに近づいたら、目的地に到着したとみなすための閾値
-        private const float DESTINATION_THRESHOLD = 0.5f;
+        private const float DestinationThreshold = 0.5f;
         
-        private const int _hitScore = 75;
-        private const int _deadScore = 5000;
+        private const int HitScore = 75;
+        private const int DeadScore = 5000;
 
         #endregion
 
@@ -60,20 +61,20 @@ namespace InGame.Model
         /// <summary>
         /// 母艦固有プロパティ
         /// </summary>
-        private GameObject motherShipObject;
+        private GameObject _motherShipObject;
 
         // 母艦のHP
 
         int IEnemyModel.CurrentHp { get; set;}
-        private int MaxHp;
+        private int _maxHp;
         
         
         // 母艦の移動速度
         private float _speed;
 
-        private bool isEnd = false;
+        private bool _isEnd = false;
         
-        private bool isRandomPatrol { get; set; } = true;
+        private bool IsRandomPatrol { get; set; } = true;
 
         #endregion
         
@@ -108,14 +109,14 @@ namespace InGame.Model
         /// <summary>
         /// 初期化
         /// </summary>
-        public void Initialize(int _hp, float speed)
+        public void Initialize(int hp, float speed)
         {
             IntervalTime = 0.2f;
             _speed = speed;
-            MaxHp = _hp;
-            ((IEnemyModel)this).CurrentHp = _hp;
+            _maxHp = hp;
+            ((IEnemyModel)this).CurrentHp = hp;
             ExplosionPower = 100;
-            isEnd = false;
+            _isEnd = false;
         }
 
         #endregion
@@ -128,9 +129,9 @@ namespace InGame.Model
             _transform = rb.transform;
         }
         
-        public void SetRandomPatrol(bool mode){ isRandomPatrol  = mode; }
+        public void SetRandomPatrol(bool mode){ IsRandomPatrol  = mode; }
 
-        public int GetMaxHp() { return MaxHp; }
+        public int GetMaxHp() { return _maxHp; }
 
         public int GetCurrentHp() { return ((IEnemyModel)this).CurrentHp; }
         
@@ -233,7 +234,7 @@ namespace InGame.Model
         public void OnDamage(int damage)
         {
             ((IEnemyModel)this).CurrentHp -= damage;
-            ScoreModel.Instance().IncrementScore(_hitScore);
+            ScoreModel.Instance.IncrementScore(HitScore);
             OnBossHit?.Invoke(((IEnemyModel)this).CurrentHp);
             _cameraShaker.Shake(_explosionShake);
             if (((IEnemyModel)this).CurrentHp <= 0) OnDead().Forget();
@@ -245,9 +246,9 @@ namespace InGame.Model
         public async UniTask OnDead()
         {
             Debug.Log("第三部　完!!");
-            ScoreModel.Instance().IncrementScore(_deadScore);
+            ScoreModel.Instance.IncrementScore(DeadScore);
 
-            isEnd = true;
+            _isEnd = true;
             OnGameClear?.Invoke(true);
         }
 
@@ -256,11 +257,11 @@ namespace InGame.Model
         /// <summary>
         /// 母艦を破壊する、
         /// </summary>
-        public void DestroyUfo(GameObject MothershipInstance)
+        public void DestroyUfo(GameObject mothershipInstance)
         {
-            if (MothershipInstance) return;
-            Addressables.ReleaseInstance(MothershipInstance); 
-            MothershipInstance = null;
+            if (mothershipInstance) return;
+            Addressables.ReleaseInstance(mothershipInstance); 
+            mothershipInstance = null;
         }
 
         #endregion
@@ -292,7 +293,7 @@ namespace InGame.Model
             if (_currentTargetIndex >= _ufoTargets.Count)
             {
                 // ランダム巡回フラグがtrueの場合、リストをシャッフルする
-                if (isRandomPatrol)
+                if (IsRandomPatrol)
                 {
                     RandomTargets();
                 }
@@ -306,7 +307,7 @@ namespace InGame.Model
             MoveTowards(currentTarget.position);
 
             // ターゲットに十分に近づいたら、次のターゲットへ移行します
-            if (Vector2.Distance(_transform.position, currentTarget.position) < DESTINATION_THRESHOLD)
+            if (Vector2.Distance(_transform.position, currentTarget.position) < DestinationThreshold)
             {
                 Rb.linearVelocity = Vector2.zero;
                 _currentTargetIndex++;
@@ -327,7 +328,7 @@ namespace InGame.Model
             MoveTowards(Vector2.zero);
 
             // 中央に十分に近づいたら完全に停止し、状態をStoppedにします
-            if (Vector2.Distance(_transform.position, Vector2.zero) < DESTINATION_THRESHOLD)
+            if (Vector2.Distance(_transform.position, Vector2.zero) < DestinationThreshold)
             {
                 if(Rb != null) Rb.linearVelocity = Vector2.zero;
                 _currentState = State.Stopped;

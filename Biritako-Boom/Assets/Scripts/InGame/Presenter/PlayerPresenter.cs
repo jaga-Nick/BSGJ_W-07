@@ -3,20 +3,23 @@ using InGame.Model;
 using InGame.View;
 using InGame.NonMVP;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Serialization;
 
 namespace InGame.Presenter
 {
     public class PlayerPresenter : MonoBehaviour
     {
+        [FormerlySerializedAs("CharacterPrefab")]
         [Header("キャラクターPrefabデータ")]
-        [SerializeField] private GameObject CharacterPrefab;
-        [SerializeField] private string CharacterAddress="PlayerCharacter";
-        public GameObject characterPrefab { get; private set; }
+        [SerializeField] private GameObject characterPrefab;
+        [FormerlySerializedAs("CharacterAddress")] [SerializeField] private string characterAddress="PlayerCharacter";
+        public GameObject CharacterPrefab { get; private set; }
 
+        [FormerlySerializedAs("SocketPrefab")]
         [Header("ソケット(コンセント）データ")]
-        [SerializeField] private GameObject SocketPrefab;
-        [SerializeField] private GameObject SocketTipPrefab;
-        [SerializeField] private string SocketAddress = "PlayerCharacter";
+        [SerializeField] private GameObject socketPrefab;
+        [FormerlySerializedAs("SocketTipPrefab")] [SerializeField] private GameObject socketTipPrefab;
+        [FormerlySerializedAs("SocketAddress")] [SerializeField] private string socketAddress = "PlayerCharacter";
         
         /// <summary>
         /// model
@@ -38,7 +41,7 @@ namespace InGame.Presenter
 
         private void Awake()
         {
-            characterPrefab = CharacterPrefab;
+            CharacterPrefab = CharacterPrefab;
 
             Model = new PlayerModel();
             Model.Initialize(this);
@@ -57,7 +60,7 @@ namespace InGame.Presenter
             AnimationView=_view.GetplayerView();
 
             //スコアイベントの購読(Singletonの呼び出し）
-            _scoreModel = ScoreModel.Instance();
+            _scoreModel = ScoreModel.Instance;
             _scoreModel.ScoreChanged += ScoreChanged;
 
             _playerController = new PlayerController(Model,this);
@@ -88,13 +91,13 @@ namespace InGame.Presenter
         /// コンセントのPrefabを取得する
         /// </summary>
         /// <returns></returns>
-        public GameObject GetSocketPrefab() { return SocketPrefab; }
+        public GameObject GetSocketPrefab() { return socketPrefab; }
         
         /// <summary>
         /// コンセントに刺さったプラグの先端のPrefabを取得する
         /// </summary>
         /// <returns></returns>
-        public GameObject GetSocketTipPrefab() { return SocketTipPrefab; }
+        public GameObject GetSocketTipPrefab() { return socketTipPrefab; }
         
         public void DestroySocketTip()
         {
@@ -102,7 +105,7 @@ namespace InGame.Presenter
             {
                 Destroy(child.gameObject);
             }
-            Model.SocketTips.Clear();
+            Model.socketTips.Clear();
         }
         
         /// <summary>

@@ -1,7 +1,8 @@
 ﻿using System;
-using Common;
-using Setting;
-//
+using Common.AudioSystem;
+using Common.GameSystem;
+
+
 namespace InGame.Model
 {
     //シーン間のデータ以降が行われる為。DontDestroy化
@@ -15,17 +16,17 @@ namespace InGame.Model
         private void UpdateScoreInfo()
         {
             ScoreChanged?.Invoke();
-            AudioManager.Instance().LoadSoundEffect("Scored");
+            AudioManager.Instance.PlaySe(AUDIO.SE_SCORED);
         }
         //加算
-        public void IncrementScore(int Num) { 
-            Score += Num;
+        public void IncrementScore(int num) { 
+            Score += num;
             UpdateScoreInfo();
         }
         //減少
-        public void DecrementScore(int Num)
+        public void DecrementScore(int num)
         {
-            Score -= Num;
+            Score -= num;
             UpdateScoreInfo();
         }
         //初期化

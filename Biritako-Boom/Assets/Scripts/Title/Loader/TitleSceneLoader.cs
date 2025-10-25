@@ -1,6 +1,6 @@
-﻿using Common;
+﻿using Common.AudioSystem;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
-using Setting;
 using UnityEngine;
 using InGame.Model;
 
@@ -23,9 +23,9 @@ public class TitleSceneLoader : ISceneInfo
     /// </summary>
     public async UniTask Init()
     {
-        ScoreModel.Instance().RestoreScore();
+        ScoreModel.Instance.RestoreScore();
 
-        AudioManager.Instance().LoadBgm("BgmTitle");
+        AudioManager.Instance.PlayBGM(AUDIO.BGM_TITLE);
     }
 
     public void InputStart()
@@ -34,6 +34,5 @@ public class TitleSceneLoader : ISceneInfo
 
     public void InputStop()
     {
-        AudioManager.Instance().StopBgm();
     }
 }

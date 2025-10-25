@@ -1,9 +1,8 @@
-using Common;
+using Common.SceneSystem;
 using UnityEngine;
-using Title.Loader;
 using UnityEngine.UI;
 
-namespace Settings.Button
+namespace Settings
 {
     public class ButtonEvent : MonoBehaviour
     {
@@ -35,7 +34,7 @@ namespace Settings.Button
         public async void OnCloseSettingButton()
         {
             await _sceneFadeManager.End();
-            await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_titleSceneLoader);
             await _sceneFadeManager.Init();
         }
     }

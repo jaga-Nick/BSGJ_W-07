@@ -1,9 +1,11 @@
 ﻿using Common;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using InGame.NonMVP;
 using Title.Loader;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Pause
@@ -19,40 +21,40 @@ namespace Pause
         private static readonly int Pressed = Animator.StringToHash("Pressed");
 
 
-        [SerializeField]
-        private Button PlayButton;
-        [SerializeField]
-        private Button RestartButton;
-        [SerializeField]
-        private Button TitleButton;
+        [FormerlySerializedAs("PlayButton")] [SerializeField]
+        private Button playButton;
+        [FormerlySerializedAs("RestartButton")] [SerializeField]
+        private Button restartButton;
+        [FormerlySerializedAs("TitleButton")] [SerializeField]
+        private Button titleButton;
 
-        private InputSystem_Actions action;
+        private InputSystem_Actions _action;
 
 
-        private Button[] buttons;
-        private Button previousButton;
-        private int currentIndex = 0;
-        private float navigateCooldown = 0.2f;
-        private float lastNavigateTime = 0f;
+        private Button[] _buttons;
+        private Button _previousButton;
+        private int _currentIndex = 0;
+        private float _navigateCooldown = 0.2f;
+        private float _lastNavigateTime = 0f;
 
         public void Awake()
         {
-            AddHoverEvents(PlayButton);
-            AddHoverEvents(RestartButton);
-            AddHoverEvents(TitleButton);
+            AddHoverEvents(playButton);
+            AddHoverEvents(restartButton);
+            AddHoverEvents(titleButton);
 
-            PlayButton.onClick.AddListener(() => { ButtonEvents(PlayButton); });
-            RestartButton.onClick.AddListener(() => { ButtonEvents(RestartButton); });
-            TitleButton.onClick.AddListener(() => { ButtonEvents(TitleButton); });
+            playButton.onClick.AddListener(() => { ButtonEvents(playButton); });
+            restartButton.onClick.AddListener(() => { ButtonEvents(restartButton); });
+            titleButton.onClick.AddListener(() => { ButtonEvents(titleButton); });
 
 
-            action = InputSystemActionsManager.Instance().GetInputSystem_Actions();
-            InputSystemActionsManager.Instance().UIEnable();
+            _action = InputSystemActionsManager.Instance.GetInputSystem_Actions();
+            InputSystemActionsManager.Instance.UIEnable();
 
-            buttons = new Button[] { PlayButton, RestartButton, TitleButton };
-            SelectButton(buttons[currentIndex]);
+            _buttons = new Button[] { playButton, restartButton, titleButton };
+            SelectButton(_buttons[_currentIndex]);
 
-            foreach (var button in buttons)
+            foreach (var button in _buttons)
             {
                 Animator animator = button.GetComponent<Animator>();
                 if (animator != null)
@@ -64,35 +66,35 @@ namespace Pause
 
         public void Update()
         {
-            Vector2 nav = action.UI.Navigate.ReadValue<Vector2>();
+            Vector2 nav = _action.UI.Navigate.ReadValue<Vector2>();
             // 時間経過チェック（入力連打防止）
-            if (Time.unscaledTime - lastNavigateTime < navigateCooldown) return;
+            if (Time.unscaledTime - _lastNavigateTime < _navigateCooldown) return;
 
             if (nav.y > 0.5f) // 上方向
             {
-                currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
-                SelectButton(buttons[currentIndex]);
-                lastNavigateTime = Time.unscaledTime;
+                _currentIndex = (_currentIndex - 1 + _buttons.Length) % _buttons.Length;
+                SelectButton(_buttons[_currentIndex]);
+                _lastNavigateTime = Time.unscaledTime;
             }
             else if (nav.y < -0.5f) // 下方向
             {
-                currentIndex = (currentIndex + 1) % buttons.Length;
-                SelectButton(buttons[currentIndex]);
-                lastNavigateTime = Time.unscaledTime;
+                _currentIndex = (_currentIndex + 1) % _buttons.Length;
+                SelectButton(_buttons[_currentIndex]);
+                _lastNavigateTime = Time.unscaledTime;
             }
 
-            if (action.UI.Submit.WasPressedThisFrame())
+            if (_action.UI.Submit.WasPressedThisFrame())
             {
-                ButtonEvents(buttons[currentIndex]);
+                ButtonEvents(_buttons[_currentIndex]);
             }
         }
 
         private void SelectButton(Button button)
         {
             // 前のボタンをNormalに戻す
-            if (previousButton != null && previousButton != button)
+            if (_previousButton != null && _previousButton != button)
             {
-                Animator prevAnimator = previousButton.GetComponent<Animator>();
+                Animator prevAnimator = _previousButton.GetComponent<Animator>();
                 if (prevAnimator != null)
                 {
                     prevAnimator.SetTrigger(Normal);
@@ -110,7 +112,7 @@ namespace Pause
             }
 
             // 次回のために記録
-            previousButton = button;
+            _previousButton = button;
         }
 
 
@@ -122,13 +124,13 @@ namespace Pause
         {
             switch (button)
             {
-                case var _ when button == PlayButton:
+                case var _ when button == playButton:
                     OnPlay();
                     break;
-                case var _ when button == RestartButton:
+                case var _ when button == restartButton:
                     OnRestart();
                     break;
-                case var _ when button == TitleButton:
+                case var _ when button == titleButton:
                     OnTitle();
                     break;
             }
@@ -186,17 +188,17 @@ namespace Pause
         {
             //TimeScale変更
             TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().UnloadSubScene().Forget();
+            SceneManager.Instance.UnloadSubScene().Forget();
         }
         private void OnRestart()
         {
             TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().LoadMainScene(new InGameSceneLoader()).Forget();
+            SceneManager.Instance.LoadMainScene(new InGameSceneLoader()).Forget();
         }
         private void OnTitle()
         {
             TimeManager.Instance().SetTimeScale(1);
-            SceneManager.Instance().LoadMainScene(new TitleSceneLoader()).Forget();
+            SceneManager.Instance.LoadMainScene(new TitleSceneLoader()).Forget();
         }
     }
 }

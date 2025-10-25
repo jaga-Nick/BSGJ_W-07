@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets; // Addressablesの機能を使うために必要
 using Cysharp.Threading.Tasks;
 using InGame.Presenter;
+using UnityEngine.Serialization;
 
 
 namespace InGame.NonMVP
@@ -12,17 +13,21 @@ namespace InGame.NonMVP
     /// </summary>
     public class AlienManager : MonoBehaviour
     {
+        [FormerlySerializedAs("_characterAddress")]
         [Header("プール設定")]
         [Tooltip("Addressablesに設定したエイリアンのアドレス")]
-        [SerializeField] private string _characterAddress = "Enemy_Alien"; // ここでキーを指定
+        [SerializeField] private string characterAddress = "Enemy_Alien"; // ここでキーを指定
 
+        [FormerlySerializedAs("_initialPoolSize")]
         [Header("エイリアン最大数")]
-        [SerializeField] private int _initialPoolSize = 50;
+        [SerializeField] private int initialPoolSize = 50;
 
+        [FormerlySerializedAs("_spawnAreaMin")]
         [Header("マップ左下")]
-        [SerializeField] private Vector2 _spawnAreaMin = new Vector2(-20f, -20f);
+        [SerializeField] private Vector2 spawnAreaMin = new Vector2(-20f, -20f);
+        [FormerlySerializedAs("_spawnAreaMax")]
         [Header("マップ右上")]
-        [SerializeField] private Vector2 _spawnAreaMax = new Vector2(20f, 20f);
+        [SerializeField] private Vector2 spawnAreaMax = new Vector2(20f, 20f);
 
         // プール（待機中のエイリアン）を管理するキュー
         private readonly Queue<AlienPresenter> _pool = new Queue<AlienPresenter>();
@@ -77,10 +82,10 @@ namespace InGame.NonMVP
 
 
             // 文字列のキーを使ってAddressablesからプレハブを非同期でロード
-            _alienPrefab = await Addressables.LoadAssetAsync<GameObject>(_characterAddress).ToUniTask();
+            _alienPrefab = await Addressables.LoadAssetAsync<GameObject>(characterAddress).ToUniTask();
 
             // 初期プールサイズ分だけ、あらかじめエイリアンを生成してプールしておく
-            for (int i = 0; i < _initialPoolSize; i++)
+            for (int i = 0; i < initialPoolSize; i++)
             {
                 GeneratePoolAlien();
             }

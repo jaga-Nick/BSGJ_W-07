@@ -1,4 +1,4 @@
-﻿namespace ShakeEffect
+﻿namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// シェイクの振る舞いを定義します。

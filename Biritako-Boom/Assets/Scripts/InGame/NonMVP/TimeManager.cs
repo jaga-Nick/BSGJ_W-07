@@ -1,5 +1,7 @@
 ﻿using System;
 using Common;
+using Common.GameSystem;
+using Common.SceneSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Cysharp.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace InGame.NonMVP
     /// TimeManager
     /// ゲーム内の時間を管理するクラス。
     /// </summary>
-    public class TimeManager : DestroyAvailable_SingletonMonoBehaviourBase<TimeManager>
+    public class TimeManager : DestroyAvailableSingletonMonoBehaviourBase<TimeManager>
     {
         /// <summary>
         /// ゲーム状態のパラメタ

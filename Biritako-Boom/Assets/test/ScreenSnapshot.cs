@@ -16,10 +16,10 @@ public class ScreenSnapShot : MonoBehaviour
     private string _saveDirPath;  // 保存ディレクトリの絶対パス
     private LayerMask _uiMask;    // 除外するUIレイヤー
 
-    private const string EXT_PNG = ".png";
-    private const string BUILD_SUBDIR = "Screenshots";
-    private const string EDITOR_SUBDIR = "EditorScreenshots_Default";
-    private const string FALLBACK_SUBDIR = "Screenshots_Fallback";
+    private const string ExtPNG = ".png";
+    private const string BuildSubdir = "Screenshots";
+    private const string EditorSubdir = "EditorScreenshots_Default";
+    private const string FallbackSubdir = "Screenshots_Fallback";
     
     /// <summary>
     /// このコンポーネントが正常に初期化されたかどうかを示します。
@@ -96,7 +96,7 @@ public class ScreenSnapShot : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError($"[ScreenSnapShot] ディレクトリ \"{_saveDirPath}\" の作成またはアクセスに失敗。エラー: {ex.Message}", this);
-            _saveDirPath = Path.Combine(Application.temporaryCachePath, FALLBACK_SUBDIR);
+            _saveDirPath = Path.Combine(Application.temporaryCachePath, FallbackSubdir);
             try
             {
                 if (!Directory.Exists(_saveDirPath)) Directory.CreateDirectory(_saveDirPath);
@@ -125,7 +125,7 @@ public class ScreenSnapShot : MonoBehaviour
         }
         else
         {
-            string defaultPath = Path.Combine(Application.persistentDataPath, EDITOR_SUBDIR);
+            string defaultPath = Path.Combine(Application.persistentDataPath, EditorSubdir);
             Debug.LogWarning($"[ScreenSnapShot] エディタモード: フォルダ選択がキャンセルされました。デフォルトの保存先 \"{defaultPath}\" を使用します。");
             return defaultPath;
         }
@@ -150,7 +150,7 @@ public class ScreenSnapShot : MonoBehaviour
         }
 
         // ファイル名をベース名から生成
-        string filePath = Path.Combine(_saveDirPath, _fileNameBase + EXT_PNG);
+        string filePath = Path.Combine(_saveDirPath, _fileNameBase + ExtPNG);
 
         int captureWidth = _cam.pixelWidth;
         int captureHeight = _cam.pixelHeight;

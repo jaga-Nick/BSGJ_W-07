@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -8,15 +9,15 @@ namespace InGame.View
     [Serializable]
     public class TimerView 
     {
-        [SerializeField]
-        private Image Timer;
+        [FormerlySerializedAs("Timer")] [SerializeField]
+        private Image timer;
         /// <summary>
         /// 引数:時間の割合
         /// </summary>
-        /// <param name="TimePercent"></param>
-        public void DisplayTimer(float TimePercent)
+        /// <param name="timePercent"></param>
+        public void DisplayTimer(float timePercent)
         {
-            Timer.fillAmount = TimePercent;
+            timer.fillAmount = timePercent;
         }
     }
 }

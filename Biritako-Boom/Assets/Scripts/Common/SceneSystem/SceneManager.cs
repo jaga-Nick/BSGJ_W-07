@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
+using Common.GameSystem;
 using Cysharp.Threading.Tasks;
-using Setting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Common
+namespace Common.SceneSystem
 {
     /// <summary>
     /// シーンマネージャーとして設計。
@@ -43,10 +43,10 @@ namespace Common
         
 
             //こちらでメインのロードを行う。
-            using (var _cts = new CancellationTokenSource())
+            using (var cts = new CancellationTokenSource())
             {
                 //トークン発行
-                var token = _cts.Token;
+                var token = cts.Token;
                 try
                 {
                     if (_subSceneInfo != null)
@@ -116,9 +116,9 @@ namespace Common
                 //入力だけ可能にする。
                 _mainSceneInfo?.InputStart();
 
-                using (var _cts = new CancellationTokenSource()) { 
+                using (var cts = new CancellationTokenSource()) { 
 
-                    var token = _cts.Token;
+                    var token = cts.Token;
                     try
                     {
                         //アンロード
@@ -144,9 +144,9 @@ namespace Common
         [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
-            SceneManager.Instance()._mainSceneInfo = new TitleSceneLoader();
-            SceneManager.Instance()._mainSceneInfo.Init();
-            SceneManager.Instance()._mainSceneInfo.InputStart();
+            SceneManager.Instance._mainSceneInfo = new TitleSceneLoader();
+            SceneManager.Instance._mainSceneInfo.Init();
+            SceneManager.Instance._mainSceneInfo.InputStart();
         }
     }
 }

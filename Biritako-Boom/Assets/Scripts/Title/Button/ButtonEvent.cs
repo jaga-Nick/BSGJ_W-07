@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.SceneSystem;
 using Title.Loader;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,7 +45,7 @@ namespace Title.Button
         public async void OnClickSettingButton()
         {
             await _sceneFadeManager.End();
-            await SceneManager.Instance().LoadMainScene(_settingSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_settingSceneLoader);
             await _sceneFadeManager.Init();
         }
 
@@ -55,7 +56,7 @@ namespace Title.Button
         {
             await _sceneFadeManager.End();
             // await SceneManager.Instance().LoadMainScene(_introSceneLoader);
-            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_inGameSceneLoader);
             await _panelFadeManager.Init();
         }
 

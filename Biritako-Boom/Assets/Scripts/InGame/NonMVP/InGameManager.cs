@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Common;
 using InGame.Model;
 using TMPro;
-using Setting;
 using System.Threading.Tasks;
+using Common.AudioSystem;
+using Common.GameSystem;
 
 namespace InGame.NonMVP
 {
@@ -12,7 +12,7 @@ namespace InGame.NonMVP
     /// ゲームの流れを管理するクラス。
     /// UI周りもこちらで行う。
     /// </summary>
-    public class InGameManager : DestroyAvailable_SingletonMonoBehaviourBase<InGameManager>
+    public class InGameManager : DestroyAvailableSingletonMonoBehaviourBase<InGameManager>
     {
         /// <summary>
         /// ゲームタイムのパラメタ
@@ -65,7 +65,7 @@ namespace InGame.NonMVP
             
             if(inGameSecond/2 == _time)
             {
-                AudioManager.Instance().LoadBgm("GameTimeupIsComming");
+                AudioManager.Instance.PlayBGM(AUDIO.BGM_GAME_TIMEUP_IS_COMMING);
             }
 
             if (0f >= _time) // 時間切れ

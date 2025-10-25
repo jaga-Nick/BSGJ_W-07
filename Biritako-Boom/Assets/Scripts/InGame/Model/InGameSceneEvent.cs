@@ -1,4 +1,5 @@
 using Common;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using InGame.Loader;
@@ -16,7 +17,7 @@ namespace InGame.Model
         /// </summary>
         public async UniTask OnGameClearLoder()
         {
-            await SceneManager.Instance().LoadMainScene(_gameclearSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_gameclearSceneLoader);
             Debug.Log("通りました");
         }
         
@@ -26,7 +27,7 @@ namespace InGame.Model
         /// </summary>
         public async UniTask OnGameOverLoder()
         {
-            await SceneManager.Instance().LoadMainScene(_gameoverSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_gameoverSceneLoader);
             Debug.Log("通りました");
         }
     }

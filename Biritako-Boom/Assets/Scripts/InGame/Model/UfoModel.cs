@@ -64,7 +64,7 @@ namespace InGame.Model
             // UFOのHPを減らす
             DecrementUfoHp(damage);
             // スコアを増やす
-            ScoreModel.Instance().IncrementScore(UfoDeadScore);
+            ScoreModel.Instance.IncrementScore(UfoDeadScore);
             // HPが0になったら殺す
             if (((IEnemyModel)this).CurrentHp <= 0)
             {
@@ -107,7 +107,7 @@ namespace InGame.Model
         async UniTask IEnemyModel.OnDead()
         {
             // スコアを加算する
-            ScoreModel.Instance().IncrementScore(UfoScore);
+            ScoreModel.Instance.IncrementScore(UfoScore);
             // 死んだときの爆発エフェクトを表示
             GenerateExplosionManager.Instance().Factory(gameObject.transform.position, 2);
             // SpawnerのUFOカウントを減らしたことを通知

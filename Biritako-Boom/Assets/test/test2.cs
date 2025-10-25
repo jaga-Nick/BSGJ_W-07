@@ -1,29 +1,31 @@
 using System.Threading;
 using UnityEngine;
 using InGame.Model;
-using InGame.Presenter; // CameraPresenterの名前空間を追加
+using InGame.Presenter;
+using UnityEngine.Serialization; // CameraPresenterの名前空間を追加
 
-public class test2 : MonoBehaviour
+public class Test2 : MonoBehaviour
 {
+    [FormerlySerializedAs("CharacterAddress")]
     [Header("母艦Prefabデータ")]
     [SerializeField]
-    private string CharacterAddress="Enemy_MotherShip";
+    private string characterAddress="Enemy_MotherShip";
     
-    private MotherShipModel Model;
+    private MotherShipModel _model;
     
     
-    private PlayerModel Model2;
+    private PlayerModel _model2;
     
-    [Header("母艦生成するか")]
-    public bool Ins1 = false;
+    [FormerlySerializedAs("Ins1")] [Header("母艦生成するか")]
+    public bool ins1 = false;
 
     
 
     
     private void Awake()
     {
-        Model = GetComponent<MotherShipModel>();
-        Model2 = new PlayerModel();
+        _model = GetComponent<MotherShipModel>();
+        _model2 = new PlayerModel();
         
 
     }
@@ -31,9 +33,9 @@ public class test2 : MonoBehaviour
     private async void Start()
     {
 
-        if (Ins1)
+        if (ins1)
         {
-            await Model.GenerateMotherShip(CharacterAddress, Vector3.zero, CancellationToken.None);
+            await _model.GenerateMotherShip(characterAddress, Vector3.zero, CancellationToken.None);
         }
         
         

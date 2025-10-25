@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Common
+namespace Common.GameSystem
 {
     /// <summary>
     /// Addressableを使う時にusingさせる
@@ -9,18 +9,18 @@ namespace Common
     /// <typeparam name="T"></typeparam>
     struct HandleDisposable<T> : IDisposable
     {
-        private AsyncOperationHandle<T> Handle;
+        private AsyncOperationHandle<T> _handle;
 
         // ctor
-        public HandleDisposable(AsyncOperationHandle<T> handle) => Handle = handle;
+        public HandleDisposable(AsyncOperationHandle<T> handle) => _handle = handle;
 
         // IDisposable interface
         public void Dispose()
         {
-            if (Handle.IsValid())
+            if (_handle.IsValid())
             {
-                Handle.Release();
-                Handle = default; //無効値
+                _handle.Release();
+                _handle = default; //無効値
             }
         }
     }

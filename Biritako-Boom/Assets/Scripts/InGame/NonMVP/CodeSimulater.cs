@@ -5,6 +5,7 @@ using System.Threading;
 using System;
 using InGame.Model;
 using Common;
+using Common.GameSystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -43,22 +44,22 @@ namespace InGame.NonMVP
             )
         {
             // フィールドにセット
-            this.CodeLineRenderer = lineRenderer;
-            this.ParticleCount = particleCount;
-            this.TimeStep = timeStep;
-            this.Gravity = gravity;
-            this.Damping = damping;
-            this.Stiffness = stiffness;
+            this._codeLineRenderer = lineRenderer;
+            this._particleCount = particleCount;
+            this._timeStep = timeStep;
+            this._gravity = gravity;
+            this._damping = damping;
+            this._stiffness = stiffness;
             this.StartObject = startObject;
-            this.EndObject = endObject;
-            this.ExplosionTriggerDistance = explosionTriggerDistance;
-            this.MaxExplosion = maxExplosion;
+            this._endObject = endObject;
+            this._explosionTriggerDistance = explosionTriggerDistance;
+            this._maxExplosion = maxExplosion;
 
             InitializeRope();
             //位置設定の総量変更
             if (lineRenderer != null)
             {
-                lineRenderer.positionCount = ParticleCount;
+                lineRenderer.positionCount = _particleCount;
             }
 
             InitializeEdgeCollider();
@@ -82,19 +83,19 @@ namespace InGame.NonMVP
         /// <summary>
         /// 終点（プレイヤーかその場、ソケット）
         /// </summary>
-        private GameObject EndObject;
+        private GameObject _endObject;
 
         /// <summary>
         /// 爆発関係
         /// </summary>
-        private int ExplosionTriggerDistance = 3;
-        private int MaxExplosion;
+        private int _explosionTriggerDistance = 3;
+        private int _maxExplosion;
 
         #region データの実装（外部から設定される。Initializeで設定)
         /// <summary>
         /// 紐の最大粒子数
         /// </summary>
-        private int ParticleCount = 20;
+        private int _particleCount = 20;
         /// <summary>
         /// 実際の紐の粒子数
         /// </summary>
@@ -108,33 +109,33 @@ namespace InGame.NonMVP
         /// <summary>
         /// シミュレーションパラメータ
         /// </summary>
-        private float TimeStep = 0.02f;
-        private Vector3 Gravity = new Vector3(0, 0, 0);
-        private float Damping = 2f;
-        private float Stiffness = 2f;
+        private float _timeStep = 0.02f;
+        private Vector3 _gravity = new Vector3(0, 0, 0);
+        private float _damping = 2f;
+        private float _stiffness = 2f;
 
         /// <summary>
         /// 質点の状態
         /// </summary>
-        private Vector3[] Positions;
-        private Vector3[] Velocities;
-        private float[] Masses;
-        private bool[] IsFixed;
+        private Vector3[] _positions;
+        private Vector3[] _velocities;
+        private float[] _masses;
+        private bool[] _isFixed;
 
         // 拘束
         private struct Constraint
         {
-            public int i, j;
-            public float restLength;
+            public int I, J;
+            public float RestLength;
             public Constraint(int i, int j, float restLength)
             {
-                this.i = i;
-                this.j = j;
-                this.restLength = restLength;
+                this.I = i;
+                this.J = j;
+                this.RestLength = restLength;
             }
         }
-        private List<Constraint> constraints = new List<Constraint>();
-        private LineRenderer CodeLineRenderer;
+        private List<Constraint> _constraints = new List<Constraint>();
+        private LineRenderer _codeLineRenderer;
         #endregion
 
 
@@ -151,7 +152,7 @@ namespace InGame.NonMVP
         /// <summary>
         /// コードの返却キャンセルに使用する
         /// </summary>
-        private CancellationTokenSource cts;
+        private CancellationTokenSource _cts;
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
         
@@ -173,7 +174,7 @@ namespace InGame.NonMVP
             }
         }
         //ゲージを増減させるという処理の基準値
-        private float GaugeDistance=0.003f;
+        private float _gaugeDistance=0.003f;
 
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace InGame.NonMVP
         /// </summary>
         public float DecideCost()
         {
-            float num=TotalDistance() * GaugeDistance;
+            float num=TotalDistance() * _gaugeDistance;
 
             return num;
         }
@@ -194,9 +195,9 @@ namespace InGame.NonMVP
         public float TotalDistance()
         {
             float totalDistance = 0f;
-            for (int j = 0; j < Positions.Length - 1; j++)
+            for (int j = 0; j < _positions.Length - 1; j++)
             {
-                totalDistance += Vector3.Distance(Positions[j], Positions[j + 1]);
+                totalDistance += Vector3.Distance(_positions[j], _positions[j + 1]);
             }
             return totalDistance;
         }
@@ -208,7 +209,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void InjectionSocketCode(GameObject socket)
         {
-            EndObject = socket;
+            _endObject = socket;
             //戻る処理
             _isReturning = false;
         }
@@ -231,33 +232,33 @@ namespace InGame.NonMVP
         {
             GameObject obje= await EndPointGenerate();
 
-            obje.transform.position = EndObject.transform.position;
-            EndObject = obje;
-            EndObject.transform.SetParent(this.transform); // 親を this の Transform に設定
+            obje.transform.position = _endObject.transform.position;
+            _endObject = obje;
+            _endObject.transform.SetParent(this.transform); // 親を this の Transform に設定
 
             //コライダー生成
-            CircleCollider2D circle = EndObject.GetComponent<CircleCollider2D>();
+            CircleCollider2D circle = _endObject.GetComponent<CircleCollider2D>();
             //コライダーの情報セット
             circle.radius = 1;
             circle.offset = new Vector2(0, 0);
             circle.isTrigger = true;
 
             //判定用のスクリプト
-            CodeEndPointAttach endPointAttach=EndObject.GetComponent<CodeEndPointAttach>();
+            CodeEndPointAttach endPointAttach=_endObject.GetComponent<CodeEndPointAttach>();
             //EndPointに情報を残す。
             endPointAttach.SetCodeSimulater(this);
 
 
             //判定の為、Rigidbodyを作成。
-            Rigidbody2D rb = EndObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = _endObject.GetComponent<Rigidbody2D>();
             rb.gravityScale = 0;
-            cts?.Cancel();
-            cts?.Dispose();
-            cts = new CancellationTokenSource();
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
 
 
             //最終地点に進める。その後消える。
-            await ReturnEndPoint(cts.Token,model);
+            await ReturnEndPoint(_cts.Token,model);
         }
         
         
@@ -267,33 +268,33 @@ namespace InGame.NonMVP
         public void TakeCodeEvent(GameObject player)
         {
             // 以前の終点として使用していたGameObjectを破棄します。
-            if (EndObject != null && EndObject.name == "EndPoint(Clone)")
+            if (_endObject != null && _endObject.name == "EndPoint(Clone)")
             {
-                Destroy(EndObject);
+                Destroy(_endObject);
             }
 
             // 新しい終点をプレイヤーに設定します。
-            EndObject = player;
+            _endObject = player;
 
             // 実行中のReturnEndPointタスクがあればキャンセルします。
-            cts?.Cancel();
-            cts?.Dispose();
-            cts = new CancellationTokenSource();
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
 
             // 紐が縮んでいる状態（_isReturning）を解除。
             _isReturning = false;
 
             // シミュレーション対象のパーティクル数を最大に戻す。
             // これで、縮んで見えなくなっていた部分の紐が再び表示・計算されるように。
-            _activeParticleCount = ParticleCount;
+            _activeParticleCount = _particleCount;
 
             // 終点のパーティクルを再度「固定」状態に。
-            IsFixed[ParticleCount - 1] = true;
+            _isFixed[_particleCount - 1] = true;
 
             // LineRendererの頂点数をアクティブなパーティクル数に合わせる。
-            if (CodeLineRenderer != null)
+            if (_codeLineRenderer != null)
             {
-                CodeLineRenderer.positionCount = _activeParticleCount;
+                _codeLineRenderer.positionCount = _activeParticleCount;
             }
 
         }
@@ -318,7 +319,7 @@ namespace InGame.NonMVP
                 await UniTask.DelayFrame(500, PlayerLoopTiming.Update, linkedToken);
 
                 // 終点の固定を解除し、紐が縮む際に自然に動くようにする
-                IsFixed[ParticleCount - 1] = false;
+                _isFixed[_particleCount - 1] = false;
 
                 float elapsedTime = 0f;
 
@@ -333,12 +334,12 @@ namespace InGame.NonMVP
 
                     // 進捗率に合わせて、物理演算の対象となるパーティクルの数を減らす
                     // Mathf.CeilToInt を使うことで、最後のパーティクルが残るように調整
-                    _activeParticleCount = Mathf.CeilToInt(Mathf.Lerp(ParticleCount, 1, t));
+                    _activeParticleCount = Mathf.CeilToInt(Mathf.Lerp(_particleCount, 1, t));
 
                     // EndObjectを、アクティブな最後のパーティクルの位置に追従させる
-                    if (_activeParticleCount > 0 && EndObject != null)
+                    if (_activeParticleCount > 0 && _endObject != null)
                     {
-                        EndObject.transform.position = Positions[_activeParticleCount - 1];
+                        _endObject.transform.position = _positions[_activeParticleCount - 1];
                     }
 
                     elapsedTime += Time.deltaTime;
@@ -351,8 +352,8 @@ namespace InGame.NonMVP
                 _activeParticleCount = 1;
 
                 // タスク完了またはキャンセルの後始末
-                cts?.Dispose();
-                cts = null;
+                _cts?.Dispose();
+                _cts = null;
 
                 if (this != null)
                 {
@@ -379,12 +380,12 @@ namespace InGame.NonMVP
             var generater = GenerateExplosionManager.Instance();
             //紐の総長さを計算し、基準に地点を
             float totalDistance = TotalDistance();
-            int num = (int)totalDistance / ExplosionTriggerDistance;
+            int num = (int)totalDistance / _explosionTriggerDistance;
 
             //最大４以上の爆発
-            if (num >= MaxExplosion)
+            if (num >= _maxExplosion)
             {
-                num = MaxExplosion;
+                num = _maxExplosion;
             }
             else if (num < 1)
             {
@@ -399,21 +400,21 @@ namespace InGame.NonMVP
             if (num == 1)
             {
                 //等分で爆発させる。
-                i = (Positions.Length - 1) / 2;
-                generater.Factory(Positions[i], explosionSize);
+                i = (_positions.Length - 1) / 2;
+                generater.Factory(_positions[i], explosionSize);
                 
             }
             else
             {
 
-                i = Positions.Length;
+                i = _positions.Length;
                 //爆発参照
-                int rate = Positions.Length / (num + 1);
+                int rate = _positions.Length / (num + 1);
                 while (count < num)
                 {
                     i -= rate;
                     //爆発させる。（線の途中）
-                    generater.Factory(Positions[i], explosionSize);
+                    generater.Factory(_positions[i], explosionSize);
                     count++;
                     await UniTask.WaitForSeconds(0.02f);
                 }
@@ -456,9 +457,9 @@ namespace InGame.NonMVP
             }
 
             // コライダーの頂点配列を一度だけ確保し、ガベージコレクションの負荷を避けます。
-            if (_colliderPoints == null || _colliderPoints.Length != ParticleCount)
+            if (_colliderPoints == null || _colliderPoints.Length != _particleCount)
             {
-                _colliderPoints = new Vector2[ParticleCount];
+                _colliderPoints = new Vector2[_particleCount];
             }
         }
 
@@ -483,7 +484,7 @@ namespace InGame.NonMVP
             var activePoints = new Vector2[_activeParticleCount];
             for (int i = 0; i < _activeParticleCount; i++)
             {
-                activePoints[i] = Positions[i];
+                activePoints[i] = _positions[i];
             }
             _edgeCollider.points = activePoints;
         }
@@ -497,30 +498,30 @@ namespace InGame.NonMVP
         /// </summary>
         private void InitializeRope()
         {
-            Positions = new Vector3[ParticleCount];
-            Velocities = new Vector3[ParticleCount];
-            Masses = new float[ParticleCount];
-            IsFixed = new bool[ParticleCount];
+            _positions = new Vector3[_particleCount];
+            _velocities = new Vector3[_particleCount];
+            _masses = new float[_particleCount];
+            _isFixed = new bool[_particleCount];
 
-            for (int i = 0; i < ParticleCount; i++)
+            for (int i = 0; i < _particleCount; i++)
             {
-                float t = (float)i / (ParticleCount - 1);
-                Positions[i] = Vector3.Lerp(StartObject.transform.position, EndObject.transform.position, t);
-                Velocities[i] = Vector3.zero;
-                Masses[i] = 1f;
+                float t = (float)i / (_particleCount - 1);
+                _positions[i] = Vector3.Lerp(StartObject.transform.position, _endObject.transform.position, t);
+                _velocities[i] = Vector3.zero;
+                _masses[i] = 1f;
             }
 
-            constraints.Clear();
-            for (int i = 0; i < ParticleCount - 1; i++)
+            _constraints.Clear();
+            for (int i = 0; i < _particleCount - 1; i++)
             {
-                float restLength = Vector3.Distance(Positions[i], Positions[i + 1]);
-                constraints.Add(new Constraint(i, i + 1, restLength));
+                float restLength = Vector3.Distance(_positions[i], _positions[i + 1]);
+                _constraints.Add(new Constraint(i, i + 1, restLength));
             }
 
-            IsFixed[0] = true;
-            IsFixed[ParticleCount - 1] = true;
+            _isFixed[0] = true;
+            _isFixed[_particleCount - 1] = true;
 
-            _activeParticleCount = ParticleCount;
+            _activeParticleCount = _particleCount;
             _isReturning = false;
         }
 
@@ -534,14 +535,14 @@ namespace InGame.NonMVP
         {
             for (int i = 0; i < _activeParticleCount; i++)
             {
-                if (IsFixed[i]) continue;
+                if (_isFixed[i]) continue;
 
                 // 1. パーティクルの円範囲にあるコライダー候補を取得
                 Collider2D[] hitColliders = Physics2D.OverlapCircleAll(predictedPositions[i], particleRadius, collisionMask);
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject == StartObject || hitCollider.gameObject == EndObject)
+                    if (hitCollider.gameObject == StartObject || hitCollider.gameObject == _endObject)
                     {
                         continue;
                     }
@@ -580,46 +581,46 @@ namespace InGame.NonMVP
             // 重力など外力の適用
             for (int i = 0; i < _activeParticleCount; i++) 
             {
-                if (IsFixed[i]) continue;
-                Velocities[i] += Gravity * TimeStep;
+                if (_isFixed[i]) continue;
+                _velocities[i] += _gravity * _timeStep;
             }
 
             // 減衰
             for (int i = 0; i < _activeParticleCount; i++)
             {
-                Velocities[i] *= (1 - Damping);
+                _velocities[i] *= (1 - _damping);
             }
 
             // 位置予測
-            Vector3[] predicted = new Vector3[ParticleCount]; 
+            Vector3[] predicted = new Vector3[_particleCount]; 
             for (int i = 0; i < _activeParticleCount; i++) 
             {
-                predicted[i] = Positions[i] + Velocities[i] * TimeStep;
+                predicted[i] = _positions[i] + _velocities[i] * _timeStep;
             }
             // 非アクティブな予測位置を現在の位置に維持
-            for (int i = _activeParticleCount; i < ParticleCount; i++)
+            for (int i = _activeParticleCount; i < _particleCount; i++)
             {
-                predicted[i] = Positions[i];
+                predicted[i] = _positions[i];
             }
 
             // 拘束解決（反復）
             for (int iter = 0; iter < 5; iter++)
             {
                 // 1. 距離の拘束を解決
-                foreach (var c in constraints)
+                foreach (var c in _constraints)
                 {
                     //  アクティブなパーティクル間の拘束のみ解決
-                    if (c.j >= _activeParticleCount) continue;
+                    if (c.J >= _activeParticleCount) continue;
 
-                    Vector3 delta = predicted[c.i] - predicted[c.j];
+                    Vector3 delta = predicted[c.I] - predicted[c.J];
                     float d = delta.magnitude;
                     if (d == 0) continue;
-                    float diff = (d - c.restLength) / d;
+                    float diff = (d - c.RestLength) / d;
 
-                    Vector3 correction = delta * diff * 0.5f * Stiffness;
+                    Vector3 correction = delta * diff * 0.5f * _stiffness;
 
-                    if (!IsFixed[c.i]) predicted[c.i] -= correction;
-                    if (!IsFixed[c.j]) predicted[c.j] += correction;
+                    if (!_isFixed[c.I]) predicted[c.I] -= correction;
+                    if (!_isFixed[c.J]) predicted[c.J] += correction;
                 }
 
                 // 衝突の拘束を解決
@@ -629,27 +630,27 @@ namespace InGame.NonMVP
             // 状態の確定（速度と位置）
             for (int i = 0; i < _activeParticleCount; i++) 
             {
-                if (IsFixed[i]) continue;
-                Velocities[i] = (predicted[i] - Positions[i]) / TimeStep;
-                Positions[i] = predicted[i];
+                if (_isFixed[i]) continue;
+                _velocities[i] = (predicted[i] - _positions[i]) / _timeStep;
+                _positions[i] = predicted[i];
             }
 
             // 両端の処理
-            Positions[0] = StartObject.transform.position;
+            _positions[0] = StartObject.transform.position;
 
             if (_isReturning)
             {
                 // 戻り処理中は、非アクティブなパーティクルを始点に集める
-                for (int i = _activeParticleCount; i < ParticleCount; i++)
+                for (int i = _activeParticleCount; i < _particleCount; i++)
                 {
-                    Positions[i] = StartObject.transform.position;
-                    Velocities[i] = Vector3.zero;
+                    _positions[i] = StartObject.transform.position;
+                    _velocities[i] = Vector3.zero;
                 }
             }
             else
             {
                 // 通常時は終点をEndObjectに固定
-                Positions[ParticleCount - 1] = EndObject.transform.position;
+                _positions[_particleCount - 1] = _endObject.transform.position;
             }
         }
 
@@ -658,16 +659,16 @@ namespace InGame.NonMVP
         /// </summary>
         private void UpdateLineRenderer()
         {
-            if (CodeLineRenderer == null) return;
+            if (_codeLineRenderer == null) return;
 
-            if (CodeLineRenderer.positionCount != _activeParticleCount)
+            if (_codeLineRenderer.positionCount != _activeParticleCount)
             {
-                CodeLineRenderer.positionCount = _activeParticleCount;
+                _codeLineRenderer.positionCount = _activeParticleCount;
             }
 
             for (int i = 0; i < _activeParticleCount; i++)
             {
-                CodeLineRenderer.SetPosition(i, Positions[i]);
+                _codeLineRenderer.SetPosition(i, _positions[i]);
             }
         }
 
@@ -676,7 +677,7 @@ namespace InGame.NonMVP
         // このコンポーネントが無効になったり破棄された時に、実行中のタスクを止める
         private void OnDisable()
         {
-            cts?.Cancel();
+            _cts?.Cancel();
         }
     }
 }

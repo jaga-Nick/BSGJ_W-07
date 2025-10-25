@@ -1,9 +1,8 @@
-using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Common
+namespace Common.SceneSystem
 {
     public class FadeManager : ISceneInfo
     {

@@ -1,8 +1,7 @@
 ﻿using System;
-using ShakeEffect;
 using UnityEngine;
 
-namespace Common.ShakeEffect
+namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// IShakeParametersインターフェースの実装です。

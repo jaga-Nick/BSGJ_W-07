@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.Presenter;
@@ -22,7 +23,7 @@ namespace InGame.NonMVP
             _model = playerModel;
             _presenter = playerPresenter;
             _enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
-            var manage = InputSystemActionsManager.Instance();
+            var manage = InputSystemActionsManager.Instance;
             _actionMap = manage.GetInputSystem_Actions();
         }
         
@@ -45,7 +46,7 @@ namespace InGame.NonMVP
         /// </summary>
         public void Init()
         {
-            var manager = InputSystemActionsManager.Instance();
+            var manager = InputSystemActionsManager.Instance;
             _actionMap = manager.GetInputSystem_Actions();
             manager.PlayerEnable();
         }
@@ -102,10 +103,10 @@ namespace InGame.NonMVP
                                 socketTipTransform.rotation,
                                 socketPresenter.transform
                             );
-                            _model.SocketTips.Add(socketTipInstance);
+                            _model.socketTips.Add(socketTipInstance);
                         }
                         
-                        Debug.Log(_model.SocketTips);
+                        Debug.Log(_model.socketTips);
                         _isHaveCode = false;
                     }
                     // プラグをコンセントにさす
@@ -143,7 +144,7 @@ namespace InGame.NonMVP
             // ポーズ画面の表示
             if (!_actionMap.Player.Pose.WasPressedThisFrame()) return;
             TimeManager.Instance().SetTimeScale(0);
-            SceneManager.Instance().LoadSubScene(new PauseSceneLoader()).Forget();
+            SceneManager.Instance.LoadSubScene(new PauseSceneLoader()).Forget();
         }
 
         

@@ -1,4 +1,4 @@
-﻿namespace ShakeEffect
+﻿namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// シェイクの現在の状態を表します。
