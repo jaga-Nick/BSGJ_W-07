@@ -4,15 +4,15 @@ namespace Title.View
 {
     public class CreditPanelView : MonoBehaviour
     {
-        private GameObject panelObject;
+        private GameObject _panelObject;
         
         /// <summary>
         /// Panelを開く。
         /// </summary>
         public void OpenPanel()
         {
-            panelObject.SetActive(true);
-            Debug.Log(panelObject.name + " Opened");
+            _panelObject.SetActive(true);
+            Debug.Log(_panelObject.name + " Opened");
         }
 
         /// <summary>
@@ -20,8 +20,8 @@ namespace Title.View
         /// </summary>
         public void ClosePanel()
         {
-            panelObject.SetActive(false);
-            Debug.Log(panelObject.name + " Closed");
+            _panelObject.SetActive(false);
+            Debug.Log(_panelObject.name + " Closed");
         }
         
         /// <summary>
@@ -29,8 +29,8 @@ namespace Title.View
         /// </summary>
         public void TogglePanel()
         {
-            if (!panelObject) return;
-            if (panelObject.activeSelf)
+            if (!_panelObject) return;
+            if (_panelObject.activeSelf)
             {
                 ClosePanel();
             }
@@ -43,6 +43,6 @@ namespace Title.View
         /// <summary>
         /// Panelが現在開いているかどうかを返します。
         /// </summary>
-        public bool IsOpen => panelObject && panelObject.activeSelf;
+        public bool IsOpen => _panelObject && _panelObject.activeSelf;
     }
 }

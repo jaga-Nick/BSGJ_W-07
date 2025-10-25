@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ShakeEffect
+namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// Transformの揺れを処理するコンポーネントです。
@@ -82,7 +82,7 @@ namespace ShakeEffect
         [SerializeField]
         private bool addToGlobalShakers;
 
-        private List<ShakeInstance> activeShakes = new List<ShakeInstance>();
+        private List<ShakeInstance> _activeShakes = new List<ShakeInstance>();
 
         private void Awake()
         {
@@ -100,14 +100,14 @@ namespace ShakeEffect
         {
             ShakeResult shake = new ShakeResult();
 
-            for (int i = activeShakes.Count - 1; i >= 0; i--)
+            for (int i = _activeShakes.Count - 1; i >= 0; i--)
             {
-                if (activeShakes[i].IsFinished())
+                if (_activeShakes[i].IsFinished())
                 {
-                    activeShakes.RemoveAt(i);
+                    _activeShakes.RemoveAt(i);
                     continue;
                 }
-                shake += activeShakes[i].UpdateShake(Time.deltaTime);
+                shake += _activeShakes[i].UpdateShake(Time.deltaTime);
             }
 
             transform.localPosition = shake.PositionShake;
@@ -149,7 +149,7 @@ namespace ShakeEffect
         /// </summary>
         public void AddShake(ShakeInstance shakeInstance)
         {
-            activeShakes.Add(shakeInstance);
+            _activeShakes.Add(shakeInstance);
         }
     }
 }

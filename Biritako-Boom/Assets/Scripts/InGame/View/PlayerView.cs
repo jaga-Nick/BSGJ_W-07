@@ -2,6 +2,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -16,11 +17,11 @@ namespace InGame.View
     {
         
 
-        private PlayerModel model;
+        private PlayerModel _model;
 
         //延長コード
-        [SerializeField]
-        private Image CodeGauge;
+        [FormerlySerializedAs("CodeGauge")] [SerializeField]
+        private Image codeGauge;
          //Animation(実装までかなり長いはずなので全文コメント
         private Animator _animator;
         private Rigidbody2D _rb;
@@ -32,8 +33,8 @@ namespace InGame.View
 
         public void Init()
         {
-            _animator = model.PlayerObject.GetComponent<Animator>();
-            _rb = model.Rb;
+            _animator = _model.PlayerObject.GetComponent<Animator>();
+            _rb = _model.Rb;
         }
 
         // Update is called once per frame
@@ -54,18 +55,18 @@ namespace InGame.View
 
             if(move.x  > 0)
             {
-                model.PlayerObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                _model.PlayerObject.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             else if (move.x <0)
             {
-                model.PlayerObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+                _model.PlayerObject.transform.rotation = Quaternion.Euler(0, 180, 0);
 
             }
         }
 
-        public void SetPlayerModel(PlayerModel _model)
+        public void SetPlayerModel(PlayerModel model)
         {
-            model = _model;
+            this._model = model;
         }
 
         public void SetHaveConcent(bool value)
@@ -73,9 +74,9 @@ namespace InGame.View
             _animator.SetBool(HaveConcent, value);
         }
 
-        public void DisplayCodeGauge(float GaugePercent)
+        public void DisplayCodeGauge(float gaugePercent)
         {
-            CodeGauge.fillAmount = GaugePercent;
+            codeGauge.fillAmount = gaugePercent;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace InGame.View
 {
@@ -10,14 +11,14 @@ namespace InGame.View
     [Serializable]
     public class ScoreView
     {
-        [SerializeField] private TextMeshProUGUI ScoreText;
+        [FormerlySerializedAs("ScoreText")] [SerializeField] private TextMeshProUGUI scoreText;
 
         /// <summary>
         /// スコアのテキストを表示する。
         /// </summary>
-        public void DisplayScore(int Score)
+        public void DisplayScore(int score)
         {
-            ScoreText.text = Score.ToString();
+            scoreText.text = score.ToString();
         }
     }
 }

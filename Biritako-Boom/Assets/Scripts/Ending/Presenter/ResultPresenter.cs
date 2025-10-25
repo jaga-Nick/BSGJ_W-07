@@ -33,7 +33,7 @@ namespace Ending.Presenter
         private void Start()
         {
             // Modelに最終スコアを設定
-            int targetScore = ScoreModel.Instance().Score;
+            int targetScore = ScoreModel.Instance.Score;
             _resultScoreModel.SetTargetScore(targetScore);
             
             // Viewの初期表示を0に設定

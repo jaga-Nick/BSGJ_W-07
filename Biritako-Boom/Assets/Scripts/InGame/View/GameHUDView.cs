@@ -11,7 +11,7 @@ namespace InGame.View
 
     public class GameHUDView : MonoBehaviour
     {
-        private PlayerModel model;
+        private PlayerModel _model;
 
         [Header("ゲージとPlayerCharacterAnimation")]
         [SerializeField]
@@ -24,13 +24,13 @@ namespace InGame.View
 
         public void Start()
         {
-            playerView.SetPlayerModel(model);
+            playerView.SetPlayerModel(_model);
             playerView.Init();
         }
 
-        public void SetModel(PlayerModel _model)
+        public void SetModel(PlayerModel model)
         {
-            model = _model;
+            this._model = model;
         }
 
         public PlayerView GetplayerView()

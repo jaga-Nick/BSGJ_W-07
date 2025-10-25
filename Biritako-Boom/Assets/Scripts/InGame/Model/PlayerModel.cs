@@ -8,7 +8,9 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Linq;
-using Setting;
+using Common.AudioSystem;
+using Common.GameSystem;
+using UnityEngine.Serialization;
 
 
 namespace InGame.Model
@@ -78,7 +80,7 @@ namespace InGame.Model
         /// <summary>
         /// コンセントに刺さったプラグの先端
         /// </summary>
-        public List<GameObject> SocketTips = new List<GameObject>();
+        [FormerlySerializedAs("SocketTips")] public List<GameObject> socketTips = new List<GameObject>();
         
         /// <summary>
         /// コードのシミュレーター
@@ -156,7 +158,7 @@ namespace InGame.Model
         public void GeneratePlayerCharacter()
         {
             if (PlayerObject != null) return;
-            PlayerObject = UnityEngine.Object.Instantiate( _presenter.characterPrefab , _instancePosition, Quaternion.identity);
+            PlayerObject = UnityEngine.Object.Instantiate( _presenter.CharacterPrefab , _instancePosition, Quaternion.identity);
             OnPlayerSpawned?.Invoke();
             Rb = PlayerObject?.GetComponent<Rigidbody2D>();
             HealCodeGauge().Forget();
@@ -192,7 +194,7 @@ namespace InGame.Model
             // modelのSocketに設定
             Socket = instance;
             // SocketのSEを再生
-            AudioManager.Instance().LoadSoundEffect("SocketPutOn");
+            AudioManager.Instance.PlaySe(AUDIO.SE_SOCKET_PUT_ON);
         }
 
         /// <summary>
@@ -203,7 +205,7 @@ namespace InGame.Model
             // Socketがnullまたはコードシミュレーターが存在する場合は何もしない
             if (Socket == null || codeSimulators.Count != 0) return;
             // Socketの音を再生
-            AudioManager.Instance().LoadSoundEffect("PlayerableCharacterPickUpSocket");
+            AudioManager.Instance.PlaySe(AUDIO.SE_PLAYABLE_CHARACTER_PICK_UP_SOCKET);
             // Socketを破棄
             UnityEngine.Object.Destroy(Socket);
         }
@@ -288,9 +290,9 @@ namespace InGame.Model
                 // Socketにコードがどれだけ刺さっているかで爆発力が変わる
                 switch (codeSimulators.Count)
                 {
-                    case <= 2: AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionSmall"); break;
-                    case <= 4: AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionMiddle"); break;
-                    case >= 5: AudioManager.Instance().LoadSoundEffect("PlugPluged_ExplosionLarge"); break;
+                    case <= 2: AudioManager.Instance.PlaySe(AUDIO.SE_PLUG_PLUGED_EXPLOSION_SMALL); break;
+                    case <= 4: AudioManager.Instance.PlaySe(AUDIO.SE_PLUG_PLUGED_EXPLOSION_MIDDLE); break;
+                    case >= 5: AudioManager.Instance.PlaySe(AUDIO.SE_PLUG_PLUGED_EXPLOSION_LARGE); break;
                 }
             }
             // Socketのコードゲージをリセット
@@ -390,7 +392,7 @@ namespace InGame.Model
                 // 完了待機はしない（寧ろ待つとバグが発生する）
                 HavingCode().Forget();
                 // コードを生成した時のSEを再生
-                AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
+                AudioManager.Instance.PlaySe(AUDIO.SE_PLAYABLE_CHARACTER_PLUG_CATCH);
             }
         }
         
@@ -413,7 +415,7 @@ namespace InGame.Model
             // 何も見つからなかったら何もしない
             if (endpoint == null || CurrentHaveCodeSimulator != null) return;
             // プラグを拾った時のSEを再生
-            AudioManager.Instance().LoadSoundEffect("PlayableCharacterPlugCatch");
+            AudioManager.Instance.PlaySe(AUDIO.SE_PLAYABLE_CHARACTER_PLUG_CATCH);
             // 生成したコードをセットする
             SetCurrentHaveCode(endpoint.CodeSimulater);
             // コードを拾った時の処理を実行
@@ -427,7 +429,7 @@ namespace InGame.Model
         public void PutOnCode()
         {
             // コードを置くときのSEを再生
-            AudioManager.Instance().LoadSoundEffect("PlugUnpluged");
+            AudioManager.Instance.PlaySe(AUDIO.SE_PLUG_UNPLUGED);
 
             //持っている処理をWhileを強制終了させる。
             _codeHaveCancellation?.Cancel();
@@ -452,7 +454,7 @@ namespace InGame.Model
                 // 爆発するか否かのブーリアンをtrueにする
                 doExplosion = true;
                 // カットインのSEを再生
-                AudioManager.Instance().LoadSoundEffect("CutInBomb");
+                AudioManager.Instance.PlaySe(AUDIO.SE_CUT_IN_BOMB);
                 // カットイン挿入
                 var cutIn= GenerateExplosionManager.Instance().GenerateCutIn();
                 // 一旦時を止める

@@ -24,11 +24,12 @@ public class SnapPresenter : MonoBehaviour
     [SerializeField]
     private string fileName = "result"; // 保存ファイル名
 
+    [FormerlySerializedAs("SavePath")]
     [FormerlySerializedAs("editorOnlyRelativeSavePath")]
     [Header("エディタ実行時 設定")]
     [Tooltip("【エディタ実行時のみ】プロジェクトルートからの相対保存ディレクトリパスを指定します。\n例: \"MyGame_Screenshots\" や \"../Temporary/EditorShots\"\n空の場合、ScreenSnapShotがユーザーにフォルダ選択を促すか、デフォルトパスを使用します。\n【ビルド時】この設定は無視されます。")]
     [SerializeField]
-    private string SavePath;
+    private string savePath;
 
     void Start()
     {
@@ -50,7 +51,7 @@ public class SnapPresenter : MonoBehaviour
             mainCamera,
             uiLayersToExclude,
             fileName, 
-            SavePath
+            savePath
         );
     }
 

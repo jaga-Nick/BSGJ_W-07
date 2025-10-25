@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Common.GameSystem;
+using UnityEngine;
 
 namespace Common
 {
@@ -7,18 +8,18 @@ namespace Common
     /// </summary>
     public class InputSystemActionsManager : SingletonMonoBehaviourBase<InputSystemActionsManager>
     {
-        private InputSystem_Actions _InputSystemActions;
+        private InputSystem_Actions _inputSystemActions;
         /// <summary>
         /// アクションマップの情報を取得する
         /// </summary>
         /// <returns></returns>
         public InputSystem_Actions GetInputSystem_Actions()
         {
-            if (_InputSystemActions == null)
+            if (_inputSystemActions == null)
             {
-                _InputSystemActions = new InputSystem_Actions();
+                _inputSystemActions = new InputSystem_Actions();
             }
-            return _InputSystemActions;
+            return _inputSystemActions;
         }
 
         /// <summary>
@@ -26,12 +27,12 @@ namespace Common
         /// </summary>
         public void PlayerEnable()
         {
-            if (_InputSystemActions == null)
+            if (_inputSystemActions == null)
             {
-                _InputSystemActions = new InputSystem_Actions();
+                _inputSystemActions = new InputSystem_Actions();
             }
-            _InputSystemActions?.Player.Enable();
-            _InputSystemActions?.UI.Disable();
+            _inputSystemActions?.Player.Enable();
+            _inputSystemActions?.UI.Disable();
         }
 
         /// <summary>
@@ -39,12 +40,12 @@ namespace Common
         /// </summary>
         public void UIEnable()
         {
-            if (_InputSystemActions == null)
+            if (_inputSystemActions == null)
             {
-                _InputSystemActions = new InputSystem_Actions();
+                _inputSystemActions = new InputSystem_Actions();
             }
-            _InputSystemActions?.Player.Disable();
-            _InputSystemActions?.UI.Enable();
+            _inputSystemActions?.Player.Disable();
+            _inputSystemActions?.UI.Enable();
         }
 
         /// <summary>
@@ -52,11 +53,11 @@ namespace Common
         /// </summary>
         public void PlayerDisable()
         {
-            if (_InputSystemActions == null)
+            if (_inputSystemActions == null)
             {
-                _InputSystemActions = new InputSystem_Actions();
+                _inputSystemActions = new InputSystem_Actions();
             }
-            _InputSystemActions?.Player.Disable();
+            _inputSystemActions?.Player.Disable();
             Debug.Log("プレイヤー操作無効化");
         }
 
@@ -65,11 +66,11 @@ namespace Common
         /// </summary>
         public void UIDisable()
         {
-            if (_InputSystemActions == null)
+            if (_inputSystemActions == null)
             {
-                _InputSystemActions = new InputSystem_Actions();
+                _inputSystemActions = new InputSystem_Actions();
             }
-            _InputSystemActions?.UI.Disable();
+            _inputSystemActions?.UI.Disable();
             Debug.Log("UI操作無効化");
         }
     }

@@ -1,8 +1,9 @@
 ﻿using Common;
+using Common.AudioSystem;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using InGame.Model;
 using InGame.NonMVP;
-using Setting;
 using UnityEngine;
 
 namespace Title.Loader
@@ -26,15 +27,14 @@ namespace Title.Loader
         /// </summary>
         public async UniTask Init()
         {
-            ScoreModel.Instance().RestoreScore();
-            AudioManager.Instance().LoadBgm("BgmInGame");
-            Debug.Log("テスト_Init");
+            ScoreModel.Instance.RestoreScore();
+            AudioManager.Instance.PlayBGM(AUDIO.BGM_TITLE);
             TimeManager.Instance().SetTimeScale(1);
         }
 
         public void InputStart()
         {
-            InputSystemActionsManager.Instance().PlayerEnable();
+            InputSystemActionsManager.Instance.PlayerEnable();
         }
 
         public void InputStop()

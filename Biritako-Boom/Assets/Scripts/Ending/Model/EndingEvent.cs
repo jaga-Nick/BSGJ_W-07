@@ -1,4 +1,5 @@
 using Common;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Ending.Loader;
@@ -15,7 +16,7 @@ namespace Ending.Model
         /// </summary>
         public async UniTask OnResultLoder()
         {
-            await SceneManager.Instance().LoadMainScene(_resultSceneLoader);
+            await SceneManager.Instance.LoadMainScene(_resultSceneLoader);
             Debug.Log("通りました");
         }
     }

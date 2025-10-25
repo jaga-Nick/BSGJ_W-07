@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace Common
+namespace Common.SceneSystem
 {
     /// <summary>
     /// シーン情報。

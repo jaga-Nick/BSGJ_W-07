@@ -4,7 +4,9 @@ using UnityEngine.Rendering;
 using Common;
 using System.Threading;
 using System;
+using Common.GameSystem;
 using InGame.Model;
+using UnityEngine.Serialization;
 
 namespace Common
 {
@@ -12,7 +14,7 @@ namespace Common
     /// カメラの追従、ポストプロセスエフェクトの実行と制御をすべて担当する統合マネージャー。
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class CameraManager : DestroyAvailable_SingletonMonoBehaviourBase<CameraManager>
+    public class CameraManager : DestroyAvailableSingletonMonoBehaviourBase<CameraManager>
     {
         [Header("ポストプロセス設定")]
         [Tooltip("ポストプロセス用のマテリアル")]
@@ -23,8 +25,9 @@ namespace Common
         [Tooltip("プレイヤーからのZ軸オフセット")]
         [SerializeField] private float offsetZ = -10f;
 
+        [FormerlySerializedAs("_defaultSize")]
         [Header("デフォルトカメラサイズ")]
-        [SerializeField] private float _defaultSize = 5.625f;
+        [SerializeField] private float defaultSize = 5.625f;
 
         [Header("カメラ拡縮設定")]
         [Tooltip("拡大（ズームイン）する際のカメラサイズ")]
@@ -80,7 +83,7 @@ namespace Common
             _offset = new Vector3(0, 0, offsetZ);
 
             // カメラのサイズを初期化
-            _camera.orthographicSize = _defaultSize;
+            _camera.orthographicSize = defaultSize;
 
             // 起動時の色覚異常モードを設定
             _isColorblindModeEnabled = enableColorblindModeOnStart;
@@ -160,7 +163,7 @@ namespace Common
             {
                 await AnimateFoV(zoomInSize, zoomInTime, _cameraSizeCts.Token);
                 await UniTask.Delay(TimeSpan.FromSeconds(zoomHoldTime), cancellationToken: _cameraSizeCts.Token);
-                await AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token);
+                await AnimateFoV(defaultSize, defaultTime, _cameraSizeCts.Token);
             }
             catch (OperationCanceledException)
             {
@@ -178,7 +181,7 @@ namespace Common
             {
                 await AnimateFoV(zoomOutSize, zoomOutTime, _cameraSizeCts.Token);
                 await UniTask.Delay(TimeSpan.FromSeconds(zoomHoldTime), cancellationToken: _cameraSizeCts.Token);
-                await AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token);
+                await AnimateFoV(defaultSize, defaultTime, _cameraSizeCts.Token);
             }
             catch (OperationCanceledException)
             {
@@ -211,7 +214,7 @@ namespace Common
         public void DefaultFoV()
         {
             CancelPreviousSizeAnimation();
-            AnimateFoV(_defaultSize, defaultTime, _cameraSizeCts.Token).Forget();
+            AnimateFoV(defaultSize, defaultTime, _cameraSizeCts.Token).Forget();
         }
 
         #endregion

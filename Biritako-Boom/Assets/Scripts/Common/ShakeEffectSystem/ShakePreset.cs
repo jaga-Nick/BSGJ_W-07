@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ShakeEffect
+namespace Common.ShakeEffectSetting
 {
     /// <summary>
     /// IShakeParametersインターフェースの、ScriptableObjectアセットによる実装です。

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Common;
+using Common.SceneSystem;
 using Cysharp.Threading.Tasks;
 using InGame.NonMVP;
 
@@ -21,12 +22,12 @@ namespace Pose
 
         void ISceneInfo.InputStart()
         {
-            InputSystemActionsManager.Instance().UIEnable();
+            InputSystemActionsManager.Instance.UIEnable();
         }
 
         void ISceneInfo.InputStop()
         {
-            InputSystemActionsManager.Instance().UIDisable();
+            InputSystemActionsManager.Instance.UIDisable();
         }
     }
 }

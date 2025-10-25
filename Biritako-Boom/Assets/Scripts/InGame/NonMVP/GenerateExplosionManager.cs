@@ -1,5 +1,6 @@
-﻿using Setting;
-using System;
+﻿using System;
+using Common.AudioSystem;
+using Common.GameSystem;
 using UnityEngine;
 
 namespace InGame.NonMVP
@@ -7,7 +8,7 @@ namespace InGame.NonMVP
     /// <summary>
     /// 破壊可能でどこからでも呼び出せるようにする。
     /// </summary>
-    public class GenerateExplosionManager:DestroyAvailable_SingletonMonoBehaviourBase<GenerateExplosionManager>
+    public class GenerateExplosionManager:DestroyAvailableSingletonMonoBehaviourBase<GenerateExplosionManager>
     {
         /// <summary>
         /// カットインパラメタ
@@ -65,15 +66,15 @@ namespace InGame.NonMVP
                 switch (explosionPower)
                 {
                     case 0:
-                        AudioManager.Instance().LoadSoundEffect("ExplosionSmall");
+                        AudioManager.Instance.PlaySe(AUDIO.SE_EXPLOSION_SMALL);
                         PlayExplosionAnimation(vec, smallCollisionSize, smallDamage, "SmallExplosion");
                         break;
                     case 1:
-                        AudioManager.Instance().LoadSoundEffect("ExplosionMiddle");
+                        AudioManager.Instance.PlaySe(AUDIO.SE_EXPLOSION_MIDDLE);
                         PlayExplosionAnimation(vec, mediumCollisionSize, mediumDamage, "MediumExplosion");
                         break;
                     case 2:
-                        AudioManager.Instance().LoadSoundEffect("ExplosionLarge");
+                        AudioManager.Instance.PlaySe(AUDIO.SE_EXPLOSION_LARGE);
                         PlayExplosionAnimation(vec, bigCollisionSize, bigDamage, "BigExplosion");
                         break;
                 }

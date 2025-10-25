@@ -1,6 +1,7 @@
 ﻿using InGame.Model;
 using UnityEngine;
 using InGame.Presenter;
+using UnityEngine.Serialization;
 
 namespace InGame.NonMVP
 {
@@ -9,79 +10,88 @@ namespace InGame.NonMVP
     /// </summary>
     public class GenerateCodeSystem : MonoBehaviour
     {
+        [FormerlySerializedAs("LineWidth")]
         [Header("LineRendererの設定")]
         [SerializeField]
         //線の細さ太さ。
-        private float LineWidth = 0.1f;
-        [SerializeField]
+        private float lineWidth = 0.1f;
+        [FormerlySerializedAs("LineMaterial")] [SerializeField]
         //マテリアルを設定(virtual)
-        private Material LineMaterial;
+        private Material lineMaterial;
+        [FormerlySerializedAs("OrderInLayer")]
         [Header("描画順")]
         [SerializeField]
-        private int OrderInLayer = 3;
+        private int orderInLayer = 3;
 
 
+        [FormerlySerializedAs("ParticleCount")]
         [Header("紐計算の設定")]
         // ヒモの粒子数
         [Header("粒子数")]
         [SerializeField]
-        private int ParticleCount = 100;
+        private int particleCount = 100;
         // シミュレーションパラメータ
+        [FormerlySerializedAs("TimeStep")]
         [Header("計算制度(更新間秒)")]
         [SerializeField]
-        private float TimeStep = 0.02f;
+        private float timeStep = 0.02f;
+        [FormerlySerializedAs("Gravity")]
         [Header("重力(質点にかかるもの)")]
         [SerializeField]
-        private Vector3 Gravity = new Vector3(0, 0, 0);
+        private Vector3 gravity = new Vector3(0, 0, 0);
+        [FormerlySerializedAs("Damping")]
         [Header("速度の減衰係数。\r\nシミュレーションの振動やエネルギーを抑えるために速度にかける減速率。")]
         [SerializeField]
-        private float Damping = 0.8f;
+        private float damping = 0.8f;
+        [FormerlySerializedAs("Stiffness")]
         [Header("\t拘束の硬さを表す係数。\r\n値が大きいほどヒモの距離拘束が強く、伸び縮みしにくくなる。")]
         [SerializeField]
-        private float Stiffness = 0.9f;
+        private float stiffness = 0.9f;
 
         //------------------------------------
+        [FormerlySerializedAs("ExplosionTriggerDistance")]
         [Header("爆発の基準距離")]
         [SerializeField]
-        private int ExplosionTriggerDistance= 1;
+        private int explosionTriggerDistance= 1;
+        [FormerlySerializedAs("MaxExplosion")]
         [Header("最大コード爆発数")]
         [SerializeField]
-        private int MaxExplosion = 5;
+        private int maxExplosion = 5;
 
         /// <summary>
         /// コードを生成
         /// </summary>
-        public CodeSimulater GenerateCode(GameObject Start, GameObject End)
+        public CodeSimulater GenerateCode(GameObject start, GameObject end)
         {
-            GameObject CodeObject = new GameObject("Code");
+            GameObject codeObject = new GameObject("Code");
 
-            LineRenderer lineRenderer = CodeObject.AddComponent<LineRenderer>();
+            LineRenderer lineRenderer = codeObject.AddComponent<LineRenderer>();
             //LineRendererを修正する。
-            lineRenderer.startWidth = LineWidth;
-            lineRenderer.endWidth = LineWidth;
-            lineRenderer.material = LineMaterial;
-            lineRenderer.sortingOrder = OrderInLayer;
+            lineRenderer.startWidth = lineWidth;
+            lineRenderer.endWidth = lineWidth;
+            lineRenderer.material = lineMaterial;
+            lineRenderer.sortingOrder = orderInLayer;
 
             //物理演算を線で行う為に生成。
-            EdgeCollider2D edge = CodeObject.AddComponent<EdgeCollider2D>();
+            EdgeCollider2D edge = codeObject.AddComponent<EdgeCollider2D>();
             edge.isTrigger = true;//衝突をオフに（IsTriggerイベントのみを取得する。）
 
             //ここでコードを生成する
-            CodeSimulater codeSimulater = CodeObject.AddComponent<CodeSimulater>();
+            CodeSimulater codeSimulater = codeObject.AddComponent<CodeSimulater>();
 
             //この時点ではUpdateは発生しない為問題ない
             //設定
             codeSimulater.Initialize(
                 lineRenderer,
-                ParticleCount, 
-                TimeStep, 
-                Gravity, 
-                Damping, 
-                Stiffness, 
-                Start , 
-                End, 
-                ExplosionTriggerDistance,
-                MaxExplosion);
+                particleCount, 
+                timeStep, 
+                gravity, 
+                damping, 
+                stiffness, 
+                start , 
+                end, 
+                explosionTriggerDistance,
+                maxExplosion);
 
             
 

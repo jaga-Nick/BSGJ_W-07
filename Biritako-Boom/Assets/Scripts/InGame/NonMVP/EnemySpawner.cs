@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using Common;
 using UnityEngine;
 using System;
+using Common.GameSystem;
 
 namespace InGame.NonMVP
 {

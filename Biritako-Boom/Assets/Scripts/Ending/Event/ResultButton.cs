@@ -1,11 +1,10 @@
-﻿using Common;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
+﻿using Common.SceneSystem;
 using Ending.Loader;
 using InGame.Model;
 using Title.Loader;
+using UnityEngine;
 
-namespace Result.Model
+namespace Ending.Event
 {
     public class ResultButton : MonoBehaviour
     {
@@ -18,8 +17,8 @@ namespace Result.Model
         /// </summary>
         public async void OnClickRePlayButton()
         {
-            ScoreModel.Instance().RestoreScore();
-            await SceneManager.Instance().LoadMainScene(_inGameSceneLoader);
+            ScoreModel.Instance.RestoreScore();
+            await SceneManager.Instance.LoadMainScene(_inGameSceneLoader);
         }
         
         /// <summary>
@@ -27,8 +26,8 @@ namespace Result.Model
         /// </summary>
         public async void OnClickTitleButton()
         {
-            ScoreModel.Instance().RestoreScore();
-            await SceneManager.Instance().LoadMainScene(_titleSceneLoader);
+            ScoreModel.Instance.RestoreScore();
+            await SceneManager.Instance.LoadMainScene(_titleSceneLoader);
         }
         
         /// <summary>

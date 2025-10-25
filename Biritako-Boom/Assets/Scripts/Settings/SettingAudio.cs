@@ -1,42 +1,45 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-
-public class SettingAudio : MonoBehaviour
+namespace Settings
 {
-    //Audioミキサーを入れるとこです
-    [SerializeField] AudioMixer audioMixer;
-
-    //それぞれのスライダーを入れるとこです。。
-    [SerializeField] Slider BGMSlider;
-    [SerializeField] Slider EffectSlider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    public class SettingAudio : MonoBehaviour
     {
-        //ミキサーのvolumeにスライダーのvolumeを入れてます。
+        //Audioミキサーを入れるとこです
+        [SerializeField] AudioMixer audioMixer;
 
-        //BGM
-        audioMixer.GetFloat("BGM", out float bgmVolume);
-        BGMSlider.value = bgmVolume;
-        //Effect
-        audioMixer.GetFloat("Effect", out float effectVolume);
-        EffectSlider.value = effectVolume;
-    }
+        //それぞれのスライダーを入れるとこです。。
+        [FormerlySerializedAs("BGMSlider")] [SerializeField] Slider bgmSlider;
+        [FormerlySerializedAs("EffectSlider")] [SerializeField] Slider effectSlider;
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        private void Start()
+        {
+            //ミキサーのvolumeにスライダーのvolumeを入れてます。
 
-    public void SetBGM(float volume)
-    {
-        audioMixer.SetFloat("BGM", volume);
-    }
+            //BGM
+            audioMixer.GetFloat("BGM", out float bgmVolume);
+            bgmSlider.value = bgmVolume;
+            //Effect
+            audioMixer.GetFloat("Effect", out float effectVolume);
+            effectSlider.value = effectVolume;
+        }
 
-    public void SetEffect(float volume)
-    {
-        audioMixer.SetFloat("Effect", volume);
-    }
+        public void SetBGM(float volume)
+        {
+            audioMixer.SetFloat("BGM", volume);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
+        public void SetEffect(float volume)
+        {
+            audioMixer.SetFloat("Effect", volume);
+        }
 
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }

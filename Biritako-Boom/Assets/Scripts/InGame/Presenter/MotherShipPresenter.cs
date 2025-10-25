@@ -1,8 +1,9 @@
 using System.Threading;
+using Common.ShakeEffectSetting;
 using UnityEngine;
 using InGame.Model;
 using InGame.View;
-using ShakeEffect;
+using UnityEngine.Serialization;
 
 namespace InGame.Presenter
 {
@@ -13,42 +14,42 @@ namespace InGame.Presenter
         [SerializeField] private Shaker cameraShaker;
         [SerializeField] private ShakePreset explosionShake;
         
-        [Header("HP"), SerializeField]
-        private int _hp = 250;
-        [Header("スピード"), SerializeField]
-        private float _speed = 2.5f;
+        [FormerlySerializedAs("_hp")] [Header("HP"), SerializeField]
+        private int hp = 250;
+        [FormerlySerializedAs("_speed")] [Header("スピード"), SerializeField]
+        private float speed = 2.5f;
         
         //MotherShip統括
-        private MotherShipModel Model;
-        private MotherShipView View;
+        private MotherShipModel _model;
+        private MotherShipView _view;
 
 
         private void Awake()
         {
-            View = GetComponent<MotherShipView>();
-            Model = GetComponent<MotherShipModel>();
+            _view = GetComponent<MotherShipView>();
+            _model = GetComponent<MotherShipModel>();
             
             cameraShaker = Camera.main.GetComponent<Shaker>();
             
-            Model.Initialize(_hp, _speed);
-            Model.SetRb(View.GetRb());
+            _model.Initialize(hp, speed);
+            _model.SetRb(_view.GetRb());
         }
         
         private void Start()
         {
-            Model.SetShaker(cameraShaker);
-            Model.SetShakePreset(explosionShake);
+            _model.SetShaker(cameraShaker);
+            _model.SetShakePreset(explosionShake);
             
-            Model.FindTargets();
-            Model.StartPatrol();
+            _model.FindTargets();
+            _model.StartPatrol();
         }
         
         private void Update()
         {
-            Model.Move();
+            _model.Move();
         }
         
-        public MotherShipModel GetModel() { return Model; }
+        public MotherShipModel GetModel() { return _model; }
     }
 }
 

@@ -51,10 +51,10 @@ namespace InGame.NonMVP{
             return closestComponent;
         }
 
-        public GameObject CharacterCheckGameObject<T>(Vector3 TransformPosition, float scanRadius) where T : Component
+        public GameObject CharacterCheckGameObject<T>(Vector3 transformPosition, float scanRadius) where T : Component
         {
             //2D用のオーバーラップサーチ
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TransformPosition, scanRadius);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transformPosition, scanRadius);
 
             //
             GameObject closestObject = null;
@@ -70,7 +70,7 @@ namespace InGame.NonMVP{
                 T component = obj.GetComponent<T>();
                 if (component == null) continue;
 
-                float distance = Vector2.Distance(TransformPosition, obj.transform.position);
+                float distance = Vector2.Distance(transformPosition, obj.transform.position);
 
                 //一番近いオブジェクトを探索
                 if (distance < closestDistance)
@@ -177,7 +177,7 @@ namespace InGame.NonMVP{
         {
             Collider2D[] hits = Physics2D.OverlapCircleAll(origin, radius);
 
-            GameObject closestEnemyGO = null;
+            GameObject closestEnemyGo = null;
             float closestDist = Mathf.Infinity;
 
             foreach (var hit in hits)
@@ -193,13 +193,13 @@ namespace InGame.NonMVP{
                         if (dist < closestDist)
                         {
                             closestDist = dist;
-                            closestEnemyGO = hit.gameObject;
+                            closestEnemyGo = hit.gameObject;
                         }
                     }
                 }
             }
 
-            return closestEnemyGO;
+            return closestEnemyGo;
         }
 
 
@@ -229,15 +229,15 @@ namespace InGame.NonMVP{
 
                 // Componentを全部取得する
                 Component[] components = obj.GetComponents<MonoBehaviour>();
-                T TargetComponent = null;
+                T targetComponent = null;
                 foreach (var comp in components)
                 {
                     //ここでInterfaceにキャストできるかどうか
-                    TargetComponent = comp as T;
-                    if (TargetComponent != null) break;
+                    targetComponent = comp as T;
+                    if (targetComponent != null) break;
                 }
                 //なかった場合終了
-                if (TargetComponent == null) continue;
+                if (targetComponent == null) continue;
 
                 //距離を確認する
                 float distance = Vector2.Distance(transformPosition, obj.transform.position);
@@ -247,7 +247,7 @@ namespace InGame.NonMVP{
                 {
                     closestDistance = distance;
                     closestObject = obj;
-                    closestComponent = TargetComponent;
+                    closestComponent = targetComponent;
                 }
             }
 
@@ -279,20 +279,20 @@ namespace InGame.NonMVP{
 
                 // Componentを全部取得する
                 Component[] components = obj.GetComponents<MonoBehaviour>();
-                T TargetComponent = null;
+                T targetComponent = null;
                 foreach (var comp in components)
                 {
                     //ここでInterfaceにキャストできるかどうか
-                    TargetComponent = comp as T;
-                    if (TargetComponent != null) break;
+                    targetComponent = comp as T;
+                    if (targetComponent != null) break;
                 }
                 //なかった場合終了
-                if (TargetComponent == null) continue;
+                if (targetComponent == null) continue;
                 //距離を確認する
                 float distance = Vector2.Distance(transformPosition, obj.transform.position);
 
                 //全て格納する
-                resultList.Add(new Contain<T>(distance, TargetComponent, obj));
+                resultList.Add(new Contain<T>(distance, targetComponent, obj));
             }
             return resultList;
         }

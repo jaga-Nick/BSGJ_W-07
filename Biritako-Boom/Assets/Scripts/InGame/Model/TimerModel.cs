@@ -10,8 +10,8 @@ namespace InGame.Model
     {
         [Header("制限時間")]
         [SerializeField]
-        private float maxLimitTime;
-        public float MaxLimitTime { get => maxLimitTime; private set => maxLimitTime = value; }
+        private float _maxLimitTime;
+        public float MaxLimitTime { get => _maxLimitTime; private set => _maxLimitTime = value; }
 
         /// <summary>
         /// 現在時間読み取り専用

@@ -1,19 +1,20 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace InGame.NonMVP
 {
     public class EnemyEffect : MonoBehaviour
     {
-        [Header("Effect生成位置"), SerializeField]
-        private GameObject _effectGenPos;
-        [Header("Effectプレハブ"), SerializeField]
-        private GameObject _effectObj;
+        [FormerlySerializedAs("_effectGenPos")] [Header("Effect生成位置"), SerializeField]
+        private GameObject effectGenPos;
+        [FormerlySerializedAs("_effectObj")] [Header("Effectプレハブ"), SerializeField]
+        private GameObject effectObj;
         
         
         public void GenerateEffect()
         {
             Vector3 pos = transform.position;
-            Instantiate(_effectObj, pos, Quaternion.identity);
+            Instantiate(effectObj, pos, Quaternion.identity);
         }
     }
 }
