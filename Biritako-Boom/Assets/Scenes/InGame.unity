@@ -19482,10 +19482,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41ace456bd5414489bed7c2812d24ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterAddress: Enemy_Alien
-  _initialPoolSize: 20
-  _spawnAreaMin: {x: -20, y: -20}
-  _spawnAreaMax: {x: 20, y: 20}
+  characterAddress: Enemy_Alien
+  initialPoolSize: 50
+  spawnAreaMin: {x: -20, y: -20}
+  spawnAreaMax: {x: 20, y: 20}
 --- !u!4 &533625919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3159852305882718284, guid: b32b69ebdf831e548b6d728f894241d3, type: 3}
@@ -71113,11 +71113,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerView:
-    CodeGauge: {fileID: 1127244923}
+    codeGauge: {fileID: 1127244923}
   scoreView:
-    ScoreText: {fileID: 1278426126}
+    scoreText: {fileID: 1279316490}
   timerView:
-    Timer: {fileID: 1076350438}
+    timer: {fileID: 649037241}
 --- !u!4 &1927360532
 Transform:
   m_ObjectHideFlags: 0
@@ -71146,10 +71146,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterPrefab: {fileID: 6643896999913150986, guid: 0e8eb706557ec0a43b4181f095ab9f32, type: 3}
-  CharacterAddress: PlayerCharacter
-  SocketPrefab: {fileID: 5145646027522680112, guid: 3d8b964afbf2ae04ab387309caf0a053, type: 3}
-  SocketTipPrefab: {fileID: 6331477108501677103, guid: 3bc6048b75d0dee49b08524e8518f6bd, type: 3}
-  SocketAddress: PlayerCharacter
+  characterAddress: PlayerCharacter
+  socketPrefab: {fileID: 5145646027522680112, guid: 3d8b964afbf2ae04ab387309caf0a053, type: 3}
+  socketTipPrefab: {fileID: 6331477108501677103, guid: 3bc6048b75d0dee49b08524e8518f6bd, type: 3}
+  socketAddress: PlayerCharacter
 --- !u!114 &1927360534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71162,16 +71162,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c276dde73dba21f44988b58337da782b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LineWidth: 1
-  LineMaterial: {fileID: 2100000, guid: c8626408f57ba5546b3b8a2d214a7208, type: 2}
-  OrderInLayer: 3
-  ParticleCount: 180
-  TimeStep: 0.02
-  Gravity: {x: 0, y: 0, z: 0}
-  Damping: 2
-  Stiffness: 0.8
-  ExplosionTriggerDistance: 1
-  MaxExplosion: 20
+  lineWidth: 1
+  lineMaterial: {fileID: 2100000, guid: c8626408f57ba5546b3b8a2d214a7208, type: 2}
+  orderInLayer: 3
+  particleCount: 100
+  timeStep: 0.02
+  gravity: {x: 0, y: 0, z: 0}
+  damping: 0.8
+  stiffness: 0.9
+  explosionTriggerDistance: 1
+  maxExplosion: 5
 --- !u!114 &1927360535
 MonoBehaviour:
   m_ObjectHideFlags: 0

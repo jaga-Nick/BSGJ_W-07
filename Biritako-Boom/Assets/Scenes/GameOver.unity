@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1660967dd24e3458a4ce90341e17b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _image: {fileID: 526630110}
+  image: {fileID: 526630110}
   resultUI: {fileID: 1809914079}
   endingSprites:
   - {fileID: 9010794184244639168, guid: 630cf39f25febda4c8208634f20d94d1, type: 3}

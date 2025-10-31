@@ -1651,7 +1651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1660967dd24e3458a4ce90341e17b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _image: {fileID: 80508869}
+  image: {fileID: 80508869}
   resultUI: {fileID: 1082399585}
   endingSprites:
   - {fileID: 21300000, guid: 832333ccfd58ad1458a9ea18bc16e30e, type: 3}
